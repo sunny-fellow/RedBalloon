@@ -36,4 +36,4 @@ py main.py
 http://127.0.0.1:5000/apidocs
 ```
 
-5. Use as funcionalidades de CRUD implementadas por meio do Swagger.
+5. Use as funcionalidades de CRUD por meio do Swagger.
