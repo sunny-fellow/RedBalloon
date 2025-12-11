@@ -1,0 +1,10 @@
+# --- Web ---
+flask
+flask-cors
+flask-restx
+flask_swagger_ui
+
+# -- Data --
+Pandas
+
+# -- Utils --
