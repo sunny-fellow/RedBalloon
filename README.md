@@ -18,7 +18,7 @@ Esse repositório contém o código desenvolvido para o projeto da disciplina de
 git clone "https://github.com/sunny-fellow/RedBalloon"
 ```
 
-2. Com o terminal no diretório `/backend`, rode o seguinte comando para adquirir todos os requisitos para a execução do projeto.
+2. Com o terminal aberto no diretório `RedBalloon\backend`, rode o seguinte comando para adquirir todos os requisitos para a execução do projeto.
 
 ```bash
 pip install -r requirements.txt
@@ -35,3 +35,5 @@ py main.py
 ```plaintext
 http://127.0.0.1:5000/apidocs
 ```
+
+5. Use as funcionalidades de CRUD implementadas por meio do Swagger.

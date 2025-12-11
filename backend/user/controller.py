@@ -5,11 +5,13 @@ from user.models import *
 api = Namespace('user', description='Gerenciamento de Usuários')
 service = UserService()
 
+
 @api.route('/list')
 class UserList(Resource):
     def get(self):
         """Lista todos os usuários"""
         return service.list_users(), 200
+
 
 @api.route('/create')
 class UserCreate(Resource):
