@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RedBalloon - Cyberpunk Arcade Dark Theme */
+
+@layer base {
+  :root {
+    --background: 240 15% 6%;
+    --foreground: 60 10% 95%;
+
+    --card: 240 15% 9%;
+    --card-foreground: 60 10% 95%;
+
+    --popover: 240 15% 8%;
+    --popover-foreground: 60 10% 95%;
+
+    --primary: 280 85% 65%;
+    --primary-foreground: 240 15% 6%;
+
+    --secondary: 190 85% 50%;
+    --secondary-foreground: 240 15% 6%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 10% 55%;
+
+    --accent: 330 85% 60%;
+    --accent-foreground: 240 15% 6%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 60 10% 95%;
+
+    --border: 280 30% 25%;
+    --input: 240 15% 12%;
+    --ring: 280 85% 65%;
+
+    --radius: 0.5rem;
+
+    /* Neon Colors */
+    --neon-purple: 280 85% 65%;
+    --neon-cyan: 190 85% 50%;
+    --neon-pink: 330 85% 60%;
+    --neon-green: 150 85% 45%;
+    --neon-yellow: 50 90% 55%;
+    --neon-red: 0 85% 55%;
+
+    /* Glows */
+    --glow-purple: 0 0 20px hsl(280 85% 65% / 0.5);
+    --glow-cyan: 0 0 20px hsl(190 85% 50% / 0.5);
+    --glow-pink: 0 0 20px hsl(330 85% 60% / 0.5);
+
+    /* Sidebar */
+    --sidebar-background: 240 15% 8%;
+    --sidebar-foreground: 60 10% 95%;
+    --sidebar-primary: 280 85% 65%;
+    --sidebar-primary-foreground: 240 15% 6%;
+    --sidebar-accent: 240 15% 12%;
+    --sidebar-accent-foreground: 60 10% 95%;
+    --sidebar-border: 280 30% 20%;
+    --sidebar-ring: 280 85% 65%;
+  }
+
+  .dark {
+    --background: 240 15% 6%;
+    --foreground: 60 10% 95%;
+
+    --card: 240 15% 9%;
+    --card-foreground: 60 10% 95%;
+
+    --popover: 240 15% 8%;
+    --popover-foreground: 60 10% 95%;
+
+    --primary: 280 85% 65%;
+    --primary-foreground: 240 15% 6%;
+
+    --secondary: 190 85% 50%;
+    --secondary-foreground: 240 15% 6%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 10% 55%;
+
+    --accent: 330 85% 60%;
+    --accent-foreground: 240 15% 6%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 60 10% 95%;
+
+    --border: 280 30% 25%;
+    --input: 240 15% 12%;
+    --ring: 280 85% 65%;
+
+    --sidebar-background: 240 15% 8%;
+    --sidebar-foreground: 60 10% 95%;
+    --sidebar-primary: 280 85% 65%;
+    --sidebar-primary-foreground: 240 15% 6%;
+    --sidebar-accent: 240 15% 12%;
+    --sidebar-accent-foreground: 60 10% 95%;
+    --sidebar-border: 280 30% 20%;
+    --sidebar-ring: 280 85% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-[hsl(var(--neon-purple))] via-[hsl(var(--neon-pink))] to-[hsl(var(--neon-cyan))] bg-clip-text text-transparent;
+  }
+
+  .neon-border {
+    @apply border border-[hsl(var(--neon-purple)/0.5)] shadow-[0_0_15px_hsl(var(--neon-purple)/0.3)];
+  }
+
+  .neon-glow {
+    @apply shadow-[0_0_20px_hsl(var(--neon-purple)/0.4),0_0_40px_hsl(var(--neon-purple)/0.2)];
+  }
+
+  .arcade-card {
+    @apply bg-card/80 backdrop-blur-sm border border-[hsl(var(--neon-purple)/0.3)] rounded-lg 
+           hover:border-[hsl(var(--neon-purple)/0.6)] hover:shadow-[0_0_20px_hsl(var(--neon-purple)/0.3)] 
+           transition-all duration-300;
+  }
+
+  .arcade-button {
+    @apply bg-gradient-to-r from-[hsl(var(--neon-purple))] to-[hsl(var(--neon-pink))] 
+           text-white font-bold uppercase tracking-wider
+           shadow-[0_0_15px_hsl(var(--neon-purple)/0.5)]
+           hover:shadow-[0_0_25px_hsl(var(--neon-purple)/0.7)]
+           transition-all duration-300;
+  }
+
+  .scanline {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.1) 2px,
+      rgba(0, 0, 0, 0.1) 4px
+    );
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .text-glow-purple {
+    text-shadow: 0 0 10px hsl(var(--neon-purple) / 0.8), 0 0 20px hsl(var(--neon-purple) / 0.5);
+  }
+
+  .text-glow-cyan {
+    text-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5);
+  }
+
+  .text-glow-pink {
+    text-shadow: 0 0 10px hsl(var(--neon-pink) / 0.8), 0 0 20px hsl(var(--neon-pink) / 0.5);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--neon-purple) / 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--neon-purple) / 0.7);
+}
+
+/* Import arcade font */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
