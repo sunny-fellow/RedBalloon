@@ -183,5 +183,191 @@
   background: hsl(var(--neon-purple) / 0.7);
 }
 
-/* Import arcade font */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* Import arcade fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap');
+
+/* Arcade pixel font class */
+.font-pixel {
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* Pixel border effect */
+.pixel-border {
+  box-shadow: 
+    4px 0 0 0 hsl(var(--neon-purple)),
+    -4px 0 0 0 hsl(var(--neon-purple)),
+    0 4px 0 0 hsl(var(--neon-purple)),
+    0 -4px 0 0 hsl(var(--neon-purple));
+}
+
+/* Pixel corners */
+.pixel-corners {
+  clip-path: polygon(
+    0 4px, 4px 4px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+}
+
+/* Pixel button */
+.pixel-btn {
+  @apply relative font-pixel text-xs uppercase tracking-wider;
+  background: linear-gradient(180deg, hsl(var(--neon-purple)) 0%, hsl(var(--neon-pink)) 100%);
+  box-shadow: 
+    0 4px 0 0 hsl(280 85% 35%),
+    0 6px 0 0 hsl(280 85% 25%);
+  transition: all 0.1s ease;
+}
+
+.pixel-btn:hover {
+  transform: translateY(2px);
+  box-shadow: 
+    0 2px 0 0 hsl(280 85% 35%),
+    0 4px 0 0 hsl(280 85% 25%);
+}
+
+.pixel-btn:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+/* Pixel card */
+.pixel-card {
+  @apply bg-card border-2 border-[hsl(var(--neon-purple)/0.5)];
+  image-rendering: pixelated;
+  box-shadow: 
+    4px 4px 0 0 hsl(var(--neon-purple) / 0.3),
+    8px 8px 0 0 hsl(var(--neon-purple) / 0.15);
+}
+
+/* Retro grid background */
+.retro-grid {
+  background-image: 
+    linear-gradient(hsl(var(--neon-purple) / 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--neon-purple) / 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Arcade Tab Animations */
+.arcade-tab {
+  @apply relative overflow-hidden transition-all duration-200;
+}
+
+.arcade-tab::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-[hsl(var(--neon-purple)/0.3)] to-[hsl(var(--neon-cyan)/0.3)] opacity-0 transition-opacity duration-200;
+}
+
+.arcade-tab:hover::before {
+  @apply opacity-100;
+}
+
+.arcade-tab[data-state="active"] {
+  @apply bg-gradient-to-r from-[hsl(var(--neon-purple))] to-[hsl(var(--neon-pink))];
+  box-shadow: 
+    0 0 15px hsl(var(--neon-purple) / 0.5),
+    0 4px 0 0 hsl(280 85% 35%);
+  animation: tab-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes tab-glow {
+  from {
+    box-shadow: 
+      0 0 10px hsl(var(--neon-purple) / 0.4),
+      0 4px 0 0 hsl(280 85% 35%);
+  }
+  to {
+    box-shadow: 
+      0 0 20px hsl(var(--neon-purple) / 0.6),
+      0 4px 0 0 hsl(280 85% 35%);
+  }
+}
+
+/* Arcade hover card effect */
+.arcade-hover-card {
+  @apply transition-all duration-300 ease-out;
+  transform-style: preserve-3d;
+}
+
+.arcade-hover-card:hover {
+  @apply scale-[1.02];
+  box-shadow: 
+    0 0 20px hsl(var(--neon-purple) / 0.4),
+    8px 8px 0 0 hsl(var(--neon-purple) / 0.2),
+    inset 0 0 30px hsl(var(--neon-purple) / 0.1);
+}
+
+.arcade-hover-card::after {
+  content: '';
+  @apply absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none rounded-lg;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--neon-purple) / 0.1) 0%,
+    transparent 50%,
+    hsl(var(--neon-cyan) / 0.1) 100%
+  );
+}
+
+.arcade-hover-card:hover::after {
+  @apply opacity-100;
+}
+
+/* Pixel scanline overlay */
+.pixel-scanlines {
+  position: relative;
+}
+
+.pixel-scanlines::before {
+  content: '';
+  @apply absolute inset-0 pointer-events-none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    hsl(var(--neon-purple) / 0.03) 2px,
+    hsl(var(--neon-purple) / 0.03) 4px
+  );
+}
+
+/* Tab content animation */
+.tab-content-enter {
+  animation: tab-slide-in 0.3s ease-out forwards;
+}
+
+@keyframes tab-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Arcade list item */
+.arcade-list-item {
+  @apply relative transition-all duration-200 border-l-4 border-transparent;
+}
+
+.arcade-list-item:hover {
+  @apply border-l-[hsl(var(--neon-purple))] bg-[hsl(var(--neon-purple)/0.1)];
+  box-shadow: 
+    inset 4px 0 8px hsl(var(--neon-purple) / 0.2),
+    0 0 10px hsl(var(--neon-purple) / 0.1);
+}
+
+/* Flicker effect for text */
+.text-flicker {
+  animation: flicker 3s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  95% { opacity: 0.9; }
+  96% { opacity: 1; }
+}

@@ -5,9 +5,24 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  itemsPerPage?: number;
+  totalItems?: number;
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ 
+  currentPage, 
+  totalPages, 
+  onPageChange, 
+  itemsPerPage = 10, 
+  totalItems 
+}: PaginationProps) {
+  // Only show pagination if there are more items than fit on one page
+  const shouldShow = totalItems !== undefined 
+    ? totalItems > itemsPerPage 
+    : totalPages > 1;
+
+  if (!shouldShow) return null;
+
   const pages = [];
   const showEllipsisStart = currentPage > 3;
   const showEllipsisEnd = currentPage < totalPages - 2;

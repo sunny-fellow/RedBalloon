@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  user_id             Int               @id @default(autoincrement())
+  name                String
+  nickname            String            @unique
+  password            String
+  email               String            @unique
+  avatar              String
+  description         String?
+  nationality         String
+  created_at          DateTime          @default(now())
+  messages            Message[]
+  likes_messages      MessageReact[]
+  problems_created    Problem[]
+  room_participations RoomParticipant[]
+  submissions         Submission[]
+  likes_submissions   SubmissionReact[]
+  followers           UserFollow[]      @relation("followerRelation")
+  followings          UserFollow[]      @relation("followingRelation")
+}
+
+model Room {
+  room_id               Int               @id @default(autoincrement())
+  name                  String
+  description           String
+  password              String
+  socket                String
+  max_participants      Int
+  accepting_submissions Boolean           @default(true)
+  ends_at               DateTime
+  status                RoomStatus        @default(IN_PROGRESS)
+  participants          RoomParticipant[]
+  problems              RoomProblem[]
+}
+
+model Problem {
+  problem_id       Int               @id @default(autoincrement())
+  creator_id       Int
+  title            String
+  description      String
+  time_limit       Int
+  memory_limit     Int
+  validation_mode  ValidationMode
+  difficulty       ProblemDifficulty
+  private          Boolean           @default(false)
+  created_at       DateTime          @default(now())
+  creator          User              @relation(fields: [creator_id], references: [user_id], onDelete: Cascade)
+  room_problems    RoomProblem[]
+  room_submissions RoomSubmission[]
+  submissions      Submission[]
+}
+
+model Tag {
+  tag_id       Int          @id @default(autoincrement())
+  name         String
+  type         TagType
+  message_tags MessageTag[]
+}
+
+model Submission {
+  submission_id Int               @id @default(autoincrement())
+  problem_id    Int
+  user_id       Int
+  code          String
+  language      String
+  time_spent    Int
+  memory_used   Int
+  status        SubmissionStatus  @default(JUDGING)
+  submitted_at  DateTime          @default(now())
+  problem       Problem           @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  user          User              @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  reacts        SubmissionReact[]
+}
+
+model RoomSubmission {
+  room_id      Int
+  user_id      Int
+  problem_id   Int
+  submitted_at DateTime         @default(now())
+  time_taken   Int
+  memory_used  Int
+  code         String
+  language     LanguageType
+  status       SubmissionStatus @default(JUDGING)
+  problem      Problem          @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  participant  RoomParticipant  @relation(fields: [room_id, user_id], references: [room_id, user_id])
+
+  @@id([room_id, user_id, problem_id])
+}
+
+model RoomParticipant {
+  room_id     Int
+  user_id     Int
+  joined_at   DateTime         @default(now())
+  is_admin    Boolean          @default(false)
+  score       Int              @default(0)
+  socket      String
+  messages    RoomChat[]
+  room        Room             @relation(fields: [room_id], references: [room_id], onDelete: Cascade)
+  user        User             @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  submissions RoomSubmission[]
+
+  @@id([room_id, user_id])
+}
+
+model RoomProblem {
+  room_id    Int
+  problem_id Int
+  problem    Problem @relation(fields: [problem_id], references: [problem_id], onDelete: Cascade)
+  room       Room    @relation(fields: [room_id], references: [room_id], onDelete: Cascade)
+
+  @@id([room_id, problem_id])
+}
+
+model RoomChat {
+  message_id  Int             @id @default(autoincrement())
+  room_id     Int
+  user_id     Int
+  message     String
+  sent_at     DateTime        @default(now())
+  participant RoomParticipant @relation(fields: [room_id, user_id], references: [room_id, user_id], onDelete: Cascade)
+}
+
+model Message {
+  message_id Int             @id @default(autoincrement())
+  user_id    Int
+  message    String
+  sent_at    DateTime        @default(now())
+  user       User            @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  context    MessageContext?
+  likes      MessageReact[]
+  tags       MessageTag[]
+}
+
+model MessageTag {
+  message_id Int
+  tag_id     Int
+  message    Message @relation(fields: [message_id], references: [message_id], onDelete: Cascade)
+  tag        Tag     @relation(fields: [tag_id], references: [tag_id], onDelete: Cascade)
+
+  @@id([message_id, tag_id])
+}
+
+model MessageContext {
+  message_id     Int                @id
+  context_type   MessageContextType
+  context_ref_id Int?
+  parent_message Int?
+  message        Message            @relation(fields: [message_id], references: [message_id], onDelete: Cascade)
+
+  @@index([context_type, context_ref_id])
+  @@index([parent_message])
+}
+
+model MessageReact {
+  message_id Int
+  user_id    Int
+  reaction   ReactionType
+  reacted_at DateTime     @default(now())
+  message    Message      @relation(fields: [message_id], references: [message_id], onDelete: Cascade)
+  user       User         @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@id([message_id, user_id])
+}
+
+model SubmissionReact {
+  submission_id Int
+  user_id       Int
+  reaction      ReactionType
+  reacted_at    DateTime     @default(now())
+  submission    Submission   @relation(fields: [submission_id], references: [submission_id], onDelete: Cascade)
+  user          User         @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@id([submission_id, user_id])
+}
+
+model UserFollow {
+  follower_id  Int
+  following_id Int
+  followed_at  DateTime @default(now())
+  follower     User     @relation("followerRelation", fields: [follower_id], references: [user_id], onDelete: Cascade)
+  following    User     @relation("followingRelation", fields: [following_id], references: [user_id], onDelete: Cascade)
+
+  @@id([follower_id, following_id])
+}
+
+enum ProblemDifficulty {
+  BEGGINNER
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum RoomStatus {
+  IN_PROGRESS
+  FINISHED
+  CROWDED
+}
+
+enum ReactionType {
+  LIKE
+  DISLIKE
+}
+
+enum ValidationMode {
+  INPUTS_OUTPUTS
+  CHECKER_ALGORITHM
+  NO_VALIDATION
+}
+
+enum TagType {
+  PROBLEM
+  MESSAGE
+}
+
+enum SubmissionStatus {
+  JUDGING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILATION_ERROR
+  VERIFICATION_ERROR
+}
+
+enum LanguageType {
+  PYTHON
+  C
+  CPP
+  JAVA
+}
+
+enum MessageContextType {
+  GLOBAL
+  PROBLEM
+  SOLUTION
+}

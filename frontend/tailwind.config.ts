@@ -74,6 +74,8 @@ export default {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "Fira Code", "monospace"],
+        pixel: ["'Press Start 2P'", "cursive"],
+        arcade: ["Orbitron", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -6,7 +7,8 @@ import {
   User, 
   MessageSquare, 
   List,
-  LogOut
+  LogOut,
+  Timer
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -14,6 +16,7 @@ import { cn } from '@/lib/utils';
 interface RoomMenuProps {
   isHost?: boolean;
   roomName?: string;
+  endTime?: string;
 }
 
 const menuItems = [
@@ -24,8 +27,36 @@ const menuItems = [
   { path: '/room/chat', label: 'Chat', icon: MessageSquare },
 ];
 
-export function RoomMenu({ isHost = false, roomName = 'Sala' }: RoomMenuProps) {
+function formatTimeRemaining(endTime: string): string {
+  const now = new Date().getTime();
+  const end = new Date(endTime).getTime();
+  const diff = end - now;
+
+  if (diff <= 0) return '00:00:00';
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+export function RoomMenu({ isHost = false, roomName = 'Sala', endTime }: RoomMenuProps) {
   const location = useLocation();
+  const [timeRemaining, setTimeRemaining] = useState<string>('--:--:--');
+
+  useEffect(() => {
+    if (!endTime) return;
+
+    const updateTimer = () => {
+      setTimeRemaining(formatTimeRemaining(endTime));
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(interval);
+  }, [endTime]);
 
   return (
     <div className="w-full lg:w-64 flex-shrink-0">
@@ -34,6 +65,22 @@ export function RoomMenu({ isHost = false, roomName = 'Sala' }: RoomMenuProps) {
           <h2 className="font-semibold text-lg truncate">{roomName}</h2>
           <p className="text-sm text-muted-foreground">Menu da Sala</p>
         </div>
+
+        {/* Timer */}
+        {endTime && (
+          <div className="p-4 rounded-lg border border-[hsl(var(--neon-cyan)/0.5)] bg-card/50">
+            <div className="flex items-center gap-2 text-[hsl(var(--neon-cyan))]">
+              <Timer className="h-4 w-4" />
+              <span className="text-sm font-medium">Tempo Restante</span>
+            </div>
+            <p 
+              className="text-2xl font-bold mt-2 text-center"
+              style={{ fontFamily: 'Orbitron, sans-serif' }}
+            >
+              {timeRemaining}
+            </p>
+          </div>
+        )}
 
         <nav className="space-y-1">
           {menuItems.map((item) => {

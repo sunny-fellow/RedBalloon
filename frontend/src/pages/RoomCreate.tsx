@@ -12,17 +12,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { mockProblems, problemTags } from '@/data/mockData';
+import { mockProblems, problemTags, BALLOON_COLORS } from '@/data/mockData';
 import { Problem } from '@/types';
 import { DifficultyBadge } from '@/components/ui/DifficultyBadge';
 import { TagBadge } from '@/components/ui/TagBadge';
+import { BalloonBadge } from '@/components/ui/BalloonBadge';
 import { CodeEditor } from '@/components/common/CodeEditor';
 import { useToast } from '@/hooks/use-toast';
 
 interface RoomProblemItem {
   problem: Problem;
   points: number;
-  color: string;
+  balloonColor: string;
 }
 
 interface TestCase {
@@ -30,10 +31,6 @@ interface TestCase {
   input: string;
   expectedOutput: string;
 }
-
-const BALLOON_COLORS = [
-  '#a855f7', '#06b6d4', '#ec4899', '#22c55e', '#eab308', '#f97316', '#ef4444', '#3b82f6'
-];
 
 export default function RoomCreate() {
   const navigate = useNavigate();
@@ -69,7 +66,7 @@ export default function RoomCreate() {
     setSelectedProblems([...selectedProblems, { 
       problem, 
       points: 10, 
-      color: BALLOON_COLORS[colorIndex] 
+      balloonColor: BALLOON_COLORS[colorIndex].value 
     }]);
     setProblemDialogOpen(false);
   };
@@ -84,9 +81,9 @@ export default function RoomCreate() {
     ));
   };
 
-  const updateProblemColor = (problemId: string, color: string) => {
+  const updateProblemBalloonColor = (problemId: string, balloonColor: string) => {
     setSelectedProblems(selectedProblems.map(p => 
-      p.problem.id === problemId ? { ...p, color } : p
+      p.problem.id === problemId ? { ...p, balloonColor } : p
     ));
   };
 
@@ -158,7 +155,7 @@ export default function RoomCreate() {
     setSelectedProblems([...selectedProblems, { 
       problem: customProblem, 
       points: 10, 
-      color: BALLOON_COLORS[colorIndex] 
+      balloonColor: BALLOON_COLORS[colorIndex].value 
     }]);
     
     resetProblemForm();
@@ -245,10 +242,7 @@ export default function RoomCreate() {
                       className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div 
-                          className="w-4 h-4 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: item.color }}
-                        />
+                        <BalloonBadge color={item.balloonColor} size="md" />
                         <div className="min-w-0">
                           <p className="font-medium truncate">{item.problem.title}</p>
                           <p className="text-xs text-muted-foreground">
@@ -264,12 +258,24 @@ export default function RoomCreate() {
                           onChange={(e) => updateProblemPoints(item.problem.id, parseInt(e.target.value) || 0)}
                           className="w-16 h-8 bg-input text-center"
                         />
-                        <input 
-                          type="color" 
-                          value={item.color}
-                          onChange={(e) => updateProblemColor(item.problem.id, e.target.value)}
-                          className="w-8 h-8 rounded cursor-pointer border-0"
-                        />
+                        <Select 
+                          value={item.balloonColor}
+                          onValueChange={(v) => updateProblemBalloonColor(item.problem.id, v)}
+                        >
+                          <SelectTrigger className="w-24 h-8 bg-input">
+                            <BalloonBadge color={item.balloonColor} size="sm" showLabel />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {BALLOON_COLORS.map(b => (
+                              <SelectItem key={b.value} value={b.value}>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: b.hex }} />
+                                  {b.label}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <Button 
                           variant="ghost" 
                           size="icon"

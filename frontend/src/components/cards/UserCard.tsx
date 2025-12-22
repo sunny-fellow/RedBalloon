@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ThumbsUp, CheckCircle, MapPin } from 'lucide-react';
+import { Users, CheckCircle, MapPin } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User } from '@/types';
@@ -47,10 +47,10 @@ export function UserCard({ user }: UserCardProps) {
             
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 text-accent">
-                <ThumbsUp className="h-4 w-4" />
-                <span className="font-bold">{user.likes}</span>
+                <Users className="h-4 w-4" />
+                <span className="font-bold">{user.followers}</span>
               </div>
-              <span className="text-xs text-muted-foreground">Likes</span>
+              <span className="text-xs text-muted-foreground">Seguidores</span>
             </div>
           </div>
         </CardContent>
