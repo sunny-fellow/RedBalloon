@@ -67,7 +67,7 @@ export default function ProblemDetail() {
               <div className="flex gap-3">
                 <Textarea 
                   placeholder="Escreva um comentário..." 
-                  className="bg-background/50 flex-1 min-h-[80px]" 
+                  className="bg-background/50 flex-1 min-h-[80px] resize-none" 
                 />
                 <Button className="self-end gap-2 pixel-btn">
                   <Send className="h-4 w-4" />
@@ -141,22 +141,28 @@ export default function ProblemDetail() {
               </div>
             </CardContent>
           </Card>
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex-1 gap-2">
-              <ThumbsUp className="h-4 w-4" />{problem.likes}
-            </Button>
-            <Button variant="outline" className="flex-1 gap-2">
-              <ThumbsDown className="h-4 w-4" />{problem.dislikes}
-            </Button>
+          <div className="flex flex-col justify-center gap-5">
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1 gap-2">
+                <ThumbsUp className="h-4 w-4" />{problem.likes}
+              </Button>
+              <Button variant="outline" className="flex-1 gap-2">
+                <ThumbsDown className="h-4 w-4" />{problem.dislikes}
+              </Button>
+            </div>
+
+            <Link to={`/solve/${problem.id}`}>
+              <Button className="w-full gap-2 pixel-btn">
+                <Play className="h-4 w-4" />Resolver
+              </Button>
+            </Link>
+
+            <Link to={`/problem/${id}/solves`}>
+              <Button variant="outline" className="w-full">
+                Ver Soluções
+              </Button>
+            </Link>
           </div>
-          <Link to={`/solve/${problem.id}`}>
-            <Button className="w-full gap-2 pixel-btn">
-              <Play className="h-4 w-4" />Resolver
-            </Button>
-          </Link>
-          <Link to={`/problem/resolutions`}>
-            <Button variant="outline" className="w-full">Ver Soluções</Button>
-          </Link>
         </div>
       </div>
     </PageContainer>

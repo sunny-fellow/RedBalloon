@@ -6,6 +6,7 @@ export const currentUser: User = {
   email: 'joao@email.com',
   login: 'joaodev',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=joao',
+  description: 'Estudante de ciência da computação e entusiasta de programação competitiva.',
   country: 'Brasil',
   problemsSolved: 42,
   problemsAttempted: 58,
@@ -33,6 +34,7 @@ export const mockUsers: User[] = [
     email: 'carlos@email.com',
     login: 'carlosdev',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=carlos',
+    description: '- Sou uma pessoa `curiosa` e movida por desafios, sempre em busca de aprender algo novo e evoluir tanto no aspecto técnico quanto pessoal. Gosto de entender como as coisas funcionam por trás dos bastidores, especialmente quando envolvem lógica, sistemas e resolução de problemas. Para mim, cada erro é uma oportunidade de aprendizado e cada acerto é apenas mais um passo em um caminho de melhoria contínua. Tenho grande interesse em tecnologia e programação, áreas nas quais encontro espaço para criatividade, análise crítica e inovação. Resolver problemas complexos me motiva, principalmente quando posso transformar ideias abstratas em soluções práticas e funcionais. Acredito que escrever código vai muito além de fazer um programa rodar: é sobre clareza, organização, legibilidade e impacto real no usuário final.',
     country: 'Espanha',
     problemsSolved: 67,
     problemsAttempted: 78,
@@ -106,7 +108,7 @@ export const mockProblems: Problem[] = [
   {
     id: '2',
     title: 'Longest Palindromic Substring',
-    description: 'Given a string s, return the longest palindromic substring in s.',
+    description: 'Given a string `s`, return the longest palindromic substring in s.',
     difficulty: 'medium',
     creatorId: '4',
     creatorName: 'Ana Chen',
@@ -303,14 +305,6 @@ export const mockSubmissions: Submission[] = [
   },
 ];
 
-export const reportCategories: ReportCategory[] = [
-  { id: '1', name: 'Inappropriate Content' },
-  { id: '2', name: 'Spam' },
-  { id: '3', name: 'Plagiarism' },
-  { id: '4', name: 'Harassment' },
-  { id: '5', name: 'Other' },
-];
-
 export const countries = [
   'Brasil', 'Portugal', 'Espanha', 'França', 'Alemanha', 'Itália',
   'Reino Unido', 'Estados Unidos', 'Canadá', 'México', 'Argentina',
@@ -370,3 +364,34 @@ export const mockComments: Comment[] = [
     createdAt: '2024-03-08T18:00:00',
   },
 ];
+
+export const mockSolveComments = [
+  {
+    id: '1',
+    solveId: '1',
+    userId: '2',
+    userName: 'Maria',
+    userAvatar: '',
+    content: 'Boa solução, bem otimizada 👍',
+    createdAt: '2025-01-01',
+  },
+  {
+    id: '2',
+    solveId: '1',
+    userId: '3',
+    userName: 'João',
+    userAvatar: '',
+    content: 'Concordo, ficou limpa.',
+    parentId: 'c1',
+    createdAt: '2025-01-01',
+  },
+  {
+    id: '3',
+    solveId: '1',
+    userId: '4',
+    userName: 'Ana',
+    userAvatar: '',
+    content: 'Essa abordagem passa no pior caso?',
+    createdAt: '2025-01-02',
+  },
+]

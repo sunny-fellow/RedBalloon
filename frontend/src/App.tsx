@@ -26,6 +26,7 @@ import RoomMe from "./pages/room/RoomMe";
 import RoomSubmissions from "./pages/room/RoomSubmissions";
 import RoomChat from "./pages/room/RoomChat";
 import NotFound from "./pages/NotFound";
+import ProblemSolve from "./pages/ProblemSolve";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +49,8 @@ const App = () => (
           <Route path="/community/write" element={<CommunityWrite />} />
           <Route path="/problem/:id" element={<ProblemDetail />} />
           <Route path="/problem/create" element={<ProblemCreate />} />
-          <Route path="/problem/resolutions" element={<ProblemResolutions />} />
+          <Route path="/problem/:id/solves" element={<ProblemResolutions />} />
+          <Route path="/problem/:problemId/solve/:solveId" element={<ProblemSolve />}/>
           <Route path="/solve/:id" element={<Solve />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/room/create" element={<RoomCreate />} />

@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DifficultyBadge } from '@/components/ui/DifficultyBadge';
 import { currentUser, mockProblems } from '@/data/mockData';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState('solved');
@@ -43,7 +44,7 @@ export default function Profile() {
             
             <div className="space-y-3 pt-2">
               <Input defaultValue={currentUser.name} className="bg-background/50" />
-              <Input defaultValue={currentUser.email} className="bg-background/50" />
+              <Textarea defaultValue={currentUser.description} className="bg-background/50 resize-none" />
             </div>
             
             <Button className="w-full gap-2 pixel-btn">
