@@ -189,7 +189,19 @@ export const mockPosts: Post[] = [
         content: 'Thanks for the mention! I used a different approach with Manacher algorithm.',
         tags: [],
         createdAt: '2024-03-10T15:00:00',
-        replies: [],
+        replies: [
+
+          {
+            id: '1-1-1',
+            userId: '2',
+            userName: 'Maria Santos',
+            userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=maria',
+            content: 'Manacher is super efficient! I should give it a try next time.',
+            tags: [],
+            createdAt: '2024-03-10T15:30:00',
+            replies: [],
+          }
+        ],
       },
     ],
   },
