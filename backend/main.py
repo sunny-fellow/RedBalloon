@@ -19,7 +19,7 @@ class Server:
             version="1.0",
             title="API RedBalloon",
             description="Documentação das rotas da aplicação Red Balloon",
-            doc=False,  # desativa o Swagger nativo
+            doc=False,  # Desativa o Swagger nativo
         )
 
         # Adiciona as rotas definidas nos controllers
@@ -35,7 +35,6 @@ class Server:
                 "app_name": "RedBalloon API"
             }
         )
-
         self.app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
     def run(self):

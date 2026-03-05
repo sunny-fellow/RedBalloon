@@ -4,7 +4,8 @@ flask-cors
 flask-restx
 flask_swagger_ui
 
-# -- Data --
-Pandas
+# --- Data ---
+pandas
+jsonschema
 
-# -- Utils --
+# --- Utils ---
