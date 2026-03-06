@@ -4,11 +4,23 @@ Esse repositório contém o código desenvolvido para o projeto da disciplina de
 
 **Observação:** o projeto está sendo desenvolvido de forma incremental e será atualizado após sprints semanais, que adicionarão mais funcionalidades e interações ao sistema proposto.
 
+### Documentos (todos encontrados no diretório `\docs`)
+
+- Documento de requisitos;
+
+- Diagrama de classes de análise (versão 1 e versão 2);
+  
+- Modelagem do banco de dados por meio do diagrama entidade-relacionamento;
+  
+- Diagrama de casos de uso para CRUD de usuários.
+
 ### Funcionalidades
 
-- Diagrama de casos de uso e diagrama de análise de classes para modelagem do sistema de gerenciamento de usuário do projeto;
+- Implementação de funções de CRUD para usuários, permitindo **adição**, **remoção**, **atualização** e **visualização total** de usuários (definida no diretório `\backend\user`);
 
-- Implementação de funções de CRUD para usuários, permitindo **adição**, **remoção**, **atualização** e **visualização total** de usuários (definida no diretório `\backend\user`).
+- Verificação de login e senha, segundo padrões propostos pela atividade;
+
+- Implementação de armazenamento de memória persistente, usando JSON.
 
 ## Intruções de uso
 
