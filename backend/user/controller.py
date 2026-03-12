@@ -1,75 +1,99 @@
 from flask_restx import Namespace, Resource
 from user.service import UserService, ValidationError
 from user.models import *
+
+from user.commands.create_user_command import CreateUserCommand
+from user.commands.delete_user_command import DeleteUserCommand
+from user.commands.list_users_command import ListUsersCommand
+from user.commands.update_user_command import UpdateUserCommand
+
 import traceback
 
 api = Namespace('user', description='Gerenciamento de Usuários')
-service = UserService()  # O arquivo padrão será o 'users.json'
+service = UserService()
 
 @api.route('/list')
 class UserList(Resource):
+
     def get(self):
-        """Lista todos os usuários"""
         try:
-            return service.list_users(), 200
-        
+            command = ListUsersCommand(service)
+            return command.execute(), 200
+
         except Exception as e:
             return {'message': f'Erro interno no servidor: {str(e)}'}, 500
 
+
 @api.route('/create')
 class UserCreate(Resource):
+
     @api.expect(getUserModel(api))
     def post(self):
-        """Cria um novo usuário"""
+
         data = api.payload
+
         try:
-            new_user = service.create_user(data)
+            command = CreateUserCommand(service, data)
+            new_user = command.execute()
+
             return new_user, 201
-        
+
         except ValidationError as e:
             return {'message': str(e)}, 400
-        
+
         except IOError as e:
             return {'message': f'Erro de armazenamento: {str(e)}'}, 500
-        
+
         except Exception as e:
             traceback.print_exc()
             return {'message': f'Erro interno inesperado: {str(e)}'}, 500
 
+
 @api.route('/delete/<int:id_user>')
 class UserDelete(Resource):
+
     def delete(self, id_user):
-        """Deleta um usuário pelo ID"""
+
         try:
-            result = service.delete_user(id_user)
+            command = DeleteUserCommand(service, id_user)
+
+            result = command.execute()
+
             if result:
                 return {'message': 'Usuário deletado com sucesso'}, 200
             else:
                 return {'message': 'Usuário não encontrado'}, 404
-        
+
         except IOError as e:
             return {'message': f'Erro de armazenamento: {str(e)}'}, 500
-        
+
         except Exception as e:
             return {'message': f'Erro interno inesperado: {str(e)}'}, 500
 
+
 @api.route('/update')
 class UserUpdate(Resource):
+
     @api.expect(getUserUpdateModel(api))
     def put(self):
-        """Atualiza um usuário existente"""
+
+        data = api.payload
+
         try:
-            updated_user = service.update_user(api.payload.get('id'), api.payload)
+            command = UpdateUserCommand(service, data.get("id"), data)
+
+            updated_user = command.execute()
+
             if not updated_user:
-                return {"message": "Usuário não encontrado"}, 404    
-            
+                return {"message": "Usuário não encontrado"}, 404
+
             return updated_user, 200
-        
+
         except ValidationError as e:
             return {'message': str(e)}, 400
-        
+
         except IOError as e:
             return {'message': f'Erro de armazenamento: {str(e)}'}, 500
-        
+
         except Exception as e:
             return {'message': f'Erro interno inesperado: {str(e)}'}, 500
