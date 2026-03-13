@@ -4,10 +4,11 @@ export interface User {
   email: string;
   login: string;
   avatar?: string;
+  description?: string;
   country: string;
   problemsSolved: number;
   problemsAttempted: number;
-  likes: number;
+  followers: number;
   createdAt: string;
 }
 
@@ -30,6 +31,7 @@ export interface Problem {
 
 export interface Comment {
   id: string;
+  problemId: string;
   userId: string;
   userName: string;
   userAvatar?: string;
@@ -61,6 +63,7 @@ export interface Room {
   status: 'waiting' | 'in_progress' | 'finished';
   endTime?: string;
   duration?: number;
+  acceptingSubmissions?: boolean;
   problems: RoomProblem[];
 }
 
@@ -87,6 +90,7 @@ export interface Submission {
   memory: number;
   createdAt: string;
   code?: string;
+  balloonColor?: string;
 }
 
 export interface ChatMessage {

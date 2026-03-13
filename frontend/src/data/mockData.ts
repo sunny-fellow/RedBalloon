@@ -1,4 +1,4 @@
-import { User, Problem, Post, Room, Submission, Tag, ReportCategory } from '@/types';
+import { User, Problem, Post, Room, Submission, Tag, ReportCategory, Comment } from '@/types';
 
 export const currentUser: User = {
   id: '1',
@@ -6,10 +6,11 @@ export const currentUser: User = {
   email: 'joao@email.com',
   login: 'joaodev',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=joao',
+  description: 'Estudante de ciência da computação e entusiasta de programação competitiva.',
   country: 'Brasil',
   problemsSolved: 42,
   problemsAttempted: 58,
-  likes: 156,
+  followers: 156,
   createdAt: '2024-01-15',
 };
 
@@ -24,7 +25,7 @@ export const mockUsers: User[] = [
     country: 'Portugal',
     problemsSolved: 89,
     problemsAttempted: 95,
-    likes: 342,
+    followers: 342,
     createdAt: '2023-11-20',
   },
   {
@@ -33,10 +34,11 @@ export const mockUsers: User[] = [
     email: 'carlos@email.com',
     login: 'carlosdev',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=carlos',
+    description: '- Sou uma pessoa `curiosa` e movida por desafios, sempre em busca de aprender algo novo e evoluir tanto no aspecto técnico quanto pessoal. Gosto de entender como as coisas funcionam por trás dos bastidores, especialmente quando envolvem lógica, sistemas e resolução de problemas. Para mim, cada erro é uma oportunidade de aprendizado e cada acerto é apenas mais um passo em um caminho de melhoria contínua. Tenho grande interesse em tecnologia e programação, áreas nas quais encontro espaço para criatividade, análise crítica e inovação. Resolver problemas complexos me motiva, principalmente quando posso transformar ideias abstratas em soluções práticas e funcionais. Acredito que escrever código vai muito além de fazer um programa rodar: é sobre clareza, organização, legibilidade e impacto real no usuário final.',
     country: 'Espanha',
     problemsSolved: 67,
     problemsAttempted: 78,
-    likes: 201,
+    followers: 201,
     createdAt: '2024-02-10',
   },
   {
@@ -48,7 +50,7 @@ export const mockUsers: User[] = [
     country: 'China',
     problemsSolved: 156,
     problemsAttempted: 160,
-    likes: 589,
+    followers: 589,
     createdAt: '2023-08-05',
   },
   {
@@ -60,7 +62,7 @@ export const mockUsers: User[] = [
     country: 'França',
     problemsSolved: 45,
     problemsAttempted: 60,
-    likes: 98,
+    followers: 98,
     createdAt: '2024-03-01',
   },
 ];
@@ -106,7 +108,7 @@ export const mockProblems: Problem[] = [
   {
     id: '2',
     title: 'Longest Palindromic Substring',
-    description: 'Given a string s, return the longest palindromic substring in s.',
+    description: 'Given a string `s`, return the longest palindromic substring in s.',
     difficulty: 'medium',
     creatorId: '4',
     creatorName: 'Ana Chen',
@@ -187,7 +189,19 @@ export const mockPosts: Post[] = [
         content: 'Thanks for the mention! I used a different approach with Manacher algorithm.',
         tags: [],
         createdAt: '2024-03-10T15:00:00',
-        replies: [],
+        replies: [
+
+          {
+            id: '1-1-1',
+            userId: '2',
+            userName: 'Maria Santos',
+            userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=maria',
+            content: 'Manacher is super efficient! I should give it a try next time.',
+            tags: [],
+            createdAt: '2024-03-10T15:30:00',
+            replies: [],
+          }
+        ],
       },
     ],
   },
@@ -215,9 +229,11 @@ export const mockRooms: Room[] = [
     currentPlayers: 23,
     status: 'waiting',
     duration: 120,
+    endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+    acceptingSubmissions: true,
     problems: [
-      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: '#a855f7', submissions: 15, correct: 12 },
-      { problemId: '2', title: 'Longest Palindromic Substring', points: 20, balloonColor: '#06b6d4', submissions: 10, correct: 5 },
+      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: 'red', submissions: 15, correct: 12 },
+      { problemId: '2', title: 'Longest Palindromic Substring', points: 20, balloonColor: 'cyan', submissions: 10, correct: 5 },
     ],
   },
   {
@@ -231,9 +247,11 @@ export const mockRooms: Room[] = [
     currentPlayers: 30,
     status: 'in_progress',
     duration: 60,
+    endTime: new Date(Date.now() + 45 * 60 * 1000).toISOString(),
+    acceptingSubmissions: true,
     problems: [
-      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: '#22c55e', submissions: 28, correct: 25 },
-      { problemId: '4', title: 'Binary Tree Inorder Traversal', points: 15, balloonColor: '#ec4899', submissions: 20, correct: 18 },
+      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: 'lime', submissions: 28, correct: 25 },
+      { problemId: '4', title: 'Binary Tree Inorder Traversal', points: 15, balloonColor: 'pink', submissions: 20, correct: 18 },
     ],
   },
   {
@@ -246,6 +264,7 @@ export const mockRooms: Room[] = [
     capacity: 10,
     currentPlayers: 4,
     status: 'waiting',
+    acceptingSubmissions: true,
     problems: [],
   },
 ];
@@ -265,6 +284,7 @@ export const mockSubmissions: Submission[] = [
     memory: 32,
     createdAt: '2024-03-10T14:00:00',
     code: 'def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        if target - num in seen:\n            return [seen[target - num], i]\n        seen[num] = i',
+    balloonColor: 'red',
   },
   {
     id: '2',
@@ -279,6 +299,7 @@ export const mockSubmissions: Submission[] = [
     time: 120,
     memory: 64,
     createdAt: '2024-03-10T13:30:00',
+    balloonColor: 'cyan',
   },
   {
     id: '3',
@@ -296,14 +317,6 @@ export const mockSubmissions: Submission[] = [
   },
 ];
 
-export const reportCategories: ReportCategory[] = [
-  { id: '1', name: 'Inappropriate Content' },
-  { id: '2', name: 'Spam' },
-  { id: '3', name: 'Plagiarism' },
-  { id: '4', name: 'Harassment' },
-  { id: '5', name: 'Other' },
-];
-
 export const countries = [
   'Brasil', 'Portugal', 'Espanha', 'França', 'Alemanha', 'Itália',
   'Reino Unido', 'Estados Unidos', 'Canadá', 'México', 'Argentina',
@@ -311,3 +324,86 @@ export const countries = [
 ];
 
 export const languages = ['java', 'python', 'c', 'cpp'] as const;
+
+export const BALLOON_COLORS = [
+  { value: 'red', label: 'Vermelho', hex: '#ef4444' },
+  { value: 'yellow', label: 'Amarelo', hex: '#eab308' },
+  { value: 'cyan', label: 'Azul Claro', hex: '#06b6d4' },
+  { value: 'blue', label: 'Azul Escuro', hex: '#3b82f6' },
+  { value: 'violet', label: 'Violeta', hex: '#a855f7' },
+  { value: 'orange', label: 'Laranja', hex: '#f97316' },
+  { value: 'lime', label: 'Verde Limão', hex: '#84cc16' },
+  { value: 'white', label: 'Branco', hex: '#f8fafc' },
+  { value: 'pink', label: 'Rosa', hex: '#ec4899' },
+  { value: 'green', label: 'Verde', hex: '#22c55e' },
+] as const;
+
+export const mockComments: Comment[] = [
+  {
+    id: '1',
+    problemId: '1',
+    userId: '2',
+    userName: 'Maria Santos',
+    userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=maria',
+    content: 'Ótimo problema para iniciantes! A dica é usar um hashmap para resolver em O(n).',
+    createdAt: '2024-03-10T14:30:00',
+  },
+  {
+    id: '2',
+    problemId: '1',
+    userId: '4',
+    userName: 'Ana Chen',
+    userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ana',
+    content: 'Resolvi usando two pointers depois de ordenar. Funciona bem também!',
+    createdAt: '2024-03-10T15:00:00',
+  },
+  {
+    id: '3',
+    problemId: '2',
+    userId: '1',
+    userName: 'João Silva',
+    userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=joao',
+    content: 'Esse problema é clássico! DP ou expand around center são as melhores abordagens.',
+    createdAt: '2024-03-09T10:00:00',
+  },
+  {
+    id: '4',
+    problemId: '3',
+    userId: '3',
+    userName: 'Carlos Ruiz',
+    userAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=carlos',
+    content: 'Muito difícil! Usei um min-heap para manter track dos menores elementos.',
+    createdAt: '2024-03-08T18:00:00',
+  },
+];
+
+export const mockSolveComments = [
+  {
+    id: '1',
+    solveId: '1',
+    userId: '2',
+    userName: 'Maria',
+    userAvatar: '',
+    content: 'Boa solução, bem otimizada 👍',
+    createdAt: '2025-01-01',
+  },
+  {
+    id: '2',
+    solveId: '1',
+    userId: '3',
+    userName: 'João',
+    userAvatar: '',
+    content: 'Concordo, ficou limpa.',
+    parentId: 'c1',
+    createdAt: '2025-01-01',
+  },
+  {
+    id: '3',
+    solveId: '1',
+    userId: '4',
+    userName: 'Ana',
+    userAvatar: '',
+    content: 'Essa abordagem passa no pior caso?',
+    createdAt: '2025-01-02',
+  },
+]

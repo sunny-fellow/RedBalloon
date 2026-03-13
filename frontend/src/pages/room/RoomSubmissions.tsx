@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Pagination } from '@/components/common/Pagination';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { BalloonBadge } from '@/components/ui/BalloonBadge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -28,6 +29,8 @@ const languageLabels: Record<string, string> = {
   c: 'C',
   cpp: 'C++',
 };
+
+const ITEMS_PER_PAGE = 10;
 
 export default function RoomSubmissions() {
   const room = mockRooms[0];
@@ -88,13 +91,21 @@ export default function RoomSubmissions() {
     return matchesSearch && matchesProblem && matchesStatus && matchesLanguage;
   });
 
+  const totalPages = Math.ceil(filteredSubmissions.length / ITEMS_PER_PAGE);
+  const paginatedSubmissions = filteredSubmissions.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  );
+
   // Get unique problems from submissions
   const problemsInRoom = Array.from(new Set(mockSubmissions.map(s => ({ id: s.problemId, title: s.problemTitle }))))
     .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
 
   return (
     <RoomLayout isHost roomName={room.name}>
-      <h2 className="text-xl font-bold mb-4">Submissões Gerais</h2>
+      <h2 className="text-xl font-bold mb-4" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+        Submissões Gerais
+      </h2>
       
       {/* Search and Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -128,15 +139,19 @@ export default function RoomSubmissions() {
       </div>
 
       <div className="space-y-3">
-        {filteredSubmissions.length === 0 ? (
+        {paginatedSubmissions.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">
             Nenhuma submissão encontrada
           </p>
         ) : (
-          filteredSubmissions.map(s => (
+          paginatedSubmissions.map(s => (
             <Card key={s.id} className="border-border/50 bg-card/50">
               <CardContent className="py-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
+                  {/* Show balloon for accepted submissions */}
+                  {s.status === 'accepted' && s.balloonColor && (
+                    <BalloonBadge color={s.balloonColor} size="lg" />
+                  )}
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={s.odAvatar} />
                     <AvatarFallback>{s.odName.charAt(0)}</AvatarFallback>
@@ -157,7 +172,13 @@ export default function RoomSubmissions() {
       </div>
 
       <div className="mt-6">
-        <Pagination currentPage={page} totalPages={3} onPageChange={setPage} />
+        <Pagination 
+          currentPage={page} 
+          totalPages={totalPages} 
+          onPageChange={setPage}
+          totalItems={filteredSubmissions.length}
+          itemsPerPage={ITEMS_PER_PAGE}
+        />
       </div>
 
       {/* Filter Dialog */}
