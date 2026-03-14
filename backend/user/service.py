@@ -1,198 +1,134 @@
-import pandas as pd
-import json
-import os
 import re
+from sqlalchemy.exc import IntegrityError
+from database.service import DatabaseService
+from models.user.user import User
+from datetime import datetime, timezone
+from utils.singleton import Singleton
 
 class ValidationError(Exception):
-    """Exceção personalizada para erros de validação."""
     pass
 
+@Singleton
 class UserService:
-    def __init__(self, storage_file='users.json'):
-        self.storage_file = storage_file
-        self.users_db = pd.DataFrame(columns=["id_user", "name", "email", "login", "password", "is_mod"])
-        self.last_id = 0
-        self._load_from_file()  # Carrega dados do arquivo ao iniciar
+    def __init__(self):
+        self.db_service = DatabaseService()
 
-    def _load_from_file(self):
-        """Carrega os usuários do arquivo JSON para o DataFrame em memória."""
-        if not os.path.exists(self.storage_file):
-            return  # Arquivo não existe, começa vazio
+    # --- validações ---
+    def _validate_nickname(self, nickname: str):
+        if not nickname or not nickname.strip():
+            raise ValidationError("O campo 'nickname' não pode ser vazio.")
+        if len(nickname) > 12:
+            raise ValidationError("O 'nickname' deve ter no máximo 12 caracteres.")
+        if re.search(r'\d', nickname):
+            raise ValidationError("O 'nickname' não pode conter números.")
 
-        try:
-            with open(self.storage_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            
-            if data:
-                self.users_db = pd.DataFrame(data)
-                # Garante que as colunas estejam na ordem correta
-                if not self.users_db.empty:
-                    self.last_id = self.users_db['id_user'].max()
-                else:
-                    self.last_id = 0
-            else:
-                self.users_db = pd.DataFrame(columns=["id_user", "name", "email", "login", "password", "is_mod"])
-                self.last_id = 0
-        
-        except (IOError, json.JSONDecodeError) as e:
-            # Em caso de erro de leitura, começa vazio, mas loga o erro (aqui apenas print para simplicidade)
-            print(f"Erro ao carregar arquivo {self.storage_file}: {e}. Iniciando com banco vazio.")
-            self.users_db = pd.DataFrame(columns=["id_user", "name", "email", "login", "password", "is_mod"])
-            self.last_id = 0
-
-    def _save_to_file(self):
-        """Salva o DataFrame atual no arquivo JSON."""
-        try:
-            self.users_db.to_json(self.storage_file, orient='records', indent=2, force_ascii=False)
-        
-        except IOError as e:
-            print(f"Erro ao salvar arquivo {self.storage_file}: {e}")
-            # Relança a exceção para que a camada superior (controller) possa tratá-la
-            raise IOError(f"Não foi possível salvar os dados no arquivo: {e}")
-
-    def _validate_login(self, login):
-        """Valida as regras do login."""
-        if not login or not login.strip():
-            raise ValidationError("O campo 'login' não pode ser vazio.")
-        
-        if len(login) > 12:
-            raise ValidationError("O 'login' deve ter no máximo 12 caracteres.")
-        
-        if re.search(r'\d', login):
-            raise ValidationError("O 'login' não pode conter números.")
-
-    def _validate_password(self, password):
-        """
-        Valida a senha seguindo a política padrão da AWS IAM:
-        - Tamanho mínimo 8 e máximo 128 caracteres.
-        - Pelo menos três dos quatro tipos: maiúscula, minúscula, número, caractere especial.
-        """
+    def _validate_password(self, password: str):
         if not password:
             raise ValidationError("O campo 'password' não pode ser vazio.")
-        
         if len(password) < 8 or len(password) > 128:
             raise ValidationError("A 'senha' deve ter entre 8 e 128 caracteres.")
 
-        # Verifica a presença de tipos de caracteres
         has_upper = bool(re.search(r'[A-Z]', password))
         has_lower = bool(re.search(r'[a-z]', password))
         has_digit = bool(re.search(r'\d', password))
-        
-        # Caracteres especiais comuns (baseado na lista da AWS)
-        special_chars = r"[!@#$%^&*()_+\-=\[\]{}|']"
-        has_special = bool(re.search(special_chars, password))
+        has_special = bool(re.search(r"[!@#$%^&*()_+\-=\[\]{}|']", password))
 
-        types_count = sum([has_upper, has_lower, has_digit, has_special])
-        if types_count < 3:
+        if sum([has_upper, has_lower, has_digit, has_special]) < 3:
             raise ValidationError(
                 "A 'senha' deve conter pelo menos três dos seguintes tipos: "
                 "letras maiúsculas, letras minúsculas, números e caracteres especiais."
             )
 
+    # --- CRUD ---
     def list_users(self):
-        """Lista todos os usuários."""
-        return self.users_db.to_dict(orient='records')
+        def func(session):
+            users = session.query(User).all()
+            return [self._to_dict(u) for u in users]
+        return self.db_service.run(func)
 
-    def create_user(self, data):
-        """Cria um novo usuário com validações e salva no arquivo."""
-        # --- Validações ---
-        login = data.get("login")
+    def create_user(self, data: dict):
+        nickname = data.get("nickname")
         password = data.get("password")
+        email = data.get("email")
 
-        self._validate_login(login)
+        self._validate_nickname(nickname)
         self._validate_password(password)
+        if not email:
+            raise ValidationError("O campo 'email' é obrigatório.")
 
-        # Validação adicional: email único (opcional, mas boa prática)
-        if login in self.users_db["login"].values:
-            raise ValidationError(f"O login '{login}' já está em uso.")
+        new_user = User(
+            nickname=nickname,
+            password=password,  # trocar para hash futuramente
+            email=email,
+            name=data.get("name"),
+            avatar=data.get("avatar"),
+            description=data.get("description"),
+            nationality=data.get("nationality"),
+            created_at=datetime.now(timezone.utc).isoformat()
+        )
 
-        # --- Criação do usuário ---
-        self.last_id += 1
-        new_user = {
-            "id_user": self.last_id,
-            "name": data.get("name"),
-            "email": data.get("email"),
-            "login": login,
-            "password": password,  # Em um cenário real, a senha deveria ser hasheada!
-            "is_mod": data.get("is_mod", False)
-        }
+        def func(session):
+            session.add(new_user)
+            try:
+                session.flush()  # força validação de constraints antes do commit
+            except IntegrityError as e:
+                raise ValidationError("Nickname ou email já estão em uso.") from e
+            return self._to_dict(new_user)
 
-        # Adiciona ao DataFrame
-        self.users_db.loc[len(self.users_db)] = new_user
+        return self.db_service.run(func)
 
-        try:
-            self._save_to_file()
-        
-        except IOError as e:
-            # Se falhar ao salvar, reverte a operação em memória para consistência
-            self.users_db = self.users_db[self.users_db["id_user"] != self.last_id].reset_index(drop=True)
-            self.last_id -= 1
-            raise IOError(f"Erro ao salvar novo usuário: {e}")
-        
-        return new_user
+    def get_user(self, user_id: int):
+        def func(session):
+            user = session.query(User).filter(User.user_id == user_id).first()
+            return self._to_dict(user) if user else None
+        return self.db_service.run(func)
 
-    def delete_user(self, id_user):
-        """Deleta um usuário pelo ID e atualiza o arquivo."""
-        if id_user not in self.users_db["id_user"].values:
-            return False
+    def update_user(self, user_id: int, data: dict):
+        def func(session):
+            user: User = session.query(User).filter(User.user_id == user_id).first()
+            if not user:
+                return None
 
-        # Guarda o estado anterior para possível rollback
-        users_backup = self.users_db.copy()
+            if "nickname" in data:
+                self._validate_nickname(data["nickname"])
+                user.nickname = data["nickname"]
 
-        # Remove e reorganiza o índice
-        self.users_db = self.users_db[self.users_db["id_user"] != id_user].reset_index(drop=True)
-
-        # --- Persistência ---
-        try:
-            self._save_to_file()
-        
-        except IOError as e:
-            # Rollback em caso de erro no arquivo
-            self.users_db = users_backup
-            raise IOError(f"Erro ao deletar usuário: {e}")
-
-        return True
-
-    def update_user(self, id_user, data):
-        """Atualiza um usuário com validações e salva no arquivo."""
-        if id_user not in self.users_db["id_user"].values:
-            return False
-
-        # Guarda o estado anterior para possível rollback
-        users_backup = self.users_db.copy()
-        idx = self.users_db.index[self.users_db["id_user"] == id_user][0]
-
-        try:
-            if "login" in data and data["login"] is not None:
-                new_login = data["login"]
-                self._validate_login(new_login)
-                # Verifica se o novo login já existe em outro usuário
-                
-                if new_login in self.users_db["login"].values and new_login != self.users_db.at[idx, "login"]:
-                    raise ValidationError(f"O login '{new_login}' já está em uso.")
-                
-                self.users_db.at[idx, "login"] = new_login
-
-            if "password" in data and data["password"] is not None:
+            if "password" in data:
                 self._validate_password(data["password"])
-                self.users_db.at[idx, "password"] = data["password"]
+                user.password = data["password"]
 
-        except ValidationError as e:
-            # Se houver erro de validação, não salva nada
-            raise e
+            for field in ["name", "email", "avatar", "description", "nationality"]:
+                if field in data:
+                    setattr(user, field, data[field])
 
-        # Atualiza os outros campos sem validação especial
-        for key in ["name", "email", "is_mod"]:
-            if key in data:
-                self.users_db.at[idx, key] = data[key]
+            try:
+                session.flush()
+            except IntegrityError as e:
+                raise ValidationError("Nickname ou email já estão em uso.") from e
 
-        # --- Persistência ---
-        try:
-            self._save_to_file()
-        
-        except IOError as e:
-            # Rollback em caso de erro no arquivo
-            self.users_db = users_backup
-            raise IOError(f"Erro ao atualizar usuário: {e}")
+            return self._to_dict(user)
 
-        return self.users_db.loc[idx].to_dict()
+        return self.db_service.run(func)
+
+    def delete_user(self, user_id: int):
+        def func(session):
+            user: User = session.query(User).filter(User.user_id == user_id).first()
+            if not user:
+                return False
+            session.delete(user)
+            return True
+
+        return self.db_service.run(func)
+
+    # --- utilitário ---
+    def _to_dict(self, user: User):
+        return {
+            "user_id": user.user_id,
+            "nickname": user.nickname,
+            "name": user.name,
+            "email": user.email,
+            "avatar": user.avatar,
+            "description": user.description,
+            "nationality": user.nationality,
+            "created_at": user.created_at
+        }

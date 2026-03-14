@@ -2,19 +2,23 @@ from flask_restx import fields, Model
 
 def getUserModel(api):
     return api.model('User', {
-        'name': fields.String(required=True, description='Nome do usuário', example='João'),
+        'name': fields.String(required=True, description="Nome do Usuário", example="João Silva"),
+        'nickname': fields.String(required=True, description='Nickname/Login do usuário', example='joao_s'),
         'email': fields.String(required=True, description='Email do usuário', example='joao@gmail.com'),
-        'login': fields.String(required=True, description='Login do usuário', example='joj'),
         'password': fields.String(required=True, description='Senha do usuário', example='joj@123'),
-        'is_mod': fields.Boolean(required=False, default=False, description='Se é moderador')
+        'avatar': fields.String(required=False, description="Avatar do usuário", example=""),
+        'description': fields.String(required=False, description="Descrição/Bio do usuário", example="Olá, me chamo João!"),
+        'nationality': fields.String(required=True, descriptiopn="Nacionalidade do usuário", example="BR"),
     })
 
 def getUserUpdateModel(api):
     return api.model('UserUpdate', {
-        'id': fields.Integer(required=True, description='ID do usuário', example=1),
-        'name': fields.String(required=False, description='Nome do usuário', example='João'),
-        'email': fields.String(required=False, description='Email do usuário', example='joao@email.com'),
-        'login': fields.String(required=False, description='Login do usuário', example='joao123'),
-        'password': fields.String(required=False, description='Senha do usuário', example='senha123'),
-        'is_mod': fields.Boolean(required=False, default=False, description='Se é moderador')
+        'user_id': fields.Integer(required=True, description='ID do usuário', example=1),
+        'name': fields.String(required=True, description="Nome do Usuário", example="João Silva"),
+        'nickname': fields.String(required=True, description='Nickname/Login do usuário', example='joao_s'),
+        'email': fields.String(required=True, description='Email do usuário', example='joao@gmail.com'),
+        'password': fields.String(required=True, description='Senha do usuário', example='joj@123'),
+        'avatar': fields.String(required=False, description="Avatar do usuário", example=""),
+        'description': fields.String(required=False, description="Descrição/Bio do usuário", example="Olá, me chamo João!"),
+        'nationality': fields.String(required=True, descriptiopn="Nacionalidade do usuário", example="BR"),
     })

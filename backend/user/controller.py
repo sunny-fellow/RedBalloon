@@ -2,10 +2,10 @@ from flask_restx import Namespace, Resource
 from user.service import UserService, ValidationError
 from user.models import *
 
-from user.commands.create_user_command import CreateUserCommand
-from user.commands.delete_user_command import DeleteUserCommand
-from user.commands.list_users_command import ListUsersCommand
-from user.commands.update_user_command import UpdateUserCommand
+from .commands.create_user import CreateUserCommand
+from .commands.delete_user import DeleteUserCommand
+from .commands.list_users import ListUsersCommand
+from .commands.update_user import UpdateUserCommand
 
 import traceback
 
@@ -80,7 +80,7 @@ class UserUpdate(Resource):
         data = api.payload
 
         try:
-            command = UpdateUserCommand(service, data.get("id"), data)
+            command = UpdateUserCommand(service, data.get("user_id"), data)
 
             updated_user = command.execute()
 

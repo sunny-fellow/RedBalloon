@@ -4,6 +4,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 
 # Importa namespaces (controllers)
 from user.controller import api as user_controller
+from database.controller import api as database_controller
 
 class Server:
     def __init__(self):
@@ -12,7 +13,7 @@ class Server:
         # rota padrão, para testar se o servidor está ativo
         @self.app.route("/")
         def hello():
-            return {"message": "Hello World"}, 200
+            return {"message": "Hello World!", "warn": "if you're looking for the documentation, check the route /apidocs"}, 200
 
         self.api = Api(
             self.app,
@@ -24,6 +25,7 @@ class Server:
 
         # Adiciona as rotas definidas nos controllers
         self.api.add_namespace(user_controller, path="/user")
+        self.api.add_namespace(database_controller, path="/database")
 
         SWAGGER_URL = "/apidocs"
         API_URL = "/swagger.json"
