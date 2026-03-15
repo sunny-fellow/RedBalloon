@@ -12,3 +12,5 @@ jsonschema
 sqlalchemy
 dotenv
 psycopg2
+bcrypt
+PyJWT

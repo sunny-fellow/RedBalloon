@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource
+from utils.handle_exceptions import handle_exceptions
 
 # Import do Service
 from database.admin_service import DatabaseAdminService
@@ -23,69 +24,63 @@ api = Namespace("database", description="Administração do Banco de Dados")
 
 @api.route("/create_database")
 class CreateDatabase(Resource):
-    @api.expect(getPasswordModel(api))
+
+    @handle_exceptions
+    @api.expect(getPasswordModel(api), validate=True)
     def post(self):
         data = api.payload
-        try:
-            command = CreateDatabaseCommand(db_admin_service, data["password"])
-            return command.execute(), 200
-        except Exception as e:
-            return {"message": str(e)}, 400
+        command = CreateDatabaseCommand(db_admin_service, data["password"])
+        return command.execute(), 200
 
 
 @api.route("/create_tables")
 class CreateTables(Resource):
-    @api.expect(getPasswordModel(api))
+
+    @handle_exceptions
+    @api.expect(getPasswordModel(api), validate=True)
     def post(self):
         data = api.payload
-        try:
-            command = CreateTablesCommand(db_admin_service, data["password"])
-            return command.execute(), 200
-        except Exception as e:
-            return {"message": str(e)}, 400
+        command = CreateTablesCommand(db_admin_service, data["password"])
+        return command.execute(), 200
 
 
 @api.route("/reset_tables")
 class ResetTables(Resource):
-    @api.expect(getPasswordModel(api))
+
+    @handle_exceptions
+    @api.expect(getPasswordModel(api), validate=True)
     def post(self):
         data = api.payload
-        try:
-            command = ResetTablesCommand(db_admin_service, data["password"])
-            return command.execute(), 200
-        except Exception as e:
-            return {"message": str(e)}, 400
+        command = ResetTablesCommand(db_admin_service, data["password"])
+        return command.execute(), 200
         
 @api.route("/drop_tables")
 class DropTables(Resource):
-    @api.expect(getPasswordModel(api))
+
+    @handle_exceptions
+    @api.expect(getPasswordModel(api), validate=True)
     def post(self):
         data = api.payload
-        try:
-            command = DropTablesCommand(db_admin_service, data["password"])
-            return command.execute(), 200
-        except Exception as e:
-            return {"message": str(e)}, 400
+        command = DropTablesCommand(db_admin_service, data["password"])
+        return command.execute(), 200
 
 
 @api.route("/fill_tables")
 class FillTables(Resource):
-    @api.expect(getPasswordModel(api))
+
+    @handle_exceptions
+    @api.expect(getPasswordModel(api), validate=True)
     def post(self):
         data = api.payload
-        try:
-            command = FillTablesCommand(db_admin_service, data["password"])
-            return command.execute(), 200
-        except Exception as e:
-            return {"message": str(e)}, 400
+        command = FillTablesCommand(db_admin_service, data["password"])
+        return command.execute(), 200
         
 @api.route("/undo_action")
 class UndoActionByMemento(Resource):
-    @api.expect(getPasswordModel(api))
+
+    @handle_exceptions
+    @api.expect(getPasswordModel(api), validate=True)
     def post(self):
         data = api.payload
-        try: 
-            command = UndoActionCommand(db_admin_service, data["password"])
-            return command.execute(), 200
-        except Exception as e:
-            return {"message": str(e)}, 400
+        command = UndoActionCommand(db_admin_service, data["password"])
+        return command.execute(), 200
