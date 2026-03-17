@@ -42,7 +42,7 @@ class MessageContextType(str, Enum):
 class ValidationMode(str, Enum):
     INPUTS_OUTPUTS = "INPUTS_OUTPUTS"
     CHECKER_ALGORITHM = "CHECKER_ALGORITHM"
-    NO_VALIDATION = "NO_VALIDATION"
+    NO_VALIDATION = "CHECKER_ALGORITHM"
 
 class ReactionType(str, Enum):
     LIKE = "LIKE"

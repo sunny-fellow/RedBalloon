@@ -20,3 +20,5 @@ engine = create_engine(
 
 # Factory de sessões
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+
+configure_mappers()

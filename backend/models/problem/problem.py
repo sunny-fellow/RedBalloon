@@ -49,3 +49,20 @@ class Problem(Base):
         back_populates="problem",
         cascade="all, delete"
     )
+
+    test_cases = relationship(
+        "ProblemTestCase",
+        back_populates="problem",
+        cascade="all, delete"
+    )
+
+    inputs = relationship(
+        "ProblemInput",
+        back_populates="problem",
+        cascade="all, delete"
+    )
+
+    checker = relationship(
+        "ProblemChecker",
+        back_populates="problem"
+    )
