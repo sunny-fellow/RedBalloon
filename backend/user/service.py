@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 from database.service import DatabaseService
 from utils.singleton import Singleton
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
 
 from models.user.user import User
 from user.repository import UserRepository
@@ -62,11 +62,11 @@ class UserService:
             try:
                 session.flush()
             except IntegrityError as e:
-                raise ValidationError("Nickname ou email já estão em uso.") from e
+                raise AppError("Nickname ou email já estão em uso.") from e
 
             return self._to_dict(user)
 
-        return self.db_service.run(func)
+        return self.db_service.run(func, user_id)
 
     def delete_user(self, user_id: int):
 
@@ -81,7 +81,7 @@ class UserService:
 
             return True
 
-        return self.db_service.run(func)
+        return self.db_service.run(func, user_id)
 
     # --- utilitário ---
 

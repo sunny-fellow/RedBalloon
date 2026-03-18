@@ -1,9 +1,10 @@
 import re
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
+from utils.validator import Validator
 from user.validators.nickname_validator import NicknameValidator
 from user.validators.password_validator import PasswordValidator
 
-class RegisterValidator:
+class RegisterValidator(Validator):
 
     @staticmethod
     def validate(data: dict):
@@ -18,15 +19,15 @@ class RegisterValidator:
 
         for field in required_fields:
             if not data.get(field):
-                raise ValidationError(f"{field} é obrigatório.")
+                raise AppError(f"{field} é obrigatório.")
 
         email = data["email"]
 
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            raise ValidationError("Email inválido.")
+            raise AppError("Email inválido.")
 
         password = data["password"]
         nickname = data["nickname"]
 
-        PasswordValidator().validate(password)
-        NicknameValidator().validate(nickname)
+        PasswordValidator.validate(password)
+        NicknameValidator.validate(nickname)

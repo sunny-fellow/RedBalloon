@@ -78,7 +78,7 @@ def CreateProblemModel(api):
 
         "difficulty": fields.String(
             required=True,
-            enum=["BEGGINNER", "EASY", "MEDIUM", "HARD"],
+            enum=["EASY", "MEDIUM", "HARD"],
             description="Dificuldade do Problema"
         ),
 

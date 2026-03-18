@@ -83,3 +83,9 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan"
     )
+
+    problem_reactions = relationship(
+        "ProblemReact",
+        back_populates="user",
+        cascade="all, delete"
+    )

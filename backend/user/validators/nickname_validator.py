@@ -1,15 +1,16 @@
 import re
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
+from utils.validator import Validator
 
-class NicknameValidator:
+class NicknameValidator(Validator):
 
     def validate(self, nickname: str):
 
         if not nickname or not nickname.strip():
-            raise ValidationError("O campo 'nickname' não pode ser vazio.")
+            raise AppError("O campo 'nickname' não pode ser vazio.")
 
         if len(nickname) > 12:
-            raise ValidationError("O 'nickname' deve ter no máximo 12 caracteres.")
+            raise AppError("O 'nickname' deve ter no máximo 12 caracteres.")
 
         if re.search(r"\d", nickname):
-            raise ValidationError("O 'nickname' não pode conter números.")
+            raise AppError("O 'nickname' não pode conter números.")

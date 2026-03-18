@@ -66,3 +66,14 @@ class Problem(Base):
         "ProblemChecker",
         back_populates="problem"
     )
+
+    problem_tags = relationship(
+        "ProblemTag",
+        back_populates="problem"
+    )
+
+    reactions = relationship(
+        "ProblemReact",
+        back_populates="problem",
+        cascade="all, delete"
+    )

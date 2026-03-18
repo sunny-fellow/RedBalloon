@@ -4,7 +4,7 @@ import traceback
 from werkzeug.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
 
 
 def handle_exceptions(func):
@@ -15,21 +15,33 @@ def handle_exceptions(func):
         try:
             return func(*args, **kwargs)
 
-        except ValidationError as e:
-            return {"message": str(e)}, 400
+        except AppError as e:
+            return e.to_dict(), e.code
 
         except IntegrityError as e:
             traceback.print_exc()
-            return {"message": "Erro de integridade no banco de dados."}, 400
+            return {
+                "message": "Erro de integridade no banco de dados.",
+                "code": 400
+            }, 400
 
         except IOError as e:
-            return {"message": f"Erro de armazenamento: {str(e)}"}, 500
+            return {
+                "message": f"Erro de armazenamento: {str(e)}",
+                "code": 500
+            }, 500
 
         except HTTPException as e:
-            return {"message": e.description}, e.code
+            return {
+                "message": e.description,
+                "code": e.code
+            }, e.code
 
         except Exception as e:
             traceback.print_exc()
-            return {"message": f"Erro interno inesperado: {str(e)}"}, 500
+            return {
+                "message": f"Erro interno inesperado: {str(e)}",
+                "code": 500
+            }, 500
 
     return wrapper

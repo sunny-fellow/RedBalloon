@@ -8,6 +8,7 @@ from user.controller import api as user_controller
 from database.controller import api as database_controller
 from auth.controller import api as auth_controller
 from problem.controller import api as problem_controller
+from message.controller import api as message_controller
 
 # The "Server" class is a facade class.
 class Server:
@@ -37,6 +38,7 @@ class Server:
         self.api.add_namespace(auth_controller, path="/auth")
         self.api.add_namespace(user_controller, path="/user")
         self.api.add_namespace(problem_controller, path="/problem")
+        self.api.add_namespace(message_controller, path="/message")
         self.api.add_namespace(database_controller, path="/database")
 
     def configure_swagger(self):

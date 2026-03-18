@@ -1,6 +1,7 @@
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
+from utils.validator import Validator
 
-class LoginValidator:
+class LoginValidator(Validator):
 
     @staticmethod
     def validate(data: dict):
@@ -9,7 +10,7 @@ class LoginValidator:
         password = data.get("password")
 
         if not login:
-            raise ValidationError("Login é obrigatório.")
+            raise AppError("Login é obrigatório.")
 
         if not password:
-            raise ValidationError("Senha é obrigatória.")
+            raise AppError("Senha é obrigatória.")

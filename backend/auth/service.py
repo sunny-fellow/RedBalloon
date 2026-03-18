@@ -4,18 +4,22 @@ from datetime import datetime, timedelta, timezone
 
 from database.service import DatabaseService
 from utils.singleton import Singleton
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
 from auth.repository import AuthRepository
 from models.user.user import User
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
+
 JWT_KEY = os.getenv("JWT_KEY")
 TOKEN_EXPIRATION_HOURS = int(os.getenv("TOKEN_EXPIRATION_HOURS"))
 
+
 from auth.validators.login import LoginValidator
 from auth.validators.register import RegisterValidator
+
 
 @Singleton
 class AuthService:
@@ -24,9 +28,28 @@ class AuthService:
         self.db_service = DatabaseService()
         self.repository = AuthRepository()
 
+    # ---------------- JWT ----------------
+    def make_jwt(self, user):
+
+        payload = {
+            "user_id": user.user_id,
+            "nickname": user.nickname,
+            "iat": datetime.now(timezone.utc),
+            "exp": datetime.now(timezone.utc) + timedelta(hours=TOKEN_EXPIRATION_HOURS)
+        }
+
+        token = jwt.encode(payload, JWT_KEY, algorithm="HS256")
+
+        # compatibilidade (pyjwt antigo)
+        if isinstance(token, bytes):
+            token = token.decode("utf-8")
+
+        return token
+
+    # ---------------- LOGIN ----------------
     def login(self, data: dict):
 
-        LoginValidator().validate(data)
+        LoginValidator.validate(data)
 
         login = data["login"]
         password = data["password"]
@@ -36,21 +59,15 @@ class AuthService:
             user = self.repository.get_by_login(session, login)
 
             if not user:
-                raise ValidationError("Credenciais inválidas.")
+                raise AppError("Credenciais inválidas.", 401)
 
             if not bcrypt.checkpw(
                 password.encode("utf-8"),
                 user.password.encode("utf-8")
             ):
-                raise ValidationError("Credenciais inválidas.")
+                raise AppError("Credenciais inválidas.", 401)
 
-            payload = {
-                "user_id": user.user_id,
-                "nickname": user.nickname,
-                "exp": datetime.now(timezone.utc) + timedelta(hours=TOKEN_EXPIRATION_HOURS)
-            }
-
-            token = jwt.encode(payload, JWT_KEY, algorithm="HS256")
+            token = self.make_jwt(user)
 
             return {
                 "token": token,
@@ -62,10 +79,11 @@ class AuthService:
             }
 
         return self.db_service.run(func)
-    
+
+    # ---------------- REGISTER ----------------
     def register(self, data: dict):
 
-        RegisterValidator().validate(data)
+        RegisterValidator.validate(data)
 
         nickname = data.get("nickname")
         email = data.get("email")
@@ -83,22 +101,21 @@ class AuthService:
             password=hashed_password,
             avatar=data.get("avatar"),
             nationality=data.get("nationality"),
-            description= "Hello, I'm " + data.get("name") + "!",
+            description="Hello, I'm " + data.get("name") + "!",
             created_at=datetime.now(timezone.utc).isoformat()
         )
 
         def func(session):
 
+            # nickname
             existing_user = self.repository.get_by_login(session, nickname)
-            existing_email = self.repository.get_by_login(session, email)
+            if existing_user:
+                raise AppError("Nickname já está em uso.", 400)
 
-            if existing_user or existing_email:
-                raise ValidationError("Nickname ou E-mail já está em uso.")
-
+            # email
             email_user = session.query(User).filter(User.email == email).first()
-
             if email_user:
-                raise ValidationError("Email já está em uso.")
+                raise AppError("Email já está em uso.", 400)
 
             session.add(new_user)
             session.flush()

@@ -1,7 +1,6 @@
 from enum import Enum
 
 class ProblemDifficulty(str, Enum):
-    BEGGINNER = "BEGGINNER"
     EASY = "EASY"
     MEDIUM = "MEDIUM"
     HARD = "HARD"
@@ -33,6 +32,28 @@ class LanguageType(str, Enum):
 class TagType(str, Enum):
     PROBLEM = "PROBLEM"
     MESSAGE = "MESSAGE"
+
+class ProblemTags(str, Enum):
+    BINARY_SEARCH = "binary_search"
+    GREEDY = "greedy"
+    DYNAMIC_PROGRAMMING = "dynamic_programming"
+    GRAPHS = "graphs"
+    MATH = "math"
+    STRINGS = "strings"
+    BITMASK = "bitmask"
+    SORTING = "sorting"
+    TREES = "trees"
+    DATA_STRUCTURES = "data_structures"
+    OPTIMIZATION = "optimization"
+    BEGGINNER = "begginner"
+
+
+class MessageTags(str, Enum):
+    DOUBT = "doubt"
+    CURIOSITY = "curiosity"
+    DISCUSSION = "discussion"
+    TIP = "tip"
+    ANNOUNCEMENT = "announcement"
 
 class MessageContextType(str, Enum):
     GLOBAL = "GLOBAL"

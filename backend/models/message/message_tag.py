@@ -1,21 +1,27 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 from ..base import Base
+from ..enums import MessageTags
 
 
 class MessageTag(Base):
     __tablename__ = "message_tags"
 
-    message_id = Column(Integer, ForeignKey("messages.message_id", ondelete="CASCADE"), primary_key=True)
-    tag_id = Column(Integer, ForeignKey("tags.tag_id", ondelete="CASCADE"), primary_key=True)
+    message_tag_id = Column(Integer, primary_key=True, autoincrement=True)
+
+    message_id = Column(
+        Integer,
+        ForeignKey("messages.message_id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    tag = Column(
+        Enum(MessageTags, name="message_tags_enum"),
+        nullable=False
+    )
 
     # -------- relações --------
     message = relationship(
         "Message",
         back_populates="tags"
-    )
-
-    tag = relationship(
-        "Tag",
-        back_populates="message_tags"
     )

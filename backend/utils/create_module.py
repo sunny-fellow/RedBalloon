@@ -20,7 +20,7 @@ api = Namespace("{name}", description="")
 
     "service.py": """from database.service import DatabaseService
 from utils.singleton import Singleton
-from utils.validation_error import ValidationError
+from utils.app_error import AppError
 from {name}.repository import {Name}Repository
 
 
