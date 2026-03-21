@@ -262,14 +262,19 @@ export default function RoomCreate() {
                           value={item.balloonColor}
                           onValueChange={(v) => updateProblemBalloonColor(item.problem.id, v)}
                         >
-                          <SelectTrigger className="w-24 h-8 bg-input">
+                          <SelectTrigger className="w-30 h-8 bg-input">
                             <BalloonBadge color={item.balloonColor} size="sm" showLabel />
                           </SelectTrigger>
                           <SelectContent>
                             {BALLOON_COLORS.map(b => (
                               <SelectItem key={b.value} value={b.value}>
                                 <div className="flex items-center gap-2">
-                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: b.hex }} />
+                                  <div className="w-4 h-8 rounded-full overflow-hidden">
+                                    <img
+                                      src={b.value}
+                                      className="w-full h-full object-cover object-top"
+                                    />
+                                  </div>
                                   {b.label}
                                 </div>
                               </SelectItem>

@@ -17,7 +17,6 @@ class Submission(Base):
     code = Column(String, nullable=False)
     language = Column(Enum(LanguageType), nullable=False)
     time_spent = Column(Integer, nullable=False)
-    memory_used = Column(Integer, nullable=False)
 
     status = Column(Enum(SubmissionStatus), default=SubmissionStatus.JUDGING, nullable=False)
     submitted_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)

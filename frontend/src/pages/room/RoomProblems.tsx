@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { RoomLayout } from '@/components/room/RoomLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { mockRooms } from '@/data/mockData';
+import { BalloonBadge } from '@/components/ui/BalloonBadge';
 
 export default function RoomProblems() {
   const room = mockRooms[0];
@@ -13,8 +14,26 @@ export default function RoomProblems() {
           <Link to={`/room/solve/${p.problemId}`} key={p.problemId}>
             <Card className="border-border/50 bg-card/50 hover:border-primary/50 transition-colors">
               <CardContent className="py-4 flex items-center justify-between">
-                <div className="flex items-center gap-4"><div className="w-6 h-6 rounded-full" style={{ backgroundColor: p.balloonColor }} /><div><p className="font-medium">{p.title}</p><p className="text-sm text-muted-foreground">{p.points} pontos</p></div></div>
-                <div className="text-sm text-muted-foreground"><span className="text-neon-green">{p.correct}</span>/{p.submissions} aceitos</div>
+                
+                <div className="flex items-center gap-4">
+                  
+                  <BalloonBadge 
+                    color={p.balloonColor} 
+                    size="md"
+                  />
+
+                  <div>
+                    <p className="font-medium">{p.title}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {p.points} pontos
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-sm text-muted-foreground">
+                  <span className="text-neon-green">{p.correct}</span>/{p.submissions} aceitos
+                </div>
+
               </CardContent>
             </Card>
           </Link>

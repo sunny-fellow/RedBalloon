@@ -13,7 +13,6 @@ class RoomSubmission(Base):
 
     submitted_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
     time_taken = Column(Integer, nullable=False)
-    memory_used = Column(Integer, nullable=False)
     code = Column(String, nullable=False)
     language = Column(Enum(LanguageType), nullable=False)
     status = Column(Enum(SubmissionStatus), default=SubmissionStatus.JUDGING, nullable=False)

@@ -232,8 +232,8 @@ export const mockRooms: Room[] = [
     endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
     acceptingSubmissions: true,
     problems: [
-      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: 'red', submissions: 15, correct: 12 },
-      { problemId: '2', title: 'Longest Palindromic Substring', points: 20, balloonColor: 'cyan', submissions: 10, correct: 5 },
+      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: 'Vermelho', submissions: 15, correct: 12 },
+      { problemId: '2', title: 'Longest Palindromic Substring', points: 20, balloonColor: 'Ciano', submissions: 10, correct: 5 },
     ],
   },
   {
@@ -250,8 +250,8 @@ export const mockRooms: Room[] = [
     endTime: new Date(Date.now() + 45 * 60 * 1000).toISOString(),
     acceptingSubmissions: true,
     problems: [
-      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: 'lime', submissions: 28, correct: 25 },
-      { problemId: '4', title: 'Binary Tree Inorder Traversal', points: 15, balloonColor: 'pink', submissions: 20, correct: 18 },
+      { problemId: '1', title: 'Two Sum', points: 10, balloonColor: 'Verde Limão', submissions: 28, correct: 25 },
+      { problemId: '4', title: 'Binary Tree Inorder Traversal', points: 15, balloonColor: 'Rosa', submissions: 20, correct: 18 },
     ],
   },
   {
@@ -284,7 +284,7 @@ export const mockSubmissions: Submission[] = [
     memory: 32,
     createdAt: '2024-03-10T14:00:00',
     code: 'def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        if target - num in seen:\n            return [seen[target - num], i]\n        seen[num] = i',
-    balloonColor: 'red',
+    balloonColor: 'Vermelho',
   },
   {
     id: '2',
@@ -299,7 +299,7 @@ export const mockSubmissions: Submission[] = [
     time: 120,
     memory: 64,
     createdAt: '2024-03-10T13:30:00',
-    balloonColor: 'cyan',
+    balloonColor: 'Ciano',
   },
   {
     id: '3',
@@ -323,19 +323,24 @@ export const countries = [
   'China', 'Japão', 'Coreia do Sul', 'Índia', 'Austrália',
 ];
 
-export const languages = ['java', 'python', 'c', 'cpp'] as const;
+export const languages = ['JAVA', 'PYTHON', 'C', 'CPP'] as const;
 
 export const BALLOON_COLORS = [
-  { value: 'red', label: 'Vermelho', hex: '#ef4444' },
-  { value: 'yellow', label: 'Amarelo', hex: '#eab308' },
-  { value: 'cyan', label: 'Azul Claro', hex: '#06b6d4' },
-  { value: 'blue', label: 'Azul Escuro', hex: '#3b82f6' },
-  { value: 'violet', label: 'Violeta', hex: '#a855f7' },
-  { value: 'orange', label: 'Laranja', hex: '#f97316' },
-  { value: 'lime', label: 'Verde Limão', hex: '#84cc16' },
-  { value: 'white', label: 'Branco', hex: '#f8fafc' },
-  { value: 'pink', label: 'Rosa', hex: '#ec4899' },
-  { value: 'green', label: 'Verde', hex: '#22c55e' },
+  { value: '/balloons/balloon-1.png', label: 'Verde Limão', hex: '#84cc16' },
+  { value: '/balloons/balloon-2.png', label: 'Vermelho', hex: '#ef4444' },
+  { value: '/balloons/balloon-3.png', label: 'Azul Claro', hex: '#06b6d4' },
+  { value: '/balloons/balloon-4.png', label: 'Amarelo', hex: '#eab308' },
+  { value: '/balloons/balloon-5.png', label: 'Laranja', hex: '#FF7E00' },
+  { value: '/balloons/balloon-6.png', label: 'Azul Escuro', hex: '#2F3699' },
+  { value: '/balloons/balloon-7.png', label: 'Bege', hex: '#FFA3B1' },
+  { value: '/balloons/balloon-8.png', label: 'Roxo', hex: '#6F3198' },
+  { value: '/balloons/balloon-9.png', label: 'Verde Escuro', hex: '#1D8F3D' },
+  { value: '/balloons/balloon-10.png', label: 'Rosa', hex: '#a855f7' },
+  { value: '/balloons/balloon-11.png', label: 'Ciano', hex: '#00FFFF' },
+  { value: '/balloons/balloon-12.png', label: 'Caramelo', hex: '#E5AA7A' },
+  { value: '/balloons/balloon-13.png', label: 'Branco', hex: '#f8fafc' },
+  { value: '/balloons/balloon-14.png', label: 'Cinza', hex: '#C0C0C0' },
+  { value: '/balloons/balloon-15.png', label: 'Preto', hex: '#5E5E5E' },
 ] as const;
 
 export const mockComments: Comment[] = [
