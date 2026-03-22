@@ -27,7 +27,7 @@ export function UserCard({ user }: UserCardProps) {
               <h3 className="font-semibold text-foreground group-hover:text-secondary transition-colors truncate">
                 {user.name}
               </h3>
-              <p className="text-sm text-muted-foreground truncate">@{user.login}</p>
+              {/* <p className="text-sm text-muted-foreground truncate">@{user.login}</p> */}
               
               <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" />

@@ -9,6 +9,8 @@ from models.problem.problem_input import ProblemInput
 from models.problem.problem_checker import ProblemChecker
 from models.enums import ValidationMode, ReactionType
 
+from problem.validators.create_problem import CreateProblemValidator
+
 
 @Singleton
 class ProblemService:
@@ -19,6 +21,7 @@ class ProblemService:
 
     # ---------------- CREATE ----------------
     def create_problem(self, data):
+        CreateProblemValidator.validate(data)
         validation_mode = ValidationMode(data["validation_mode"])
 
         def func(session):

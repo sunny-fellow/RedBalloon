@@ -183,20 +183,25 @@ export default function RoomSubmissions() {
 
       {/* Filter Dialog */}
       <Dialog open={filterDialogOpen} onOpenChange={setFilterDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle style={{ fontFamily: 'Orbitron, sans-serif' }}>Filtrar Submissões</DialogTitle>
+            <DialogTitle style={{ fontFamily: 'Orbitron, sans-serif' }}>
+              Filtrar Submissões
+            </DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-6 py-4">
-            {/* Problems Filter */}
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm text-[hsl(var(--neon-cyan))]">Problema</h4>
-              <div className="grid gap-2">
+          <div className="grid grid-cols-2 gap-6 py-4">
+            
+            {/* Problems - ocupa coluna inteira esquerda */}
+            <div className="space-y-3 col-span-1 row-span-2">
+              <h4 className="font-medium text-sm text-[hsl(var(--neon-cyan))]">
+                Problema
+              </h4>
+              <div className="grid gap-2 max-h-[300px] overflow-y-auto pr-2">
                 {problemsInRoom.map(problem => (
                   <div 
                     key={problem.id} 
-                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer transition"
                     onClick={() => toggleItem(tempProblems, setTempProblems, problem.id)}
                   >
                     <Checkbox 
@@ -204,7 +209,7 @@ export default function RoomSubmissions() {
                       checked={tempProblems.includes(problem.id)}
                       onCheckedChange={() => toggleItem(tempProblems, setTempProblems, problem.id)}
                     />
-                    <Label htmlFor={`prob-${problem.id}`} className="cursor-pointer flex-1">
+                    <Label htmlFor={`prob-${problem.id}`} className="cursor-pointer flex-1 truncate">
                       {problem.title}
                     </Label>
                   </div>
@@ -212,14 +217,16 @@ export default function RoomSubmissions() {
               </div>
             </div>
 
-            {/* Status Filter */}
+            {/* Status - topo direita */}
             <div className="space-y-3">
-              <h4 className="font-medium text-sm text-[hsl(var(--neon-purple))]">Status</h4>
-              <div className="grid grid-cols-2 gap-2">
+              <h4 className="font-medium text-sm text-[hsl(var(--neon-purple))]">
+                Status
+              </h4>
+              <div className="grid gap-2">
                 {statusOptions.map(status => (
                   <div 
                     key={status.value} 
-                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer transition"
                     onClick={() => toggleItem(tempStatuses, setTempStatuses, status.value)}
                   >
                     <Checkbox 
@@ -235,14 +242,16 @@ export default function RoomSubmissions() {
               </div>
             </div>
 
-            {/* Language Filter */}
+            {/* Language - baixo direita */}
             <div className="space-y-3">
-              <h4 className="font-medium text-sm text-[hsl(var(--neon-pink))]">Linguagem</h4>
+              <h4 className="font-medium text-sm text-[hsl(var(--neon-pink))]">
+                Linguagem
+              </h4>
               <div className="grid grid-cols-2 gap-2">
                 {languages.map(lang => (
                   <div 
                     key={lang} 
-                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer transition"
                     onClick={() => toggleItem(tempLanguages, setTempLanguages, lang)}
                   >
                     <Checkbox 
@@ -250,13 +259,14 @@ export default function RoomSubmissions() {
                       checked={tempLanguages.includes(lang)}
                       onCheckedChange={() => toggleItem(tempLanguages, setTempLanguages, lang)}
                     />
-                    <Label htmlFor={`lang-${lang}`} className="cursor-pointer flex-1">
+                    <Label htmlFor={`lang-${lang}`} className="cursor-pointer flex-1 truncate">
                       {languageLabels[lang] || lang}
                     </Label>
                   </div>
                 ))}
               </div>
             </div>
+
           </div>
 
           <DialogFooter>

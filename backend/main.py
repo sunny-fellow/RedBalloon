@@ -1,66 +1,64 @@
-# backend/main.py
 from flask import Flask
-from flask_restx import Api
+from flask_socketio import SocketIO
 from flask_swagger_ui import get_swaggerui_blueprint
 
-# Importa namespaces (controllers)
-from user.controller import api as user_controller
-from database.controller import api as database_controller
-from auth.controller import api as auth_controller
-from problem.controller import api as problem_controller
-from message.controller import api as message_controller
-from submission.controller import api as submission_controller
+# Configurações e Middlewares
+from config import Config
+from auth_middleware import check_jwt_header
+from api_factory import create_api
 
-# The "Server" class is a facade class.
+# Importa controllers
+from auth.controller        import api as auth_ns
+from database.controller    import api as database_ns
+from message.controller     import api as message_ns
+from problem.controller     import api as problem_ns
+from room.controller        import api as room_ns
+from submission.controller  import api as submission_ns
+from user.controller        import api as user_ns
+
+
 class Server:
-
     def __init__(self):
         self.app = Flask(__name__)
-        self.api = None
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+        self.api = create_api(self.app)
+        
+        self._setup_middlewares()
+        self._register_namespaces()
+        self._configure_swagger_ui()
 
-    def configure_routes(self):
+    def _setup_middlewares(self):
         @self.app.route("/")
         def hello():
-            return {
-                "message": "Hello World!",
-                "warn": "if you're looking for the documentation, check /apidocs"
-            }, 200
+            return {"message": "RedBalloon API Online"}, 200
 
-    def configure_api(self):
-        self.api = Api(
-            self.app,
-            version="1.0",
-            title="API RedBalloon",
-            description="Documentação das rotas da aplicação Red Balloon",
-            doc=False,
-        )
+        # Aplica a validação JWT globalmente
+        self.app.before_request(check_jwt_header)
 
-    def register_controllers(self):
-        self.api.add_namespace(auth_controller, path="/auth")
-        self.api.add_namespace(user_controller, path="/user")
-        self.api.add_namespace(problem_controller, path="/problem")
-        self.api.add_namespace(submission_controller, path="/submission")
-        self.api.add_namespace(message_controller, path="/message")
-        self.api.add_namespace(database_controller, path="/database")
+    def _register_namespaces(self):
+        self.api.add_namespace(auth_ns, path="/auth")
+        self.api.add_namespace(problem_ns, path="/problem")
+        self.api.add_namespace(message_ns, path="/message")
+        self.api.add_namespace(room_ns, path="/room")
+        self.api.add_namespace(submission_ns, path="/submission")
+        self.api.add_namespace(user_ns, path="/user")
+        self.api.add_namespace(database_ns, path="/database")
 
-    def configure_swagger(self):
-        swaggerui_blueprint = get_swaggerui_blueprint(
-            "/apidocs",
-            "/swagger.json",
+    def _configure_swagger_ui(self):
+        swagger_bp = get_swaggerui_blueprint(
+            "/apidocs", "/swagger.json", 
             config={"app_name": "RedBalloon API"}
         )
-
-        self.app.register_blueprint(swaggerui_blueprint, url_prefix="/apidocs")
-
-    def build(self):
-        self.configure_routes()
-        self.configure_api()
-        self.register_controllers()
-        self.configure_swagger()
+        self.app.register_blueprint(swagger_bp, url_prefix="/apidocs")
 
     def run(self):
-        self.build()
-        self.app.run(debug=True)
+        self.socketio.run(
+            self.app, 
+            host="0.0.0.0", 
+            port=Config.PORT, 
+            debug=Config.DEBUG
+        )
 
 if __name__ == "__main__":
-    Server().run()
+    server = Server()
+    server.run()

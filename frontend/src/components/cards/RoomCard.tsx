@@ -11,19 +11,11 @@ interface RoomCardProps {
   onJoin: (room: Room) => void;
 }
 
-const statusConfig = {
-  waiting: { label: 'Aguardando', icon: Clock, className: 'bg-neon-cyan/20 text-neon-cyan' },
-  in_progress: { label: 'Em andamento', icon: Play, className: 'bg-neon-green/20 text-neon-green' },
-  finished: { label: 'Finalizado', icon: CheckCircle, className: 'bg-muted text-muted-foreground' },
-};
-
 export function RoomCard({ room, onJoin }: RoomCardProps) {
-  const status = statusConfig[room.status];
-  const StatusIcon = status.icon;
   const isFull = room.currentPlayers >= room.capacity;
 
   return (
-    <Card className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10">
+    <Card className="group relative overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/10 flex flex-col h-full">
       <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
       
       <CardHeader className="pb-2">
@@ -35,14 +27,10 @@ export function RoomCard({ room, onJoin }: RoomCardProps) {
               ) : (
                 <Unlock className="h-4 w-4 text-neon-green" />
               )}
-              <Badge className={cn('text-xs', status.className)}>
-                <StatusIcon className="h-3 w-3 mr-1" />
-                {status.label}
-              </Badge>
+              <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors truncate">
+                {room.name}
+              </h3>
             </div>
-            <h3 className="font-semibold text-foreground group-hover:text-accent transition-colors truncate">
-              {room.name}
-            </h3>
           </div>
         </div>
       </CardHeader>
@@ -73,7 +61,7 @@ export function RoomCard({ room, onJoin }: RoomCardProps) {
         )}
       </CardContent>
 
-      <CardFooter className="pt-2 border-t border-border/50">
+      <CardFooter className="pt-2 border-t border-border/50 mt-auto">
         <div className="flex gap-2 w-full">
           <Button
             className="flex-1"
@@ -86,11 +74,11 @@ export function RoomCard({ room, onJoin }: RoomCardProps) {
           >
             {isFull ? 'Sala Cheia' : 'Entrar'}
           </Button>
-          <Link to={`/room/lobby`} className="flex-1">
+          {/* <Link to={`/room/lobby`} className="flex-1">
             <Button variant="outline" className="w-full">
               Ver Detalhes
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </CardFooter>
     </Card>

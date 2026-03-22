@@ -1,8 +1,8 @@
-from execution.executors import CodeExecutor, PythonExecutor, CExecutor, CppExecutor, JavaExecutor
+from execution.executors import Executor, PythonExecutor, CExecutor, CppExecutor, JavaExecutor
 
 class ExecutorFactory:
     @staticmethod
-    def get_executor(language: str) -> CodeExecutor:
+    def get_executor(language: str) -> Executor:
         if language == "PYTHON":
             return PythonExecutor()
         if language == "C":

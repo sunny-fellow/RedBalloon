@@ -13,7 +13,7 @@ class SubmissionService:
     def __init__(self):
         self.db_service = DatabaseService()
         self.repository = SubmissionRepository()
-        self.executor = ExecutionService()
+        self.executor = ExecutionService(self.db_service)
 
     def submit(self, data):
         SubmissionValidator().validate(data)

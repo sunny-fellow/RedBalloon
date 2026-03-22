@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from ..base import Base
 
@@ -8,6 +8,9 @@ class RoomProblem(Base):
 
     room_id = Column(Integer, ForeignKey("rooms.room_id", ondelete="CASCADE"), primary_key=True)
     problem_id = Column(Integer, ForeignKey("problems.problem_id", ondelete="CASCADE"), primary_key=True)
+
+    points = Column(Integer, nullable=False, default=0)
+    balloon = Column(String, nullable=False, default="/balloons/balloon-1.png")
 
     # -------- relações --------
     room = relationship(

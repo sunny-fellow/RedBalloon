@@ -22,19 +22,93 @@ class UserService:
 
     # --- CRUD ---
 
-    def list_users(self):
+    def list_users(self, data):
 
         def func(session):
-            users = self.repository.get_all(session)
-            return [self._to_dict(u) for u in users]
+            users = self.repository.get_all(
+                session,
+                query=data.get("query", ""),
+                country=data.get("country", "")
+            )
+
+            return [
+                {
+                    "user_id": u.user_id,
+                    "name": u.name,
+                    "avatar": u.avatar,
+                    "followers": u.followers_count,
+                    "solved": u.solved_count,
+                    "nationality": u.nationality
+                }
+                for u in users
+            ]
 
         return self.db_service.run(func)
 
-    def get_user(self, user_id: int):
+    def get_user(self, data):
+        user_id = data.get("user_id")
+        requester_id = data.get("requester_id")
 
         def func(session):
-            user = self.repository.get_by_id(session, user_id)
-            return self._to_dict(user) if user else None
+            result = self.repository.get_user_full(session, user_id, requester_id)
+
+            if not result:
+                return None
+
+            user, solved, created = result
+
+            return {
+                "user_id": user.user_id,
+                "name": user.name,
+                "avatar": user.avatar,
+                "nationality": user.nationality,
+                "followers": user.followers_count,
+                "description": user.description,
+                "solved": user.solved_count,
+                "is_following": user.is_following > 0,
+
+                "solved_problems": [
+                    {
+                        "problem_id": p.problem_id,
+                        "title": p.title,
+                        "difficulty": p.difficulty
+                    }
+                    for p in solved
+                ],
+
+                "created_problems": [
+                    {
+                        "problem_id": p.problem_id,
+                        "title": p.title,
+                        "difficulty": p.difficulty,
+                        "solved_count": p.solved_count
+                    }
+                    for p in created
+                ]
+            }
+
+        return self.db_service.run(func)
+    
+    def follow(self, data):
+        follower_id = data.get("follower_id")
+        following_id = data.get("following_id")
+
+        def func(session):
+            if follower_id == following_id:
+                raise AppError("Você não pode seguir a si mesmo", 401)
+
+            existing = self.repository.get_follow(
+                session, follower_id, following_id
+            )
+
+            if existing:
+                self.repository.delete_follow(session, existing)
+                return {"following": False}
+
+            self.repository.create_follow(
+                session, follower_id, following_id
+            )
+            return {"following": True}
 
         return self.db_service.run(func)
 

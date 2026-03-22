@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
   CheckCircle,
-  Target,
+  Pencil,
   Edit2,
   Lightbulb,
   Gamepad2,
@@ -104,12 +104,12 @@ export default function Profile() {
           <div className="grid grid-cols-2 gap-4">
             <Card className="border-border/50 bg-card/50 pixel-card arcade-hover-card">
               <CardContent className="pt-6 text-center">
-                <Target className="h-8 w-8 mx-auto text-neon-orange" />
+                <Pencil className="h-8 w-8 mx-auto text-neon-orange" />
                 <p className="text-3xl font-arcade font-bold mt-2 text-glow-pink">
-                  {currentUser.problemsAttempted}
+                  {currentUser.problemsAttempted}  {/* Tem que substituir dps por len de problemas criados*/}
                 </p>
                 <p className="text-muted-foreground font-pixel text-[8px] mt-1">
-                  TENTADOS
+                  CRIADOS
                 </p>
               </CardContent>
             </Card>

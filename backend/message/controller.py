@@ -4,7 +4,7 @@ from message.service import MessageService
 
 service = MessageService()
 
-api = Namespace("message", description="")
+api = Namespace("message", description="Serviço de postagem e busca de mensagens")
 
 # Models
 from message.models.comment import CommentModel

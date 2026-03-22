@@ -63,9 +63,9 @@ export default function UserProfile() {
               <h2 className="text-xl font-arcade font-bold text-glow-purple text-flicker">
                 {user.name}
               </h2>
-              <p className="text-sm font-mono text-muted-foreground">
+              {/* <p className="text-sm font-mono text-muted-foreground">
                 @{user.login}
-              </p>
+              </p> */}
             </div>
 
             <div className="w-full space-y-2 text-sm text-muted-foreground">
