@@ -3,6 +3,7 @@ flask
 flask-cors
 flask-restx
 flask_swagger_ui
+flask-socketio
 
 # --- Data ---
 pandas

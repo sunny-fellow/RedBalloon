@@ -63,7 +63,7 @@ class DatabaseAdminService:
         sql_file_path = os.path.join(os.path.dirname(__file__), "sql", "fill_tables.sql")
         if not os.path.exists(sql_file_path):
             raise FileNotFoundError(f"Arquivo SQL não encontrado: {sql_file_path}")
-        with open(sql_file_path, "r", encoding="utf-8") as f:
+        with open(sql_file_path, "r", encoding="latin-1") as f:
             sql_commands = f.read()
         with engine.begin() as conn:
             conn.execute(text(sql_commands))

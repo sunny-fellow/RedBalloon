@@ -42,7 +42,7 @@ class AuthService:
 
         # compatibilidade (pyjwt antigo)
         if isinstance(token, bytes):
-            token = token.decode("utf-8")
+            token = token.decode("latin-1")
 
         return token
 
@@ -62,8 +62,8 @@ class AuthService:
                 raise AppError("Credenciais inválidas.", 401)
 
             if not bcrypt.checkpw(
-                password.encode("utf-8"),
-                user.password.encode("utf-8")
+                password.encode("latin-1"),
+                user.password.encode("latin-1")
             ):
                 raise AppError("Credenciais inválidas.", 401)
 
@@ -82,7 +82,7 @@ class AuthService:
 
     # ---------------- REGISTER ----------------
     def register(self, data: dict):
-
+        print(data)
         RegisterValidator.validate(data)
 
         nickname = data.get("nickname")
@@ -90,9 +90,9 @@ class AuthService:
         password = data.get("password")
 
         hashed_password = bcrypt.hashpw(
-            password.encode("utf-8"),
+            password.encode("latin-1"),
             bcrypt.gensalt()
-        ).decode("utf-8")
+        ).decode("latin-1")
 
         new_user = User(
             name=data.get("name"),

@@ -4,7 +4,7 @@ from config import Config
 
 def check_jwt_header():
     # Whitelist de rotas que não exigem token
-    whitelist = ['auth', 'hello', 'static', 'restx_doc']
+    whitelist = ['auth', 'hello', 'static', 'restx_doc', 'database']
     
     if request.path.startswith(('/apidocs', '/swagger')):
         return

@@ -42,9 +42,9 @@ class DockerExecutor:
         container = None
         
         try:
-            with open(os.path.join(sandbox_path, config["filename"]), "w", encoding="utf-8") as f:
+            with open(os.path.join(sandbox_path, config["filename"]), "w", encoding="latin-1") as f:
                 f.write(source_code)
-            with open(os.path.join(sandbox_path, "input.txt"), "w", encoding="utf-8") as f:
+            with open(os.path.join(sandbox_path, "input.txt"), "w", encoding="latin-1") as f:
                 f.write(input_data)
         except Exception as e:
             shutil.rmtree(tmp_dir, ignore_errors=True)
