@@ -4,7 +4,8 @@ from utils.validator import Validator
 
 class PasswordValidator(Validator):
 
-    def validate(self, password: str):
+    @staticmethod
+    def validate(password: str):
 
         if not password:
             raise AppError("O campo 'password' não pode ser vazio.")

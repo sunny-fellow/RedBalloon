@@ -29,5 +29,7 @@ class RegisterValidator(Validator):
         password = data["password"]
         nickname = data["nickname"]
 
+        print("Password", password)
+
         PasswordValidator.validate(password)
         NicknameValidator.validate(nickname)
