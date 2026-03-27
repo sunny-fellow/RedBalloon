@@ -38,7 +38,7 @@ def handle_exceptions(func):
             }, e.code
 
         except Exception as e:
-            traceback.print_exc()
+            # traceback.print_exc()
             return {
                 "message": f"Erro interno inesperado: {str(e)}",
                 "code": 500
