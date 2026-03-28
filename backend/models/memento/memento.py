@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from ..base import Base
 
-
 class Memento(Base):
     __tablename__ = "mementos"
 
