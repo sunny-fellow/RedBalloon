@@ -23,7 +23,9 @@ def check_jwt_header():
         token = auth_header.split(" ")[1] if " " in auth_header else auth_header
         payload = jwt.decode(token, Config.JWT_KEY, algorithms=["HS256"])
         g.user = payload  # Disponível em todos os controllers
+    
     except jwt.ExpiredSignatureError:
         return jsonify({"status": "error", "message": "Token expirado"}), 401
+    
     except jwt.InvalidTokenError:
         return jsonify({"status": "error", "message": "Token inválido"}), 401

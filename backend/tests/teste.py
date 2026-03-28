@@ -5,12 +5,13 @@ from execution.executors.c_executor import CExecutor
 
 def run_test(name, executor, code, input_data=""):
     print(f"\n===== TESTE: {name} =====")
+    
     try:
         result = executor.execute(code, input_data, 2000, 128)
         print(result)
+    
     except Exception as e:
         print("ERRO NO TESTE:", str(e))
-
 
 # ---------------- PYTHON ----------------
 
@@ -47,7 +48,6 @@ run_test("Python - Exec sistema", py_exec, """
 import os
 os.system("ls /")
 """)
-
 
 # ---------------- JAVA ----------------
 
@@ -101,7 +101,6 @@ public class Solution {
 """
 )
 
-
 # ---------------- C ----------------
 
 c_exec = CExecutor()
@@ -133,7 +132,6 @@ int main() {
     return 0;
 }
 """)
-
 
 # ---------------- C++ ----------------
 

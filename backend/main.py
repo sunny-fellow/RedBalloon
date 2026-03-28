@@ -16,7 +16,6 @@ from room.controller        import api as room_ns
 from submission.controller  import api as submission_ns
 from user.controller        import api as user_ns
 
-
 class Server:
     def __init__(self):
         self.app = Flask(__name__)
