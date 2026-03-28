@@ -16,10 +16,8 @@ load_dotenv()
 JWT_KEY = os.getenv("JWT_KEY")
 TOKEN_EXPIRATION_HOURS = int(os.getenv("TOKEN_EXPIRATION_HOURS"))
 
-
 from auth.validators.login import LoginValidator
 from auth.validators.register import RegisterValidator
-
 
 @Singleton
 class AuthService:
