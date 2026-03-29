@@ -254,3 +254,6 @@ class ProblemRepository:
         )
 
         return "created"
+    
+    def count_problems(self, session):
+        return session.query(func.count(Problem.problem_id)).scalar()

@@ -229,3 +229,10 @@ class ProblemService:
             }
 
         return self.db_service.run(func)
+    
+    def count_problems(self):
+
+        def func(session):
+            return self.repository.count_problems(session)
+
+        return self.db_service.run(func)

@@ -10,7 +10,6 @@ from user.repository import UserRepository
 from user.validators.nickname_validator import NicknameValidator
 from user.validators.password_validator import PasswordValidator
 
-
 @Singleton
 class UserService:
 
@@ -116,6 +115,9 @@ class UserService:
 
         def func(session):
 
+            if not self.repository.user_exists(session, user_id):
+                return False
+
             user = self.repository.get_by_id(session, user_id)
 
             if not user:
@@ -146,12 +148,10 @@ class UserService:
 
         def func(session):
 
-            user = self.repository.get_by_id(session, user_id)
-
-            if not user:
+            if not self.repository.user_exists(session, user_id):
                 return False
 
-            self.repository.delete(session, user)
+            self.repository.delete(session, user_id)
 
             return True
 
@@ -171,3 +171,9 @@ class UserService:
             "nationality": user.nationality,
             "created_at": user.created_at
         }
+    
+    def count_users(self):
+        def func(session):
+            return self.repository.count_users(session)
+
+        return self.db_service.run(func)

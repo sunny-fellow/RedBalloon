@@ -1,23 +1,18 @@
 from flask_restx import Namespace, Resource
 from flask import request
-from user.service import UserService
+
 from utils.handle_exceptions import handle_exceptions
 from utils.get_user_id import get_user_id
 
-# Commands
-from user.commands.delete_user import DeleteUserCommand
-from user.commands.list_users import ListUsersCommand
-from user.commands.update_user import UpdateUserCommand
-from user.commands.user_details import UserDetailsCommand
-from user.commands.user_follow import UserFollowCommand
+from facade.facade_singleton_controller import FacadeSingletonController
 
 # Models
 from user.models.user_update import UserUpdateModel
 
-import traceback
-
 api = Namespace('user', description='Gerenciamento de Usuários')
-service = UserService()
+
+facade = FacadeSingletonController()
+
 
 @api.route('/list')
 class UserList(Resource):
@@ -30,34 +25,29 @@ class UserList(Resource):
         query = request.args.get("query")
         country = request.args.get("country")
 
-        command = ListUsersCommand(service, {"query": query, "country": country})
-        return command.execute(), 200
+        return facade.list_users(query, country), 200
 
-@api.route('/<int:user_id>')
+
+@api.route('/details/<int:id_user>')
 class UserDetails(Resource):
-
-    @handle_exceptions
-    @api.param("user_id", "ID do usuário que está sendo buscado")
-    def get(self, user_id):
-        requester_id = get_user_id()
-        command = UserDetailsCommand(service, {
-            "user_id": user_id,
-            "requester_id": requester_id
-        })
-        return command.execute(), 200
     
-@api.route('/follow/<int:user_id>')
+    @handle_exceptions
+    def get(self, id_user):
+
+        requester_id = get_user_id()
+
+        result = facade.user_details(id_user, requester_id)
+
+        return result, 200
+
+@api.route('/follow/<int:id_user>')
 class UserFollow(Resource):
 
     @handle_exceptions
-    @api.param("user_id", "ID do usuário a dar follow ou unfollow")
-    def get(self, user_id):
+    def get(self, id_user):
         follower_id = get_user_id()
-        command = UserFollowCommand(service, {
-            "follower_id": follower_id,
-            "following_id": user_id
-        })
-        return command.execute(), 200
+
+        return facade.follow_user(follower_id, id_user), 200
 
 
 @api.route('/delete/<int:id_user>')
@@ -65,8 +55,7 @@ class UserDelete(Resource):
 
     @handle_exceptions
     def delete(self, id_user):
-        command = DeleteUserCommand(service, id_user)
-        result = command.execute()
+        result = facade.delete_user(id_user)
 
         if result:
             return {'message': 'Usuário deletado com sucesso'}, 200
@@ -83,10 +72,19 @@ class UserUpdate(Resource):
 
         data = api.payload
 
-        command = UpdateUserCommand(service, data.get("user_id"), data)
-        updated_user = command.execute()
+        updated_user = facade.update_user(data.get("user_id"), data)
 
         if not updated_user:
             return {"message": "Usuário não encontrado"}, 404
 
         return updated_user, 200
+    
+@api.route('/count')
+class UserCount(Resource):
+
+    @handle_exceptions
+    @api.doc("Retorna o número total de usuários cadastrados")
+    def get(self):
+        return {
+            "count": facade.count_users()
+        }, 200

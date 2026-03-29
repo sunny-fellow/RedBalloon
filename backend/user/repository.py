@@ -3,7 +3,6 @@ from models.user.user_follow import UserFollow
 from models.submission.submission import Submission
 from models.problem.problem import Problem
 from models.enums import SubmissionStatus
-
 from sqlalchemy import func, and_
 
 class UserRepository:
@@ -72,7 +71,7 @@ class UserRepository:
             and_(
                 Submission.problem_id == Problem.problem_id,
                 Submission.user_id == user_id,
-                Submission.status == "ACCEPTED"
+                Submission.status == SubmissionStatus.ACCEPTED
             )
         ).group_by(Problem.problem_id).all()
 
@@ -86,7 +85,7 @@ class UserRepository:
             Submission,
             and_(
                 Submission.problem_id == Problem.problem_id,
-                Submission.status == "ACCEPTED"
+                Submission.status == SubmissionStatus.ACCEPTED
             )
         ).filter(
             Problem.creator_id == user_id
@@ -97,8 +96,8 @@ class UserRepository:
     def add(self, session, user: User):
         session.add(user)
 
-    def delete(self, session, user: User):
-        session.delete(user)
+    def delete(self, session, user_id: int):
+        session.query(User).filter(User.user_id == user_id).delete()
 
     def get_follow(self, session, follower_id: int, following_id: int):
         return session.query(UserFollow).filter(
@@ -116,3 +115,12 @@ class UserRepository:
 
     def delete_follow(self, session, follow: UserFollow):
         session.delete(follow)
+
+    def count_users(self, session):
+        return session.query(func.count(User.user_id)).scalar()
+    
+    def get_by_id(self, session, user_id: int):
+        return session.query(User).filter(User.user_id == user_id).first()
+    
+    def user_exists(self, session, user_id: int) -> bool:
+        return session.query(User.user_id).filter(User.user_id == user_id).first() is not None
