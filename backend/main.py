@@ -4,8 +4,8 @@ from flask_swagger_ui import get_swaggerui_blueprint
 
 # Configurações e Middlewares
 from config import Config
-from auth_middleware import check_jwt_header
-from api_factory import create_api
+from utils.auth_middleware import check_jwt_header
+from utils.api_factory import create_api
 
 # Importa controllers
 from auth.controller        import api as auth_ns

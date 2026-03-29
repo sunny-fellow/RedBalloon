@@ -57,7 +57,7 @@ class SubmissionDetails(Resource):
 
     
 @api.route("/react")
-class ProblemReact(Resource):
+class SubmissionReact(Resource):
     @handle_exceptions
     @api.expect(SubmissionReactModel(api), validate = True)
     @api.doc("Permite que usuários dêem likes/dislikes em submissões")
