@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 
 from ..base import Base
 
-
 class UserFollow(Base):
     __tablename__ = "user_follows"
 
@@ -13,7 +12,7 @@ class UserFollow(Base):
 
     followed_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
 
-    # -------- relações --------
+    # Relações 
     follower = relationship(
         "User",
         back_populates="followings",

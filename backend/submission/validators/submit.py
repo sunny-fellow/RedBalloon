@@ -2,7 +2,8 @@ from utils.validator import Validator
 from utils.app_error import AppError
 
 class SubmissionValidator(Validator):
-    def validate(data):
+    @staticmethod  # ADICIONE ESTE DECORADOR
+    def validate(data):  # Mantém o parâmetro data
         user_id = data.get("user_id")
         problem_id = data.get("problem_id")
         source_code = data.get("source_code")

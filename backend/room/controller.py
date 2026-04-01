@@ -18,7 +18,6 @@ from room.commands.list import ListRoomCommand
 
 @api.route("/list")
 class RoomList(Resource):
-
     @handle_exceptions
     @api.doc("Lista as salas criadas ativas")
     @api.param("query", "Query de busca de salas")
@@ -29,7 +28,6 @@ class RoomList(Resource):
 
 @api.route("/create")
 class CreateRoom(Resource):
-
     @handle_exceptions
     @api.doc("Endpoint para criação de uma sala")
     @api.expect(CreateRoomModel(api), validate = True)
@@ -38,10 +36,8 @@ class CreateRoom(Resource):
         command = CreateRoomCommand(service, data)
         return command.execute(), 201
 
-
 @api.route("/enter")
 class EnterRoom(Resource):
-
     @handle_exceptions
     @api.doc("Endpoint para entrar em uma sala existente")
     @api.expect(EnterRoomModel(api), validate = True)

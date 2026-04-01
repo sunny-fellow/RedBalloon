@@ -5,10 +5,8 @@ from user.validators.nickname_validator import NicknameValidator
 from user.validators.password_validator import PasswordValidator
 
 class RegisterValidator(Validator):
-
     @staticmethod
     def validate(data: dict):
-
         required_fields = [
             "name",
             "nickname",

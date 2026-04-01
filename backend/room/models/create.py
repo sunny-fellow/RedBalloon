@@ -1,10 +1,7 @@
 from flask_restx import fields
 
-
 def CreateRoomModel(api):
-
-    # -------- reutilizando partes do problem --------
-
+    # Reutilizando partes do problem
     InputsOutputs = api.model("RoomProblemInputsOutputs", {
         "input": fields.String(required=True),
         "output": fields.String(required=True)
@@ -18,8 +15,7 @@ def CreateRoomModel(api):
         "source_code": fields.String(required=True)
     })
 
-    # -------- problema NOVO (inline) --------
-
+    # Problema NOVO (inline)
     NewProblem = api.model("RoomNewProblem", {
         "title": fields.String(required=True),
         "description": fields.String(required=True),
@@ -37,13 +33,13 @@ def CreateRoomModel(api):
             enum=["EASY", "MEDIUM", "HARD"]
         ),
 
-        # validação
+        # Validação
         "inputs_outputs": fields.List(fields.Nested(InputsOutputs)),
         "inputs": fields.List(fields.String),
         "checker": fields.Nested(Checker),
     })
 
-    # -------- problema EXISTENTE --------
+    # Problema EXISTENTE
 
     ExistingProblem = api.model("RoomExistingProblem", {
         "problem_id": fields.Integer(
@@ -52,18 +48,16 @@ def CreateRoomModel(api):
         )
     })
 
-    # -------- wrapper (define tipo + config sala) --------
-
+    # Wrapper (define tipo + config sala)
     RoomProblemItem = api.model("RoomProblemItem", {
-
-        # tipo
+        # Tipo
         "type": fields.String(
             required=True,
             enum=["EXISTING", "NEW"],
             description="Define se é problema existente ou novo"
         ),
 
-        # config da sala
+        # Config da sala
         "points": fields.Integer(
             required=True,
             description="Pontuação do problema na sala"
@@ -74,15 +68,13 @@ def CreateRoomModel(api):
             description="Caminho/identificador da cor do balão"
         ),
 
-        # payload (um dos dois)
+        # Payload (um dos dois)
         "existing_problem": fields.Nested(ExistingProblem),
         "new_problem": fields.Nested(NewProblem),
     })
 
-    # -------- model principal --------
-
+    # Model principal
     return api.model("CreateRoom", {
-
         "user_id": fields.Integer(
             required=True,
             description="ID do usuário que está criando a sala"
@@ -113,7 +105,7 @@ def CreateRoomModel(api):
             description="Senha da sala"
         ),
 
-        # 🔥 aqui fica o principal
+        # Aqui fica o principal
         "problems": fields.List(
             fields.Nested(RoomProblemItem),
             required=True,

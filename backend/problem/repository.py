@@ -10,12 +10,9 @@ from models.message.message_context import MessageContext
 
 from models.enums import ReactionType, SubmissionStatus, MessageContextType
 
-
 class ProblemRepository:
-
-    # -------- LIST BASE --------
+    # LIST BASE
     def list_problems(self, session, query=None, tags=None):
-
         q = session.query(Problem)
 
         if query:
@@ -34,9 +31,8 @@ class ProblemRepository:
 
         return q.distinct().all()
 
-    # -------- REACTIONS --------
+    # REACTIONS
     def get_reactions_count(self, session, problem_ids):
-
         rows = session.query(
             ProblemReact.problem_id,
             ProblemReact.reaction,
@@ -53,14 +49,14 @@ class ProblemRepository:
         for r in rows:
             if r.reaction == ReactionType.LIKE:
                 result[r.problem_id]["likes"] = r.count
+            
             elif r.reaction == ReactionType.DISLIKE:
                 result[r.problem_id]["dislikes"] = r.count
 
         return result
 
-    # -------- TAGS --------
+    # TAGS
     def get_tags(self, session, problem_ids):
-
         rows = session.query(
             ProblemTag.problem_id,
             ProblemTag.tag
@@ -75,8 +71,8 @@ class ProblemRepository:
 
         return result
 
-    # -------- SUBMISSIONS --------
-    def get_submission_stats(self, session, problem_ids):
+    # SUBMISSIONS
+    def get_submission_stats_bulk(self, session, problem_ids):
         rows = session.query(
             Submission.problem_id,
 
@@ -110,14 +106,13 @@ class ProblemRepository:
 
         return result
     
-    # -------- PROBLEM BASE INFO --------
+    # PROBLEM BASE INFO
     def get_problem_by_id(self, session, problem_id):
         return session.query(Problem).filter(
             Problem.problem_id == problem_id
         ).first()
 
-
-    # -------- CREATOR --------
+    # CREATOR
     def get_creator_name(self, session, creator_id):
         user = session.query(User).filter(
             User.user_id == creator_id
@@ -125,8 +120,7 @@ class ProblemRepository:
 
         return user.name if user else None
 
-
-    # -------- REACTIONS --------
+    # REACTIONS
     def get_reactions(self, session, problem_id):
 
         rows = session.query(
@@ -149,8 +143,8 @@ class ProblemRepository:
         return result
 
 
-    # -------- SUBMISSIONS --------
-    def get_submission_stats(self, session, problem_id):
+    # SUBMISSIONS
+    def get_submission_stats_single(self, session, problem_id):
 
         row = session.query(
             func.count().label("total"),
@@ -169,10 +163,8 @@ class ProblemRepository:
             "accepted": row.accepted or 0
         }
 
-
-    # -------- TAGS --------
+    # TAGS
     def get_problem_tags(self, session, problem_id):
-
         rows = session.query(
             ProblemTag.tag
         ).filter(
@@ -181,8 +173,7 @@ class ProblemRepository:
 
         return [r.tag for r in rows]
 
-
-    # -------- COMMENTS --------
+    # COMMENTS
     def get_comments(self, session, problem_id):
         rows = session.query(
             Message.message_id,
@@ -232,19 +223,18 @@ class ProblemRepository:
             ProblemReact.user_id == user_id
         ).first()
 
-        # -------- já existe --------
+        # Já existe
         if existing:
-
-            # mesmo tipo → remove (toggle)
+            # Mesmo tipo → remove (toggle)
             if existing.reaction == react_type:
                 session.delete(existing)
                 return "removed"
 
-            # tipo diferente → atualiza
+            # Tipo diferente → atualiza
             existing.reaction = react_type
             return "updated"
 
-        # -------- não existe --------
+        # Não existe
         session.add(
             ProblemReact(
                 problem_id=problem_id,
@@ -252,7 +242,6 @@ class ProblemRepository:
                 reaction=react_type
             )
         )
-
         return "created"
     
     def count_problems(self, session):

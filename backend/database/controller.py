@@ -19,12 +19,9 @@ from database.commands.undo_action     import UndoActionCommand
 # Definição do Namespace
 api = Namespace("database", description="Administração do Banco de Dados")
 
-
-# ----------------- API Endpoints -----------------
-
+# API Endpoints
 @api.route("/create_database")
 class CreateDatabase(Resource):
-
     @handle_exceptions
     @api.expect(getPasswordModel(api), validate=True)
     def post(self):
@@ -35,7 +32,6 @@ class CreateDatabase(Resource):
 
 @api.route("/create_tables")
 class CreateTables(Resource):
-
     @handle_exceptions
     @api.expect(getPasswordModel(api), validate=True)
     def post(self):
@@ -43,10 +39,8 @@ class CreateTables(Resource):
         command = CreateTablesCommand(db_admin_service, data["password"])
         return command.execute(), 200
 
-
 @api.route("/reset_tables")
 class ResetTables(Resource):
-
     @handle_exceptions
     @api.expect(getPasswordModel(api), validate=True)
     def post(self):
@@ -56,7 +50,6 @@ class ResetTables(Resource):
         
 @api.route("/drop_tables")
 class DropTables(Resource):
-
     @handle_exceptions
     @api.expect(getPasswordModel(api), validate=True)
     def post(self):
@@ -64,10 +57,8 @@ class DropTables(Resource):
         command = DropTablesCommand(db_admin_service, data["password"])
         return command.execute(), 200
 
-
 @api.route("/fill_tables")
 class FillTables(Resource):
-
     @handle_exceptions
     @api.expect(getPasswordModel(api), validate=True)
     def post(self):
@@ -77,7 +68,6 @@ class FillTables(Resource):
         
 @api.route("/undo_action")
 class UndoActionByMemento(Resource):
-
     @handle_exceptions
     @api.expect(getPasswordModel(api), validate=True)
     def post(self):

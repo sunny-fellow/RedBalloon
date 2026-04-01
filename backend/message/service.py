@@ -10,7 +10,6 @@ from message.validators.get_comments import GetCommentsValidator
 
 @Singleton
 class MessageService:
-
     def __init__(self):
         self.db_service = DatabaseService()
         self.repository = MessageRepository()
@@ -66,6 +65,7 @@ class MessageService:
 
         if context_type not in ["GLOBAL", "PROBLEM", "SOLUTION"]:
             raise AppError("context_type inválido", 400)
+        
         if context_type in ["PROBLEM", "SOLUTION"] and not context_ref_id:
             raise AppError("context_ref_id é obrigatório para este context_type", 400)
 
@@ -77,13 +77,15 @@ class MessageService:
                 query=query,
                 tags=tags
             )
-
             result = []
+            
             for msg in comments:
                 msg_tags = [t.tag for t in getattr(msg, "tags", [])]
                 reaction_info = reacts.get(msg.message_id, {"likes": 0, "dislikes": 0})
-                # opcional: verificar se o usuário atual reagiu
+                
+                # Opcional: verificar se o usuário atual reagiu
                 user_reaction = None
+                
                 if current_user_id:
                     react = next(
                         (r for r in getattr(msg, "likes", []) if r.user_id == current_user_id),

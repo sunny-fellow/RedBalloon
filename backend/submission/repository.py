@@ -3,7 +3,6 @@ from models.submission.submission_react import SubmissionReact
 from models.enums import SubmissionStatus
 
 class SubmissionRepository:
-
     def save_submission(self, session, problem_id, user_id, code, language, time_spent, status, submitted_at):
         sub = Submission(
             problem_id=problem_id,
@@ -15,7 +14,7 @@ class SubmissionRepository:
             submitted_at=submitted_at
         )
         session.add(sub)
-        session.flush()  # garante que tem ID
+        session.flush()  # Garante que tem ID
         return sub
 
     def get_accepted_submissions(self, session, problem_id):
@@ -58,7 +57,7 @@ class SubmissionRepository:
         likes = sum(1 for r in sub.reacts if r.reaction.value == "LIKE")
         dislikes = sum(1 for r in sub.reacts if r.reaction.value == "DISLIKE")
 
-        # reação do usuário que requisitou
+        # Reação do usuário que requisitou
         user_react = next(
             (r.reaction.value for r in sub.reacts if r.user_id == requesting_user_id),
             None

@@ -23,7 +23,6 @@ from utils.singleton import Singleton
 from utils.app_error import AppError
 from {name}.repository import {Name}Repository
 
-
 @Singleton
 class {Name}Service:
 
@@ -48,15 +47,13 @@ class {Name}Service:
 """
 }
 
-
 def create_module(name):
     base_path = f"{name}"
 
     os.makedirs(base_path, exist_ok=True)
 
-    # cria arquivos principais
+    # Cria arquivos principais
     for file, template in TEMPLATES.items():
-
         content = template.format(
             name=name,
             Name=name.capitalize()
@@ -65,7 +62,7 @@ def create_module(name):
         with open(os.path.join(base_path, file), "w") as f:
             f.write(content)
 
-    # cria subpastas
+    # Cria subpastas
     subfolders = ["models", "commands", "validators"]
 
     for folder in subfolders:
@@ -73,9 +70,9 @@ def create_module(name):
 
     print(f"Módulo '{name}' criado com sucesso.")
 
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("uso: python create_module.py nome_do_modulo")
+    
     else:
         create_module(sys.argv[1])

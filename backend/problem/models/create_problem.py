@@ -1,10 +1,7 @@
 from flask_restx import fields
 
-
 def CreateProblemModel(api):
-
-    # -------- inputs + outputs --------
-
+    # Inputs + outputs
     InputsOutputs = api.model("ProblemInputsOutputs", {
         "input": fields.String(
             required=True,
@@ -18,8 +15,7 @@ def CreateProblemModel(api):
         )
     })
 
-    # -------- checker --------
-
+    # Checker
     Checker = api.model("ProblemChecker", {
         "language": fields.String(
             required=True,
@@ -32,8 +28,7 @@ def CreateProblemModel(api):
         )
     })
 
-    # -------- model principal --------
-
+    # Model principal
     return api.model("ProblemCreate", {
 
         "creator_id": fields.Integer(
@@ -88,16 +83,14 @@ def CreateProblemModel(api):
             description="Se pertence exclusivamente a uma sala"
         ),
 
-        # -------- INPUTS_OUTPUTS --------
-
+        # INPUTS_OUTPUTS
         "inputs_outputs": fields.List(
             fields.Nested(InputsOutputs),
             required=False,
             description="Lista de casos de teste com entrada e saída"
         ),
 
-        # -------- NO_VALIDATION / CHECKER --------
-
+        # NO_VALIDATION / CHECKER
         "inputs": fields.List(
             fields.String,
             required=False,
@@ -107,8 +100,7 @@ def CreateProblemModel(api):
             nullable=True
         ),
 
-        # -------- CHECKER_ALGORITHM --------
-
+        # CHECKER_ALGORITHM
         "checker": fields.Nested(
             Checker,
             required=False,

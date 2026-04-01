@@ -13,21 +13,26 @@ class DockerExecutor:
 
     def _get_config(self, language: str, memory_limit_mb: int):
         lang = language.lower()
+        
         if lang == "python":
             return {"filename": "Main.py", "command": "python3 /sandbox/Main.py < /sandbox/input.txt", "pids": 8}
+        
         elif lang == "java":
             # Modo Java 11+ (Source File Mode): compila em memória e roda direto
             java_policy = '-Djava.security.manager -Djava.security.policy==/sandbox/security.policy'
             return {"filename": "Solution.java", "command": f"java {java_policy} -Xmx{memory_limit_mb}m /sandbox/Solution.java < /sandbox/input.txt", "pids": 64}
+        
         elif lang in ("c", "cpp"):
             compiler = "gcc" if lang == "c" else "g++"
             filename = "Main." + lang 
+            
             # Compila no /tmp (RAM) e executa. O 'chmod' não é estritamente necessário se rodar via /tmp montado com exec.
             return {
                 "filename": filename,
                 "command": f"{compiler} /sandbox/{filename} -O2 -o /tmp/main_binary && /tmp/main_binary < /sandbox/input.txt",
                 "pids": 8
             }
+        
         else:
             raise ValueError(f"Unsupported language: {language}")
 
@@ -37,6 +42,7 @@ class DockerExecutor:
         os.makedirs(sandbox_path, exist_ok=True)
 
         config = self._get_config(language, memory_limit_mb)
+        
         # Inicializamos como erro desconhecido; será atualizado conforme o fluxo
         result = {"status": SubmissionStatus.RUNTIME_ERROR, "output": "", "error": "", "time_spent_ms": 0}
         container = None
@@ -44,8 +50,10 @@ class DockerExecutor:
         try:
             with open(os.path.join(sandbox_path, config["filename"]), "w", encoding="latin-1") as f:
                 f.write(source_code)
+            
             with open(os.path.join(sandbox_path, "input.txt"), "w", encoding="latin-1") as f:
                 f.write(input_data)
+        
         except Exception as e:
             shutil.rmtree(tmp_dir, ignore_errors=True)
             return {"status": SubmissionStatus.RUNTIME_ERROR, "error": f"Setup error: {str(e)}"}
@@ -73,11 +81,11 @@ class DockerExecutor:
                 ulimits=[docker.types.Ulimit(name="stack", soft=8192000, hard=8192000)],
                 detach=True
             )
-
             # Aguarda o container com timeout manual para precisão do TLE
             try:
                 exit_info = container.wait(timeout=time_limit_ms / 1000)
                 exit_code = exit_info["StatusCode"]
+            
             except:
                 # Se cair aqui, o timeout do wait estourou (TLE)
                 try: container.kill()
@@ -96,10 +104,13 @@ class DockerExecutor:
             # Lógica de decisão de Status
             if is_oom:
                 result.update({"status": SubmissionStatus.MEMORY_LIMIT_EXCEEDED, "error": "Memory limit exceeded."})
+            
             elif exit_code == 137: # Container morto externamente (geralmente TLE/SIGKILL)
                 result.update({"status": SubmissionStatus.TIME_LIMIT_EXCEEDED})
+            
             elif exit_code != 0:
                 result.update({"status": SubmissionStatus.RUNTIME_ERROR, "error": logs})
+            
             else:
                 result.update({"status": SubmissionStatus.ACCEPTED, "output": logs})
 
@@ -109,7 +120,9 @@ class DockerExecutor:
         return self._finalize(container, result, start_time, tmp_dir)
 
     def _finalize(self, container, result, start_time, tmp_dir):
-        """Limpa recursos e calcula tempo final."""
+        """
+        Limpa recursos e calcula tempo final.
+        """
         result["time_spent_ms"] = int((time.perf_counter() - start_time) * 1000)
         
         if container:

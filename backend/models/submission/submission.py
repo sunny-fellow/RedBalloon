@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 from ..base import Base
 from ..enums import SubmissionStatus, LanguageType
 
-
 class Submission(Base):
     __tablename__ = "submissions"
 
@@ -21,7 +20,7 @@ class Submission(Base):
     status = Column(Enum(SubmissionStatus), default=SubmissionStatus.JUDGING, nullable=False)
     submitted_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
 
-    # -------- relações --------
+    # Relações
 
     problem = relationship(
         "Problem",

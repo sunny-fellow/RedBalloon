@@ -6,7 +6,6 @@ from room.gateway.service import RoomGatewayService
 
 service = RoomGatewayService()
 
-
 def safe_emit(event_name, broadcast=False):
     """
     Decorator para capturar erros do service e enviar para o cliente
@@ -18,23 +17,26 @@ def safe_emit(event_name, broadcast=False):
         def wrapper(self, data):
             try:
                 result = func(self, data)
+                
                 if broadcast:
-                    # envia para todos na sala
+                    # Envia para todos na sala
                     emit(event_name, {"status": "success", "data": result}, room=data.get("room_socket"))
+                
                 else:
-                    # envia apenas para o usuário que acionou
+                    # Envia apenas para o usuário que acionou
                     emit(event_name, {"status": "success", "data": result}, to=data.get("user_socket"))
+            
             except AppError as e:
                 emit(event_name, {"status": "error", "message": str(e)}, to=data.get("user_socket"))
+            
             except Exception as e:
                 emit(event_name, {"status": "error", "message": "Erro interno"}, to=data.get("user_socket"))
                 print("ERRO:", e)
-        return wrapper
+        
+        return wrapper    
     return decorator
 
-
 class RoomGateway(Namespace):
-
     def on_connect(self):
         print("Cliente conectado")
 

@@ -2,12 +2,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import inspect, desc
 from models.memento.memento import Memento
 
-
 class MementoManager:
     """
     Gerencia mementos persistidos no banco para permitir undo por usuário.
     """
-
     def save(self, session: Session, obj, snapshot: dict, action: str, user_id: int = None):
         """
         Salva um memento no banco.
@@ -17,7 +15,6 @@ class MementoManager:
             update -> objeto foi modificado
             delete -> objeto foi deletado
         """
-
         cls = obj.__class__
         pk = self._get_primary_key(obj)
 
@@ -55,28 +52,29 @@ class MementoManager:
             try:
                 pk = self._parse_pk(memento.entity_pk)
                 obj = session.get(cls, pk)
+            
             except:
                 obj = None
 
-        # ---- undo create ----
+        # Undo create
         if action == "create":
             if obj:
                 session.delete(obj)
 
-        # ---- undo delete ----
+        # Undo delete
         elif action == "delete":
             clean_snapshot = {k: v for k, v in snapshot.items() if not k.startswith("_sa_")}
             obj = cls(**clean_snapshot)
             session.add(obj)
 
-        # ---- undo update ----
+        # Undo update
         elif action == "update":
             if obj:
                 for field, value in snapshot.items():
                     if not field.startswith("_sa_"):
                         setattr(obj, field, value)
 
-        # remove o memento depois de desfazer
+        # Remove o memento depois de desfazer
         session.delete(memento)
         session.commit()
 
@@ -116,6 +114,7 @@ class MementoManager:
         """
         if pk_str.startswith("("):
             return tuple(map(int, pk_str.strip("()").split(",")))
+        
         return int(pk_str)
 
     def _resolve_class(self, class_name: str):

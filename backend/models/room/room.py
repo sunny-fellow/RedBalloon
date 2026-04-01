@@ -29,7 +29,7 @@ class Room(Base):
         nullable=False
     )
 
-    # -------- relações --------
+    # Relações
 
     participants = relationship(
         "RoomParticipant",

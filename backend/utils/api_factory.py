@@ -9,7 +9,6 @@ def create_api(app):
             'description': "Digite: Bearer <seu_token>"
         }
     }
-
     return Api(
         app,
         version="1.0",

@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 
 from ..base import Base
 
-
 class RoomParticipant(Base):
     __tablename__ = "room_participants"
 
@@ -16,7 +15,7 @@ class RoomParticipant(Base):
     score = Column(Integer, default=0, nullable=False)
     socket = Column(String, nullable=False)
 
-    # -------- relações --------
+    # Relações
     room = relationship(
         "Room",
         back_populates="participants"

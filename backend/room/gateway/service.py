@@ -13,32 +13,31 @@ class RoomGatewayService:
     def validate_sockets(func):
         @wraps(func)
         def wrapper(self, data: dict, *args, **kwargs):
-            # campos obrigatórios
+            # Campos obrigatórios
             required_keys = ["user_id", "room_id", "user_socket", "room_socket"]
             for key in required_keys:
                 if key not in data:
                     raise AppError(f"{key} é obrigatório")
 
-            # valida se sala existe
+            # Valida se sala existe
             room = self.repository.get_room_by_id(data["room_id"])
             if not room:
                 raise AppError("Sala não encontrada")
 
-            # valida se usuário participa da sala
+            # Valida se usuário participa da sala
             participant = self.repository.get_participant(data["room_id"], data["user_id"])
             if not participant:
                 raise AppError("Usuário não participa da sala")
 
-            # se tudo ok, chama o método original
+            # Se tudo ok, chama o método original
             return func(self, data, *args, **kwargs)
         return wrapper
 
-
-    # ---------------- chat ----------------
+    # Chat
     @validate_sockets
     def send_message(self, data: dict):
         """
-            data: {room_id, user_id, message, user_socket}
+        data: {room_id, user_id, message, user_socket}
         """
         if not data.get("message"):
             raise AppError("Mensagem vazia")
@@ -48,10 +47,9 @@ class RoomGatewayService:
             user_id=data["user_id"],
             message=data["message"]
         )
-
         return msg
 
-    # ---------------- submissões ----------------
+    # Submissões
     @validate_sockets
     def submit_problem(self, data: dict):
         """
@@ -60,7 +58,7 @@ class RoomGatewayService:
             user_id, room_id, problem_id, code, language, user_socket, room_socket
         }
         """
-        # validações básicas
+        # Validações básicas
         user_id = data.get("user_id")
         room_id = data.get("room_id")
         problem_id = data.get("problem_id")
@@ -75,22 +73,23 @@ class RoomGatewayService:
 
         return result
 
-    # ---------------- configuração da sala ----------------
+    # Configuração da sala
     @validate_sockets
     def update_room_config(self, data: dict):
         """
         data: {room_id, user_id, new_config}
         """
-        # verifica se user é admin
+        # Verifica se user é admin
         room = self.repository.get_room_by_id(data["room_id"])
         participant = self.repository.get_participant(data["room_id"], data["user_id"])
+        
         if not participant or not participant.is_admin:
             raise AppError("Usuário não é administrador da sala")
 
         updated_room = self.repository.update_room_config(data["room_id"], data["new_config"])
         return updated_room
 
-    # ---------------- problemas da sala ----------------
+    # Problemas da sala
     @validate_sockets
     def get_room_problems(self, room_id: int):
         """
@@ -106,7 +105,7 @@ class RoomGatewayService:
         """
         return self.repository.get_problem_details(data["room_id"], data["problem_id"])
 
-    # ---------------- info da sala ----------------
+    # Info da sala
     @validate_sockets
     def get_room_lobby_info(self, data: dict):
         """

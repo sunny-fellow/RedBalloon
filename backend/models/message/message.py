@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 
 from ..base import Base
 
-
 class Message(Base):
     __tablename__ = "messages"
 
@@ -14,7 +13,7 @@ class Message(Base):
     message = Column(String, nullable=False)
     sent_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
 
-    # -------- relações --------
+    # Relações
     user = relationship(
         "User",
         back_populates="messages"
@@ -23,7 +22,8 @@ class Message(Base):
     context = relationship(
         "MessageContext",
         back_populates="message",
-        uselist=False
+        uselist=False,
+        cascade="all, delete-orphan"
     )
 
     likes = relationship(

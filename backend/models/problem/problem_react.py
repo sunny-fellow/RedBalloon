@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from ..base import Base
 from ..enums import ReactionType
 
-
 class ProblemReact(Base):
     __tablename__ = "problem_reacts"
 
@@ -31,8 +30,7 @@ class ProblemReact(Base):
         UniqueConstraint("problem_id", "user_id", name="unique_problem_user_reaction"),
     )
 
-    # -------- relações --------
-
+    # Relações
     problem = relationship(
         "Problem",
         back_populates="reactions"

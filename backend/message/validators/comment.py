@@ -2,7 +2,6 @@ from utils.app_error import AppError
 from models.enums import MessageTags
 
 class CommentValidator:
-
     @staticmethod
     def validate(data):
         context_type = data.get("context_type")
@@ -11,9 +10,9 @@ class CommentValidator:
         user_id = data.get("user_id")
         message = data.get("message")
 
-        # context_type
         if not context_type:
             raise AppError("context_type é obrigatório", 400)
+        
         if context_type not in ["GLOBAL", "PROBLEM", "SOLUTION"]:
             raise AppError("context_type inválido", 400)
 
@@ -21,6 +20,7 @@ class CommentValidator:
         if context_type in ["PROBLEM", "SOLUTION"]:
             if context_ref_id is None:
                 raise AppError(f"context_ref_id é obrigatório para {context_type}", 400)
+            
             if not isinstance(context_ref_id, int) or context_ref_id <= 0:
                 raise AppError("context_ref_id inválido", 400)
 

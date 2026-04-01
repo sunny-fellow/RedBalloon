@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
-
 from models.base import Base
 from models.enums import ProblemTags
 
@@ -21,7 +20,7 @@ class ProblemTag(Base):
         nullable=False
     )
 
-    # -------- relações --------
+    # Relações 
 
     problem = relationship(
         "Problem",

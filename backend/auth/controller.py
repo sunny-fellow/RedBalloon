@@ -16,7 +16,6 @@ from auth.commands.register import RegisterCommand
 
 @api.route("/login")
 class AuthLogin(Resource):
-
     @api.doc(description="Endpoint pelo qual o usuário faz login e recebe JWT")
     @handle_exceptions
     @api.expect(LoginModel(api))
@@ -25,10 +24,8 @@ class AuthLogin(Resource):
         command = LoginCommand(service, data)
         return command.execute(), 200
     
-
 @api.route("/register")
 class AuthRegister(Resource):
-    
     @api.doc(description="Endpoint de criação de usuário")
     @handle_exceptions
     @api.expect(RegisterModel(api))

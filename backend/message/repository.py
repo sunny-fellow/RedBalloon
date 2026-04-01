@@ -7,18 +7,20 @@ from models.message.message_react import MessageReact
 from models.user.user import User
 from models.enums import MessageContextType, ReactionType, MessageTags
 
-
 class MessageRepository:
-
     def create_message(self, session, user_id: int, content: str) -> Message:
-        """Cria a mensagem e retorna o objeto."""
+        """
+        Cria a mensagem e retorna o objeto.
+        """
         message = Message(user_id=user_id, message=content)
         session.add(message)
-        session.flush()  # gera message_id
+        session.flush()  # Gera message_id
         return message
 
     def create_message_context(self, session, message_id: int, context_type: str, context_ref_id: int = None, parent_message: int = None):
-        """Cria o contexto da mensagem."""
+        """
+        Cria o contexto da mensagem.
+        """
         context = MessageContext(
             message_id=message_id,
             context_type=MessageContextType(context_type),
@@ -46,21 +48,22 @@ class MessageRepository:
         Ordena por: mais likes primeiro, depois mais recente.
         Aplica offset e limite.
         """
-        # ---------- base query ----------
+        #Base query
         base_query = session.query(Message).join(MessageContext)
 
-        # filtro por contexto
+        # Filtro por contexto
         base_query = base_query.filter(MessageContext.context_type == context_type)
+        
         if context_type in ["PROBLEM", "SOLUTION"]:
             base_query = base_query.filter(MessageContext.context_ref_id == context_ref_id)
 
-        # filtro textual
+        # Filtro textual
         base_query = self._apply_text_filter(base_query, query)
 
-        # filtro por tags
+        # Filtro por tags
         base_query = self._apply_tag_filter(base_query, tags)
 
-        # ---------- ordenar no SQL ----------
+        # Ordenar no SQL
         base_query = base_query.outerjoin(MessageReact) \
                             .group_by(Message.message_id) \
                             .order_by(
@@ -68,16 +71,16 @@ class MessageRepository:
                                 Message.sent_at.desc()
                             )
 
-        # ---------- aplicar offset e limite ----------
+        # Aplicar offset e limite
         comments = base_query.offset(offset).limit(limit).all()
         message_ids = [msg.message_id for msg in comments]
 
-        # ---------- contagem de likes/dislikes ----------
+        # Contagem de likes/dislikes
         reacts = self._get_reacts(session, message_ids)
 
         return comments, reacts
 
-    # ---------- filtros auxiliares ----------
+    # Filtros auxiliares
     def _apply_text_filter(self, query_obj, search_text):
         if search_text:
             search = f"%{search_text}%"
@@ -93,11 +96,13 @@ class MessageRepository:
     def _apply_tag_filter(self, query_obj, tags):
         if tags:
             query_obj = query_obj.join(MessageTag).filter(MessageTag.tag.in_(tags))
+        
         return query_obj
 
-    # ---------- contagem de reações ----------
+    # Contagem de reações
     def _get_reacts(self, session, message_ids):
         reacts = {}
+        
         if not message_ids:
             return reacts
 
@@ -112,8 +117,10 @@ class MessageRepository:
         for row in rows:
             if row.message_id not in reacts:
                 reacts[row.message_id] = {"likes": 0, "dislikes": 0}
+            
             if row.reaction == ReactionType.LIKE:
                 reacts[row.message_id]["likes"] = row.count
+            
             else:
                 reacts[row.message_id]["dislikes"] = row.count
 

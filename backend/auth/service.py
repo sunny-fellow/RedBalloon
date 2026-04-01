@@ -21,39 +21,34 @@ from auth.validators.register import RegisterValidator
 
 @Singleton
 class AuthService:
-
     def __init__(self):
         self.db_service = DatabaseService()
         self.repository = AuthRepository()
 
-    # ---------------- JWT ----------------
+    # JWT
     def make_jwt(self, user):
-
         payload = {
             "user_id": user.user_id,
             "nickname": user.nickname,
             "iat": datetime.now(timezone.utc),
             "exp": datetime.now(timezone.utc) + timedelta(hours=TOKEN_EXPIRATION_HOURS)
         }
-
         token = jwt.encode(payload, JWT_KEY, algorithm="HS256")
 
-        # compatibilidade (pyjwt antigo)
+        # Compatibilidade (pyjwt antigo)
         if isinstance(token, bytes):
             token = token.decode("latin-1")
 
         return token
 
-    # ---------------- LOGIN ----------------
+    # LOGIN
     def login(self, data: dict):
-
         LoginValidator.validate(data)
-
+        
         login = data["login"]
         password = data["password"]
 
         def func(session):
-
             user = self.repository.get_by_login(session, login)
 
             if not user:
@@ -78,7 +73,7 @@ class AuthService:
 
         return self.db_service.run(func)
 
-    # ---------------- REGISTER ----------------
+    # REGISTER
     def register(self, data: dict):
         print(data)
         RegisterValidator.validate(data)
@@ -104,13 +99,12 @@ class AuthService:
         )
 
         def func(session):
-
-            # nickname
+            # Nickname
             existing_user = self.repository.get_by_login(session, nickname)
             if existing_user:
                 raise AppError("Nickname já está em uso.", 400)
 
-            # email
+            # E-mail
             email_user = session.query(User).filter(User.email == email).first()
             if email_user:
                 raise AppError("Email já está em uso.", 400)

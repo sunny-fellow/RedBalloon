@@ -3,10 +3,8 @@ from utils.app_error import AppError
 from utils.validator import Validator
 
 class NicknameValidator(Validator):
-
     @staticmethod
     def validate(nickname: str):
-
         if not nickname or not nickname.strip():
             raise AppError("O campo 'nickname' não pode ser vazio.")
 

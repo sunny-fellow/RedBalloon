@@ -2,10 +2,8 @@ from utils.app_error import AppError
 from utils.validator import Validator
 
 class LoginValidator(Validator):
-
     @staticmethod
     def validate(data: dict):
-
         login = data.get("login")
         password = data.get("password")
 

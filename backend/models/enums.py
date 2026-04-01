@@ -5,12 +5,10 @@ class ProblemDifficulty(str, Enum):
     MEDIUM = "MEDIUM"
     HARD = "HARD"
 
-
 class RoomStatus(str, Enum):
     IN_PROGRESS = "IN_PROGRESS"
     FINISHED = "FINISHED"
     CROWDED = "CROWDED"
-
 
 class SubmissionStatus(str, Enum):
     JUDGING = "JUDGING"
@@ -21,7 +19,6 @@ class SubmissionStatus(str, Enum):
     RUNTIME_ERROR = "RUNTIME_ERROR"
     COMPILATION_ERROR = "COMPILATION_ERROR"
     VERIFICATION_ERROR = "VERIFICATION_ERROR"
-
 
 class LanguageType(str, Enum):
     PYTHON = "PYTHON"
@@ -46,7 +43,6 @@ class ProblemTags(str, Enum):
     DATA_STRUCTURES = "data_structures"
     OPTIMIZATION = "optimization"
     BEGGINNER = "begginner"
-
 
 class MessageTags(str, Enum):
     DOUBT = "doubt"

@@ -3,10 +3,8 @@ from utils.app_error import AppError
 from utils.validator import Validator
 
 class PasswordValidator(Validator):
-
     @staticmethod
     def validate(password: str):
-
         if not password:
             raise AppError("O campo 'password' não pode ser vazio.")
 

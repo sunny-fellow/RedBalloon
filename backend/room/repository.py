@@ -10,9 +10,7 @@ from models.room.room_problem import RoomProblem
 from models.room.room_chat import RoomChat
 from models.room.room_submission import RoomSubmission
 
-
 class RoomRepository:
-
     def list(self, session, query=None):
         creator = aliased(User)
         creator_participant = aliased(RoomParticipant)
@@ -52,7 +50,7 @@ class RoomRepository:
         return q.all()
     
     def create_room(self, session, data):
-        room_socket = str(uuid.uuid4())  # socket da sala
+        room_socket = str(uuid.uuid4())  # Socket da sala
         room = Room(
             name=data["room_name"],
             description=data.get("room_description", ""),
@@ -62,11 +60,11 @@ class RoomRepository:
             socket=room_socket
         )
         session.add(room)
-        session.flush()  # pega room_id
+        session.flush()  # Pega room_id
         return room, room_socket
 
     def add_participant(self, session, room_id, user_id, is_admin=False):
-        user_socket = str(uuid.uuid4())  # socket do participante
+        user_socket = str(uuid.uuid4())  # Socket do participante
         participant = RoomParticipant(
             room_id=room_id,
             user_id=user_id,
@@ -76,14 +74,14 @@ class RoomRepository:
         session.add(participant)
         return participant, user_socket
 
-    # -------- PROBLEM --------
+    # PROBLEM
     def create_problem(self, session, data):
         problem = Problem(**data)
         session.add(problem)
         session.flush()
         return problem
 
-    # -------- ROOM_PROBLEM --------
+    # ROOM_PROBLEM
     def add_problem_to_room(self, session, room_id, problem_id, points, balloon):
         rp = RoomProblem(
             room_id=room_id,

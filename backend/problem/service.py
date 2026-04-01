@@ -11,21 +11,18 @@ from models.enums import ValidationMode, ReactionType
 
 from problem.validators.create_problem import CreateProblemValidator
 
-
 @Singleton
 class ProblemService:
-
     def __init__(self):
         self.db_service = DatabaseService()
         self.repository = ProblemRepository()
 
-    # ---------------- CREATE ----------------
+    # CREATE
     def create_problem(self, data):
         CreateProblemValidator.validate(data)
         validation_mode = ValidationMode(data["validation_mode"])
 
         def func(session):
-
             problem = Problem(
                 creator_id=data["creator_id"],
                 title=data["title"],
@@ -40,9 +37,8 @@ class ProblemService:
             session.add(problem)
             session.flush()
 
-            # -------- INPUTS + OUTPUTS --------
+            # INPUTS + OUTPUTS
             if validation_mode == ValidationMode.INPUTS_OUTPUTS:
-
                 cases = data.get("inputs_outputs")
 
                 if not cases:
@@ -59,9 +55,8 @@ class ProblemService:
                         )
                     )
 
-            # -------- CHECKER --------
+            # CHECKER
             elif validation_mode == ValidationMode.CHECKER_ALGORITHM:
-
                 checker_data = data.get("checker")
                 inputs = data.get("inputs")
 
@@ -89,9 +84,8 @@ class ProblemService:
                         )
                     )
 
-            # -------- NO VALIDATION --------
+            # NO VALIDATION
             elif validation_mode == ValidationMode.NO_VALIDATION:
-
                 inputs = data.get("inputs")
 
                 if not inputs:
@@ -109,11 +103,9 @@ class ProblemService:
 
         return self.db_service.run(func, data["creator_id"])
 
-    # ---------------- LIST ----------------
+    # LIST
     def list(self, data):
-
         def func(session):
-
             problems = self.repository.list_problems(
                 session=session,
                 query=data.get("query"),
@@ -126,7 +118,7 @@ class ProblemService:
             ids = [p.problem_id for p in problems]
 
             reactions = self.repository.get_reactions_count(session, ids)
-            submissions = self.repository.get_submission_stats(session, ids)
+            submissions = self.repository.get_submission_stats_bulk(session, ids)
             tags = self.repository.get_tags(session, ids)
 
             result = []
@@ -154,7 +146,6 @@ class ProblemService:
         user_id = data["user_id"]
 
         def func(session):
-
             problem = self.repository.get_problem_by_id(session, problem_id)
 
             if not problem:
@@ -166,7 +157,7 @@ class ProblemService:
 
             reactions = self.repository.get_reactions(session, problem_id)
 
-            submissions = self.repository.get_submission_stats(
+            submissions = self.repository.get_submission_stats_single(
                 session, problem_id
             )
 
@@ -209,10 +200,11 @@ class ProblemService:
 
             try:
                 react_type = ReactionType(data["react_type"])
+            
             except ValueError:
                 raise AppError("Tipo de reação inválido", 400)
 
-            # opcional (recomendado): validar se problema existe
+            # Opcional (recomendado): validar se problema existe
             problem = self.repository.get_problem_by_id(session, problem_id)
             if not problem:
                 raise AppError("Problema não encontrado", 404)
@@ -223,7 +215,6 @@ class ProblemService:
                 user_id,
                 react_type
             )
-
             return {
                 "action": action  # created | updated | removed
             }
@@ -231,7 +222,6 @@ class ProblemService:
         return self.db_service.run(func)
     
     def count_problems(self):
-
         def func(session):
             return self.repository.count_problems(session)
 

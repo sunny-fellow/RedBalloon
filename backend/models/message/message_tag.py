@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
+
 from ..base import Base
 from ..enums import MessageTags
-
 
 class MessageTag(Base):
     __tablename__ = "message_tags"
@@ -20,7 +20,7 @@ class MessageTag(Base):
         nullable=False
     )
 
-    # -------- relações --------
+    # Relações
     message = relationship(
         "Message",
         back_populates="tags"

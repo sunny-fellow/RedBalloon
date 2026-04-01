@@ -18,8 +18,7 @@ class RoomGatewayRepository:
     def __init__(self):
         self.db_service = DatabaseService()
 
-
-    # ---------------- sala ----------------
+    # Sala
     def get_room_by_id(self, room_id: int):
         def func(session):
             return session.query(Room).filter(Room.room_id == room_id).first()
@@ -48,7 +47,7 @@ class RoomGatewayRepository:
         return self.db_service.run(func)
 
 
-    # ---------------- chat ----------------
+    # Chat
     def add_message(self, room_id: int, user_id: int, message: str):
         def func(session):
             msg = RoomChat(room_id=room_id, user_id=user_id, message=message)
@@ -65,7 +64,7 @@ class RoomGatewayRepository:
         return self.db_service.run(func)
 
 
-    # ---------------- problemas da sala ----------------
+    # Problemas da sala
     def get_problems_for_room(self, room_id: int):
         def func(session):
             problems = session.query(
@@ -113,10 +112,10 @@ class RoomGatewayRepository:
         return self.db_service.run(func)
 
 
-    # ---------------- submissões ----------------
+    # Submissões
     def create_room_submission(self, data: dict):
         def func(session):
-            # cria nova submissão com status JUDGING
+            # Cria nova submissão com status JUDGING
             submission = RoomSubmission(
                 room_id=data["room_id"],
                 user_id=data["user_id"],
@@ -134,16 +133,16 @@ class RoomGatewayRepository:
 
 
     def judge_room_submission(self, submission: RoomSubmission):
-        # executa código do usuário
+        # Executa código do usuário
         result = self.execution_service.run(
             problem_id=submission.problem_id,
             source_code=submission.code,
             language=submission.language.value
         )
 
-        # atualiza somente esta submissão
+        # Atualiza somente esta submissão
         def _update(session):
-            # pega exatamente o objeto que já temos
+            # Pega exatamente o objeto que já temos
             sub = session.merge(submission)
             sub.status = result["status"]
             sub.time_taken = result.get("time_spent", 0)
@@ -161,7 +160,6 @@ class RoomGatewayRepository:
             "room_id": updated_submission.room_id
         }
 
-
     def get_user_submissions(self, room_id: int, user_id: int):
         def func(session):
             subs = session.query(RoomSubmission).filter(
@@ -177,7 +175,6 @@ class RoomGatewayRepository:
                 } for s in subs
             ]
         return self.db_service.run(func)
-
 
     def get_all_room_submissions(self, room_id: int):
         def func(session):
@@ -195,12 +192,12 @@ class RoomGatewayRepository:
             ]
         return self.db_service.run(func)
 
-
-    # ---------------- info da sala ----------------
+    # Info da sala
     def get_lobby_info(self, room_id: int):
         def func(session):
             # Pega a sala
             room = session.query(Room).filter(Room.room_id == room_id).first()
+            
             if not room:
                 raise AppError("Sala não encontrada")
 
@@ -222,7 +219,6 @@ class RoomGatewayRepository:
                 }
                 for p in participants_query.all()
             ]
-
             current_players = len(participants)
 
             return {
@@ -237,18 +233,18 @@ class RoomGatewayRepository:
 
         return self.db_service.run(func)
     
-
     def is_admin(self, room_id: int, user_id: int) -> bool:
         def func(session):
             participant = session.query(RoomParticipant).filter_by(
                 room_id=room_id,
                 user_id=user_id
             ).first()
+            
             if not participant:
                 raise AppError("Usuário não participa da sala")
+            
             return participant.is_admin
         return self.db_service.run(func)
-
 
     def set_leader(self, room_id: int, new_leader_id: int):
         def func(session):
@@ -259,13 +255,15 @@ class RoomGatewayRepository:
                 room_id=room_id,
                 user_id=new_leader_id
             ).first()
+            
             if not participant:
                 raise AppError("Usuário a ser definido como líder não está na sala")
+            
             participant.is_admin = True
             session.commit()
+            
             return participant
         return self.db_service.run(func)
-
 
     def remove_participant(self, room_id: int, user_id: int):
         def func(session):
@@ -273,9 +271,12 @@ class RoomGatewayRepository:
                 room_id=room_id,
                 user_id=user_id
             ).first()
+            
             if not participant:
                 raise AppError("Usuário não encontrado na sala")
+            
             session.delete(participant)
             session.commit()
+            
             return participant
         return self.db_service.run(func)

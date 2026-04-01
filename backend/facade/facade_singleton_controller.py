@@ -17,16 +17,13 @@ from problem.commands.list_problems import ListProblemsCommand
 from problem.commands.problem_info import ProblemInfoCommand
 from problem.commands.problem_react import ProblemReactCommand
 
-
 @Singleton
 class FacadeSingletonController:
-
     def __init__(self):
         self.user_service = UserService()
         self.problem_service = ProblemService()
 
-    # ---------------- USER ----------------
-
+    # USER
     def list_users(self, query=None, country=None):
         command = ListUsersCommand(
             self.user_service,
@@ -35,7 +32,6 @@ class FacadeSingletonController:
         return command.execute()
 
     def user_details(self, user_id, requester_id):
-
         print("FACADE: user_details START")
         print(f"FACADE: user_id={user_id}, requester_id={requester_id}")
 
@@ -46,13 +42,7 @@ class FacadeSingletonController:
                 "requester_id": requester_id
             }
         )
-
-        print("FACADE: command criado")
-
         result = command.execute()
-
-        print("FACADE: command.execute() finalizado")
-
         return result
 
     def follow_user(self, follower_id, following_id):
@@ -73,8 +63,7 @@ class FacadeSingletonController:
         command = DeleteUserCommand(self.user_service, user_id)
         return command.execute()
 
-    # ---------------- PROBLEM ----------------
-
+    # PROBLEM
     def create_problem(self, data):
         command = CreateProblemCommand(self.problem_service, data)
         return command.execute()
@@ -102,8 +91,6 @@ class FacadeSingletonController:
     def react_problem(self, data):
         command = ProblemReactCommand(self.problem_service, data)
         return command.execute()
-
-    # ---------------- MÉTRICAS (EXIGÊNCIA DO LAB) ----------------
 
     def count_users(self):
         return self.user_service.count_users()

@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 from ..base import Base
 from ..enums import ReactionType
 
-
 class SubmissionReact(Base):
     __tablename__ = "submission_reacts"
 
@@ -15,7 +14,7 @@ class SubmissionReact(Base):
     reaction = Column(Enum(ReactionType), nullable=False)
     reacted_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
 
-    # -------- relações --------
+    # Relações
     submission = relationship(
         "Submission",
         back_populates="reacts"

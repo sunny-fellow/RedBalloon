@@ -25,7 +25,7 @@ class RoomSubmission(Base):
         ),
     )
 
-    # -------- relações --------
+    # Relações
     problem = relationship(
         "Problem",
         back_populates="room_submissions"

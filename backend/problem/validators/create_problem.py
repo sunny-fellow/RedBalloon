@@ -2,14 +2,12 @@ from utils.validator import Validator
 from utils.app_error import AppError
 
 class CreateProblemValidator(Validator):
-
     MAX_TIME = 5000       # ms
     MAX_MEMORY = 700      # MB
 
     @staticmethod
     def validate(data: dict):
-
-        # -------- required --------
+        # Required
         required_fields = [
             "creator_id",
             "title",
@@ -24,7 +22,7 @@ class CreateProblemValidator(Validator):
             if field not in data or data[field] is None:
                 raise AppError(f"{field} é obrigatório")
 
-        # -------- limits --------
+        # Limits
         time_limit = data["time_limit"]
         memory_limit = data["memory_limit"]
 
@@ -38,7 +36,7 @@ class CreateProblemValidator(Validator):
                 f"memory_limit deve estar entre 1 e {CreateProblemValidator.MAX_MEMORY} MB"
             )
 
-        # -------- validation mode --------
+        # Validation mode
         mode = data["validation_mode"]
 
         if mode == "INPUTS_OUTPUTS":

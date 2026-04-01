@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 from ..base import Base
 from ..enums import ProblemDifficulty, ValidationMode
 
-
 class Problem(Base):
     __tablename__ = "problems"
 
@@ -25,7 +24,7 @@ class Problem(Base):
     private = Column(Boolean, default=False, nullable=False)
     created_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
 
-    # -------- relações --------
+    # Relações
 
     creator = relationship(
         "User",

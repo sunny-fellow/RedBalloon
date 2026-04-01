@@ -4,7 +4,6 @@ from datetime import datetime, timezone
 
 from ..base import Base
 
-
 class RoomChat(Base):
     __tablename__ = "room_chats"
 

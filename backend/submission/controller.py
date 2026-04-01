@@ -19,19 +19,16 @@ from submission.commands.submission_details import SubmissionDetailsCommand
 
 @api.route("/submit")
 class Submit(Resource):
-
     @handle_exceptions
     @api.doc("Endpoint de submissão para problemas públicos")
     @api.expect(SubmissionModel(api), validate = True)
     def post(self):
         data = api.payload
-
         command = SubmissionCommand(service, data)
         return command.execute(), 201
     
 @api.route("/problem/<int:problem_id>")
 class ProblemSubmissions(Resource):
-
     @handle_exceptions
     @api.doc("Retorna todas as submissões ACEITAS feitas a um problema específico")
     @api.param("problem_id", "ID do Problema ao qual as submissões pertencem")
@@ -51,11 +48,9 @@ class SubmissionDetails(Resource):
                 "submission_id": submission_id, 
                 "user_id": get_user_id()
             }
-        
         )
         return command.execute(), 200
 
-    
 @api.route("/react")
 class SubmissionReact(Resource):
     @handle_exceptions

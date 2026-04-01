@@ -35,6 +35,7 @@ class DatabaseService:
 
             if hist.deleted:
                 value = hist.deleted[0]
+            
             else:
                 value = getattr(obj, key)
 
@@ -56,17 +57,19 @@ class DatabaseService:
             for obj in session.deleted:
                 if isinstance(obj, Memento):
                     continue
+                
                 memento_manager.save(session, obj, self.snapshot(obj), "delete", user_id)
 
         @event.listens_for(Session, "after_flush")
         def after_flush(session, flush_context):
             user_id = session.info.get("user_id", None)
 
-            # só grava mementos de objetos novos depois do flush,
-            # garantindo que tenham PK
+            # Só grava mementos de objetos novos depois do flush,
+            # Garantindo que tenham PK
             for obj in session.new:
                 if isinstance(obj, Memento):
                     continue
+                
                 memento_manager.save(session, obj, self.snapshot(obj), "create", user_id)
 
     def run(self, func, user_id: int = None):
@@ -84,6 +87,7 @@ class DatabaseService:
         session: Session = SessionLocal()
         try:
             return self._to_dict(self._memento.undo_last(session))
+        
         finally:
             session.close()
 
@@ -96,6 +100,7 @@ class DatabaseService:
         """Converte um objeto SQLAlchemy em dicionário pronto para JSON."""
         try:
             state = inspect(obj)
+        
         except NoInspectionAvailable:
             return obj
 

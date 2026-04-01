@@ -6,10 +6,8 @@ from submission.validators.submit import SubmissionValidator
 from execution.service import ExecutionService
 from datetime import datetime, timezone
 
-
 @Singleton
 class SubmissionService:
-
     def __init__(self):
         self.db_service = DatabaseService()
         self.repository = SubmissionRepository()
@@ -113,6 +111,7 @@ class SubmissionService:
             details = self.repository.get_submission_details(session, submission_id, user_id)
             if not details:
                 raise AppError("Submission not found", 404)
+            
             return details
 
         return self.db_service.run(_query, user_id=user_id)

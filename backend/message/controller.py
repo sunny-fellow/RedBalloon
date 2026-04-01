@@ -16,7 +16,6 @@ from message.commands.get_comments import GetCommentsCommand
 
 @api.route("/comment")
 class Comment(Resource):
-
     @handle_exceptions
     @api.doc("Permite que o usuário comente em geral, em problemas ou em outras mensagens")
     @api.expect(CommentModel(api), validate = True)
@@ -27,7 +26,6 @@ class Comment(Resource):
     
 @api.route("/get_comments")
 class GetComments(Resource):
-
     @handle_exceptions
     @api.doc("Consulta comentários do geral, de um problema ou de uma submissão")
     @api.expect(GetCommentsModel(api), validate = True)

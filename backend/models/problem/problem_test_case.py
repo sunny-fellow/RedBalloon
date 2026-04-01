@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 
 from ..base import Base
 
-
 class ProblemTestCase(Base):
     __tablename__ = "problem_test_cases"
 

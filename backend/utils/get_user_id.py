@@ -22,8 +22,10 @@ def get_user_id():
 
     if len(parts) == 1:
         token = parts[0]
+    
     elif len(parts) == 2 and parts[0].lower() == "bearer":
         token = parts[1]
+    
     else:
         raise AppError("Formato de token inválido", 401)
 

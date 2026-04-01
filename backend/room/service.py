@@ -7,11 +7,9 @@ import uuid
 
 @Singleton
 class RoomService:
-
     def __init__(self):
         self.db_service = DatabaseService()
         self.repository = RoomRepository()
-
 
     def list(self, query):
         def func(session):
@@ -39,17 +37,17 @@ class RoomService:
         def func(session):
             user_id = data["user_id"]
 
-            # -------- calcular tempo --------
+            # Calcular tempo
             ends_at = (
                 datetime.now(timezone.utc) +
                 timedelta(minutes=data["duration"])
             ).isoformat()
             data["ends_at"] = ends_at
 
-            # -------- criar sala + socket --------
+            # Criar sala + socket
             room, room_socket = self.repository.create_room(session, data)
 
-            # -------- adicionar criador + socket --------
+            # Adicionar criador + socket
             participant, user_socket = self.repository.add_participant(
                 session,
                 room.room_id,
@@ -57,7 +55,7 @@ class RoomService:
                 is_admin=True
             )
 
-            # -------- processar problemas --------
+            # Processar problemas
             for item in data["problems"]:
                 p_type = item["type"]
                 points = item["points"]
@@ -87,7 +85,7 @@ class RoomService:
                 else:
                     raise AppError("Tipo de problema inválido")
 
-                # vincular à sala
+                # Vincular à sala
                 self.repository.add_problem_to_room(session, room.room_id, problem_id, points, balloon)
 
             return {
@@ -104,21 +102,21 @@ class RoomService:
             room_id = data["room_id"]
             room_password = data.get("room_password")
 
-            # -------- buscar sala --------
+            # Buscar sala
             room = self.repository.get_room_by_id(session, room_id)
             if not room:
                 raise AppError("Sala não encontrada", 404)
 
-            # -------- checar senha --------
+            # Checar senha
             if room.password and room.password != (room_password or ""):
                 raise AppError("Senha inválida")
 
-            # -------- checar lotação --------
+            # Checar lotação
             current_players = self.repository.count_participants(session, room_id)
             if current_players >= room.max_participants:
                 raise AppError("Sala cheia")
 
-            # -------- adicionar participante --------
+            # Adicionar participante
             participant, user_socket = self.repository.add_participant(
                 session,
                 room_id,

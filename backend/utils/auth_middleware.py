@@ -12,6 +12,7 @@ def check_jwt_header():
     if request.endpoint:
         endpoint_root = request.path.split('/')[1]
         print(endpoint_root)
+        
         if endpoint_root in whitelist:
             return
 
