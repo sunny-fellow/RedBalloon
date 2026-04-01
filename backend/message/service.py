@@ -1,18 +1,20 @@
+from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from utils.app_error import AppError
 from utils.singleton import Singleton
 
 from database.service import DatabaseService
 from models.enums import MessageContextType
 
-from message.repository import MessageRepository
 from message.validators.comment import CommentValidator
 from message.validators.get_comments import GetCommentsValidator
+
 
 @Singleton
 class MessageService:
     def __init__(self):
         self.db_service = DatabaseService()
-        self.repository = MessageRepository()
+        factory = SQLAlchemyRepositoryFactory()
+        self.repository = factory.create_message_repository()
 
     def comment(self, data):
         CommentValidator.validate(data)
@@ -37,8 +39,8 @@ class MessageService:
 
             self.repository.associate_tags(
                 session,
-                message_id = message.message_id,
-                tags = tags
+                message_id=message.message_id,
+                tags=tags
             )
 
             return {

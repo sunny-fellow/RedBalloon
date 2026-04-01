@@ -1,8 +1,9 @@
+from models.submission.submission_repository import SubmissionRepository
 from models.submission.submission import Submission
 from models.submission.submission_react import SubmissionReact
 from models.enums import SubmissionStatus
 
-class SubmissionRepository:
+class SQLAlchemySubmissionRepository(SubmissionRepository):
     def save_submission(self, session, problem_id, user_id, code, language, time_spent, status, submitted_at):
         sub = Submission(
             problem_id=problem_id,

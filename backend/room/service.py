@@ -1,19 +1,20 @@
+from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
-from room.repository import RoomRepository
 from datetime import datetime, timedelta, timezone
 import uuid
+
 
 @Singleton
 class RoomService:
     def __init__(self):
         self.db_service = DatabaseService()
-        self.repository = RoomRepository()
+        factory = SQLAlchemyRepositoryFactory()
+        self.repository = factory.create_room_repository()
 
     def list(self, query):
         def func(session):
-
             rooms = self.repository.list(
                 session,
                 query=query

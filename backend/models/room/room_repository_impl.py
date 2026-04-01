@@ -1,3 +1,4 @@
+from models.room.room_repository import RoomRepository
 from sqlalchemy import func, and_
 from sqlalchemy.orm import aliased
 import uuid
@@ -10,7 +11,7 @@ from models.room.room_problem import RoomProblem
 from models.room.room_chat import RoomChat
 from models.room.room_submission import RoomSubmission
 
-class RoomRepository:
+class SQLAlchemyRoomRepository(RoomRepository):
     def list(self, session, query=None):
         creator = aliased(User)
         creator_participant = aliased(RoomParticipant)

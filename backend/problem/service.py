@@ -1,7 +1,7 @@
+from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
-from problem.repository import ProblemRepository
 
 from models.problem.problem import Problem
 from models.problem.problem_test_case import ProblemTestCase
@@ -11,11 +11,14 @@ from models.enums import ValidationMode, ReactionType
 
 from problem.validators.create_problem import CreateProblemValidator
 
+
 @Singleton
 class ProblemService:
     def __init__(self):
         self.db_service = DatabaseService()
-        self.repository = ProblemRepository()
+        factory = SQLAlchemyRepositoryFactory()
+        self.repository = factory.create_problem_repository()
+
 
     # CREATE
     def create_problem(self, data):

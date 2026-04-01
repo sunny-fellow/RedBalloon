@@ -1,3 +1,4 @@
+from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timezone
 
@@ -6,15 +7,17 @@ from utils.singleton import Singleton
 from utils.app_error import AppError
 
 from models.user.user import User
-from user.repository import UserRepository
+from models.factories.repository_factory import RepositoryFactory  # Importa a Factory
 from user.validators.nickname_validator import NicknameValidator
 from user.validators.password_validator import PasswordValidator
+
 
 @Singleton
 class UserService:
     def __init__(self):
         self.db_service = DatabaseService()
-        self.repository = UserRepository()
+        factory = SQLAlchemyRepositoryFactory()
+        self.repository = factory.create_user_repository()
         self.nickname_validator = NicknameValidator()
         self.password_validator = PasswordValidator()
 

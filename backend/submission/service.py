@@ -1,16 +1,18 @@
+from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
-from submission.repository import SubmissionRepository
 from submission.validators.submit import SubmissionValidator
 from execution.service import ExecutionService
 from datetime import datetime, timezone
+
 
 @Singleton
 class SubmissionService:
     def __init__(self):
         self.db_service = DatabaseService()
-        self.repository = SubmissionRepository()
+        factory = SQLAlchemyRepositoryFactory()
+        self.repository = factory.create_submission_repository()
         self.executor = ExecutionService(self.db_service)
 
     def submit(self, data):
