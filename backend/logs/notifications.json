@@ -1,1 +1,41 @@
-[]
+[
+  {
+    "timestamp": "2026-04-06T18:16:42.964933",
+    "level": "INFO",
+    "message": "Submissão aceita - notificação gerada",
+    "context": {
+      "type": "submission_accepted",
+      "user_id": 1,
+      "problem_id": 1,
+      "submission_id": 1,
+      "timestamp": "2026-04-06T18:16:42.964912",
+      "message": "Parabéns! Você resolveu o problema 1!"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T18:20:25.287360",
+    "level": "INFO",
+    "message": "Submissão aceita - notificação gerada",
+    "context": {
+      "type": "submission_accepted",
+      "user_id": 1,
+      "problem_id": 1,
+      "submission_id": 2,
+      "timestamp": "2026-04-06T18:20:25.287341",
+      "message": "Parabéns! Você resolveu o problema 1!"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T18:39:42.804889",
+    "level": "INFO",
+    "message": "Submissão aceita - notificação gerada",
+    "context": {
+      "type": "submission_accepted",
+      "user_id": 1,
+      "problem_id": 1,
+      "submission_id": 3,
+      "timestamp": "2026-04-06T18:39:42.804879",
+      "message": "Parabéns! Você resolveu o problema 1!"
+    }
+  }
+]

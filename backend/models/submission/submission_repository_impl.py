@@ -21,10 +21,11 @@ class SQLAlchemySubmissionRepository(SubmissionRepository):
         session.flush()
         return sub
 
-    def get_accepted_submissions(self, session, problem_id):
+    def get_any_submission(self, session, problem_id):
+        print("Cheguei aqui 1")
         return (
             session.query(Submission)
-            .filter_by(problem_id=problem_id, status=SubmissionStatus.ACCEPTED.value)  # Use .value
+            .filter_by(problem_id=problem_id)  # Use .value
             .all()
         )
 
