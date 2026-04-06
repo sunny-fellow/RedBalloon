@@ -5,22 +5,19 @@ from datetime import datetime
 from utils.handle_exceptions import handle_exceptions
 from utils.get_user_id import get_user_id
 from utils.reports.report_factory import ReportFactory, ReportType
+from flask import Response
+from datetime import datetime
+from utils.handle_exceptions import handle_exceptions
+from utils.get_user_id import get_user_id
+from utils.reports.html_report import HTMLReport
+from utils.reports.pdf_report import PDFReport
 
 api = Namespace("reports", description="Geração de Relatórios Estatísticos")
 
 @api.route("/access-stats")
 class AccessStatsReport(Resource):
     @handle_exceptions
-    @api.doc("Gera relatório de estatísticas de acesso dos usuários")
-    @api.param("start_date", "Data inicial (YYYY-MM-DD)")
-    @api.param("end_date", "Data final (YYYY-MM-DD)")
-    @api.param("format", "Formato do relatório: html ou pdf")
     def get(self):
-        # Verificar permissão (apenas admin)
-        user_id = get_user_id()
-        # TODO: Verificar se user_id tem permissão de admin
-        
-        # Obter parâmetros
         start_date_str = request.args.get("start_date")
         end_date_str = request.args.get("end_date")
         format_type = request.args.get("format", "html").lower()
@@ -34,30 +31,35 @@ class AccessStatsReport(Resource):
         except ValueError:
             return {"error": "Formato de data inválido. Use YYYY-MM-DD"}, 400
         
-        # Criar relatório conforme formato
         if format_type == "html":
-            report_type = ReportType.HTML
-            content_type = "text/html"
-            extension = "html"
+            report = HTMLReport()
+            content = report.generate(start_date, end_date)
+            
+            return Response(
+                content,
+                mimetype="text/html",
+                headers={
+                    "Content-Disposition": f"attachment; filename=relatorio_{start_date_str}_a_{end_date_str}.html"
+                }
+            )
+        
         elif format_type == "pdf":
-            report_type = ReportType.PDF
-            content_type = "text/plain"  # Simulado - em produção use application/pdf
-            extension = "txt"
+            report = PDFReport()
+            pdf_bytes = report.generate(start_date, end_date)
+            
+            # Verificar se realmente é PDF (deve começar com %PDF)
+            print(f"[DEBUG] PDF bytes preview: {pdf_bytes[:20]}")
+            
+            return Response(
+                pdf_bytes,
+                mimetype="application/pdf",
+                headers={
+                    "Content-Disposition": f"attachment; filename=relatorio_{start_date_str}_a_{end_date_str}.pdf"
+                }
+            )
+        
         else:
             return {"error": "Formato inválido. Use 'html' ou 'pdf'"}, 400
-        
-        # Gerar relatório usando Template Method
-        report = ReportFactory.create_report(report_type)
-        report_content = report.generate(start_date, end_date)
-        
-        # Retornar como download
-        return Response(
-            report_content,
-            mimetype=content_type,
-            headers={
-                "Content-Disposition": f"attachment; filename=relatorio_acessos_{start_date_str}_a_{end_date_str}.{extension}"
-            }
-        )
 
 
 @api.route("/formats")

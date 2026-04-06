@@ -10,16 +10,17 @@ from models.enums import MessageContextType
 from message.validators.comment import CommentValidator
 from message.validators.get_comments import GetCommentsValidator
 
+from utils.adapter.logger_factory import LoggerFactory  # Adicionar import
 
 @Singleton
 class MessageService:
-    def __init__(self):
+    def __init__(self, logger_type: str = None):
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_message_repository()
         
-        # Adapter para JSON logs
-        self.logger = JsonLoggerAdapter(log_dir="logs", filename="message_actions.json")
+        # Criar logger usando a fábrica
+        self.logger = LoggerFactory.create_logger(logger_type)
 
     def comment(self, data):
         CommentValidator.validate(data)

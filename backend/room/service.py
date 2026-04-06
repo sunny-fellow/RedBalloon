@@ -6,17 +6,17 @@ from utils.app_error import AppError
 from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 from datetime import datetime, timedelta, timezone
 import uuid
-
+from utils.adapter.logger_factory import LoggerFactory  # Adicionar import
 
 @Singleton
 class RoomService:
-    def __init__(self):
+    def __init__(self, logger_type: str = None):
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_room_repository()
         
-        # Adapter para JSON logs
-        self.logger = JsonLoggerAdapter(log_dir="logs", filename="room_actions.json")
+        # Criar logger usando a fábrica
+        self.logger = LoggerFactory.create_logger(logger_type)
 
     def list(self, query):
         def func(session):

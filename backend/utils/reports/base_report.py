@@ -1,11 +1,10 @@
 # utils/base_report.py
-
 from abc import ABC, abstractmethod
-from datetime import datetime, timedelta
-from typing import Dict, List, Any
-from sqlalchemy import text
+from datetime import datetime
+from typing import Dict, Union
 from database.service import DatabaseService
-from utils.adapter.json_logger_adapter import JsonLoggerAdapter
+from utils.adapter.logger_factory import LoggerFactory
+from sqlalchemy import text
 
 class BaseReport(ABC):
     """
@@ -14,9 +13,12 @@ class BaseReport(ABC):
     
     def __init__(self):
         self.db_service = DatabaseService()
-        self.logger = JsonLoggerAdapter(log_dir="logs", filename="reports_actions.json")
+        self.logger = LoggerFactory.create_logger()
     
-    def generate(self, start_date: datetime, end_date: datetime) -> str:
+    def generate(self, start_date: datetime, end_date: datetime) -> Union[str, bytes]:
+        """
+        Método template - pode retornar str (HTML/TXT) ou bytes (PDF)
+        """
         self._validate_dates(start_date, end_date)
         access_data = self._collect_access_data(start_date, end_date)
         statistics = self._calculate_statistics(access_data)

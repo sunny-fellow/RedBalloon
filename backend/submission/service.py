@@ -8,17 +8,18 @@ from event_bus import EventBus, Event, EventType
 from submission.validators.submit import SubmissionValidator
 from execution.service import ExecutionService
 from datetime import datetime, timezone
+from utils.adapter.logger_factory import LoggerFactory  # Adicionar import
 
 @Singleton
 class SubmissionService:
-    def __init__(self):
+    def __init__(self, logger_type: str = None):
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_submission_repository()
         self.executor = ExecutionService(self.db_service)
         
-        # Adapter para JSON logs
-        self.logger = JsonLoggerAdapter(log_dir="logs", filename="submission_actions.json")
+        # Criar logger usando a fábrica
+        self.logger = LoggerFactory.create_logger(logger_type)
         self.event_bus = EventBus()
 
     def submit(self, data):

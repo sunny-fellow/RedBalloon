@@ -4,9 +4,9 @@ from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timezone
 
 from database.service import DatabaseService
+from utils.adapter.logger_factory import LoggerFactory
 from utils.singleton import Singleton
 from utils.app_error import AppError
-from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 
 from models.user.user import User
 from models.factories.repository_factory import RepositoryFactory
@@ -16,15 +16,19 @@ from user.validators.password_validator import PasswordValidator
 
 @Singleton
 class UserService:
-    def __init__(self):
+    def __init__(self, logger_type: str = None):
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_user_repository()
         self.nickname_validator = NicknameValidator()
         self.password_validator = PasswordValidator()
         
-        # Adapter para JSON logs
-        self.logger = JsonLoggerAdapter(log_dir="logs", filename="user_actions.json")
+        # Criar logger dinamicamente
+        self.logger = LoggerFactory.create_logger(
+            logger_type=logger_type,
+            use_colors=True,
+            show_context=True
+        )
 
     def list_users(self, data):
         def func(session):
@@ -245,27 +249,20 @@ class UserService:
             if not self.repository.user_exists(session, user_id):
                 self.logger.warning(
                     f"Tentativa de deletar usuário inexistente",
-                    context={
-                        "user_id": user_id,
-                        "action": "delete"
-                    }
+                    context={"user_id": user_id, "action": "delete"}
                 )
                 return False
-
-            # Aplica soft delete
+            
             result = self.repository.soft_delete(session, user_id)
             
             if result:
                 self.logger.info(
-                    f"Usuário deletado (soft delete)",
-                    context={
-                        "user_id": user_id,
-                        "action": "soft_delete"
-                    }
+                    f"Usuário deletado com sucesso",
+                    context={"user_id": user_id, "action": "soft_delete"}
                 )
-
+            
             return result
-
+        
         return self.db_service.run(func, user_id)
 
     def restore_user(self, user_id: int):

@@ -30,5 +30,329 @@
         "time_spent": null
       }
     }
+  },
+  {
+    "timestamp": "2026-04-06T17:40:30.872515",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:40:30.903614",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:40:30.927080",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:40:36.059205",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:40:36.098768",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:40:36.140350",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:46:07.374952",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:46:07.410065",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:46:07.434308",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:53:04.297695",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:53:04.350408",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:53:04.388440",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:54:12.642745",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:54:12.684405",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:54:12.720022",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:54:39.226428",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:54:39.268475",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:54:39.300940",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:55:56.953027",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:55:56.997180",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:55:57.025252",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:56:43.356930",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:56:43.439511",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:56:43.521045",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:57:25.907502",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:57:25.933351",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:57:25.965418",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:57:57.583574",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:57:57.607882",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:57:57.630479",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:58:03.734428",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:58:03.831302",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:58:03.918068",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:59:13.262993",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "StatisticsListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:59:13.301841",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "submission.accepted",
+      "listener": "NotificationListener"
+    }
+  },
+  {
+    "timestamp": "2026-04-06T17:59:13.356806",
+    "level": "INFO",
+    "message": "Listener subscribed",
+    "context": {
+      "event_type": "user.followed",
+      "listener": "NotificationListener"
+    }
   }
 ]

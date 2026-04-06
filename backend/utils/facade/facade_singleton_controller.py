@@ -22,11 +22,33 @@ from problem.commands.problem_react import ProblemReactCommand
 
 from utils.reports.report_factory import ReportFactory, ReportType
 
+from utils.adapter.logger_factory import LoggerFactory
+from message.service import MessageService
+from room.service import RoomService
+from submission.service import SubmissionService
+import os
+
 @Singleton
 class FacadeSingletonController:
     def __init__(self):
-        self.user_service = UserService()
-        self.problem_service = ProblemService()
+        # Definir tipo de logger baseado no ambiente
+        env = os.getenv("ENV", "development")
+        
+        if env == "development":
+            logger_type = "console"  # Console em desenvolvimento
+        
+        elif env == "production":
+            logger_type = "json"     # JSON em produção
+        
+        else:
+            logger_type = "console"  # Fallback
+        
+        # Criar serviços com o logger configurado
+        self.user_service = UserService(logger_type=logger_type)
+        self.problem_service = ProblemService(logger_type=logger_type)
+        self.message_service = MessageService(logger_type=logger_type)
+        self.room_service = RoomService(logger_type=logger_type)
+        self.submission_service = SubmissionService(logger_type=logger_type)
 
     # USER
     def list_users(self, query=None, country=None):

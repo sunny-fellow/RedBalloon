@@ -11,17 +11,17 @@ from models.problem.problem_checker import ProblemChecker
 from models.enums import ValidationMode, ReactionType
 
 from problem.validators.create_problem import CreateProblemValidator
-
+from utils.adapter.logger_factory import LoggerFactory  # <-- ADICIONAR ESTA LINHA
 
 @Singleton
 class ProblemService:
-    def __init__(self):
+    def __init__(self, logger_type: str = None):
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_problem_repository()
         
         # Adapter para JSON logs
-        self.logger = JsonLoggerAdapter(log_dir="logs", filename="problem_actions.json")
+        self.logger = LoggerFactory.create_logger(logger_type)
 
     # CREATE
     def create_problem(self, data):

@@ -15,7 +15,7 @@ from submission.controller  import api as submission_ns
 from user.controller        import api as user_ns
 from utils.reports.report_controller       import api as reports_ns
 
-from event_bus                import EventBus
+from event_bus import EventBus, EventType
 from utils.listeners.ranking_listener         import RankingUpdateListener
 from utils.listeners.notification_listener    import NotificationListener
 from utils.listeners.statistics_listener      import StatisticsListener
@@ -63,11 +63,11 @@ class Server:
             debug=Config.DEBUG
         )
     
-    def register_listeners():
+    def register_listeners(self):
         bus = EventBus()
-        bus.subscribe(bus.EventType.SUBMISSION_ACCEPTED, StatisticsListener())
-        bus.subscribe(bus.EventType.SUBMISSION_ACCEPTED, NotificationListener())
-        bus.subscribe(bus.EventType.USER_FOLLOWED, NotificationListener())
+        bus.subscribe(EventType.SUBMISSION_ACCEPTED, StatisticsListener())
+        bus.subscribe(EventType.SUBMISSION_ACCEPTED, NotificationListener())
+        bus.subscribe(EventType.USER_FOLLOWED, NotificationListener())
 
 if __name__ == "__main__":
     server = Server()
