@@ -2,17 +2,14 @@ from flask_restx import Namespace, Resource
 from utils.handle_exceptions import handle_exceptions
 from auth.service import AuthService
 
-service = AuthService()
-
-api = Namespace("auth", description="Operações de Autenticação")
-
-# Models
 from auth.models.login import LoginModel
 from auth.models.register import RegisterModel
 
-# Commands
 from auth.commands.login import LoginCommand
 from auth.commands.register import RegisterCommand
+
+service = AuthService()
+api = Namespace("auth", description="Operações de Autenticação")
 
 @api.route("/login")
 class AuthLogin(Resource):

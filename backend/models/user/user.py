@@ -15,8 +15,6 @@ class User(Base):
     description = Column(String)
     nationality = Column(String)
     created_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat())
-    
-    # NOVO: Campo para soft delete
     deleted_at = Column(DateTime, nullable=True)  # NULL = ativo, não-NULL = deletado
 
     # Mensagens - REMOVA o cascade="all, delete" para evitar exclusão física

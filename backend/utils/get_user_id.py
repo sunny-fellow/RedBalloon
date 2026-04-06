@@ -1,9 +1,9 @@
-# utils/get_user_id.py
 import os
+import jwt
+
 from dotenv import load_dotenv
 from flask import request
-import jwt
-from utils.app_error import AppError
+from .app_error import AppError
 
 load_dotenv()
 
@@ -13,7 +13,6 @@ if not JWT_KEY:
     JWT_KEY = "dev-secret-key"
 
 def get_user_id():
-
     auth_header = request.headers.get("Authorization")
     if not auth_header:
         raise AppError("Token não fornecido", 401)
@@ -31,7 +30,6 @@ def get_user_id():
 
     try:
         payload = jwt.decode(token, JWT_KEY, algorithms=["HS256"])
-
         user_id = payload.get("user_id") or payload.get("sub")
 
         if user_id is None:

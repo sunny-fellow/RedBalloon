@@ -1,4 +1,4 @@
-from utils.command import Command
+from utils.interfaces.command import Command
 from user.service import UserService
 
 class UserFollowCommand(Command):

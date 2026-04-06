@@ -1,0 +1,34 @@
+[
+  {
+    "timestamp": "2026-04-04T15:53:23.278575",
+    "level": "DEBUG",
+    "message": "Event emitted",
+    "context": {
+      "event_type": "submission.accepted",
+      "payload": {
+        "submission_id": 4,
+        "user_id": 1,
+        "problem_id": 1,
+        "status": "RUNTIME_ERROR",
+        "room_id": null,
+        "time_spent": null
+      }
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:58:42.860812",
+    "level": "DEBUG",
+    "message": "Event emitted",
+    "context": {
+      "event_type": "submission.accepted",
+      "payload": {
+        "submission_id": 5,
+        "user_id": 1,
+        "problem_id": 1,
+        "status": "RUNTIME_ERROR",
+        "room_id": null,
+        "time_spent": null
+      }
+    }
+  }
+]

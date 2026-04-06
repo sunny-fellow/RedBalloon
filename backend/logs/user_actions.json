@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2026-04-03T22:32:05.815699",
+    "level": "DEBUG",
+    "message": "Contagem de usu�rios realizada",
+    "context": {
+      "total_users": 1,
+      "action": "count"
+    }
+  },
+  {
+    "timestamp": "2026-04-03T22:32:33.126363",
+    "level": "WARNING",
+    "message": "Tentativa de acesso a usu�rio inexistente",
+    "context": {
+      "user_id": 1,
+      "requester_id": 4,
+      "action": "get_user"
+    }
+  },
+  {
+    "timestamp": "2026-04-03T22:32:44.476855",
+    "level": "DEBUG",
+    "message": "Listagem de usu�rios realizada",
+    "context": {
+      "query": null,
+      "country": null,
+      "result_count": 1,
+      "action": "list"
+    }
+  }
+]

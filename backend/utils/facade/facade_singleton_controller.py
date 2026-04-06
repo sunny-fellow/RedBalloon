@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from utils.app_error import AppError
 from utils.singleton import Singleton
 
 # Services
@@ -16,6 +19,8 @@ from problem.commands.create_problem import CreateProblemCommand
 from problem.commands.list_problems import ListProblemsCommand
 from problem.commands.problem_info import ProblemInfoCommand
 from problem.commands.problem_react import ProblemReactCommand
+
+from utils.reports.report_factory import ReportFactory, ReportType
 
 @Singleton
 class FacadeSingletonController:
@@ -97,3 +102,14 @@ class FacadeSingletonController:
 
     def count_problems(self):
         return self.problem_service.count_problems()
+    
+    def generate_access_report(self, start_date: datetime, end_date: datetime, format_type: str):
+        """Gera relatório de estatísticas de acesso"""
+        if format_type == "html":
+            report = ReportFactory.create_report(ReportType.HTML)
+        elif format_type == "pdf":
+            report = ReportFactory.create_report(ReportType.PDF)
+        else:
+            raise AppError(f"Formato de relatório inválido: {format_type}", 400)
+        
+        return report.generate(start_date, end_date)

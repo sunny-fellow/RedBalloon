@@ -1,15 +1,15 @@
-# --- Web ---
+# Web
 flask
 flask-cors
 flask-restx
 flask_swagger_ui
 flask-socketio
 
-# --- Data ---
+# Data
 pandas
 jsonschema
 
-# --- Utils ---
+# Utils
 sqlalchemy
 dotenv
 psycopg2-binary==2.9.11

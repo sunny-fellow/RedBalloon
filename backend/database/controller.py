@@ -1,14 +1,10 @@
 from flask_restx import Namespace, Resource
 from utils.handle_exceptions import handle_exceptions
 
-# Import do Service
 from database.admin_service import DatabaseAdminService
-db_admin_service = DatabaseAdminService()
 
-# Import dos Models
 from database.models.password import getPasswordModel
 
-# Import dos ConcreteCommands
 from database.commands.create_database import CreateDatabaseCommand
 from database.commands.create_tables   import CreateTablesCommand
 from database.commands.fill_tables     import FillTablesCommand
@@ -16,10 +12,9 @@ from database.commands.reset_tables    import ResetTablesCommand
 from database.commands.drop_tables     import DropTablesCommand
 from database.commands.undo_action     import UndoActionCommand
 
-# Definição do Namespace
+db_admin_service = DatabaseAdminService()
 api = Namespace("database", description="Administração do Banco de Dados")
 
-# API Endpoints
 @api.route("/create_database")
 class CreateDatabase(Resource):
     @handle_exceptions
@@ -28,7 +23,6 @@ class CreateDatabase(Resource):
         data = api.payload
         command = CreateDatabaseCommand(db_admin_service, data["password"])
         return command.execute(), 200
-
 
 @api.route("/create_tables")
 class CreateTables(Resource):

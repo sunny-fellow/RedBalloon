@@ -16,16 +16,11 @@ class MementoManager:
             delete -> objeto foi deletado
         """
         cls = obj.__class__
-        pk = self._get_primary_key(obj)
+        pk  = self._get_primary_key(obj)
 
-        memento = Memento(
-            user_id=user_id,
-            entity_class=cls.__name__,
-            entity_pk=str(pk),
-            action=action,
-            snapshot=snapshot
-        )
-
+        memento = Memento(user_id=user_id, entity_class=cls.__name__,
+                          entity_pk=str(pk), action=action, snapshot=snapshot)
+        
         session.add(memento)
 
     def undo_last(self, session: Session, user_id: int = None):

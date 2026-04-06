@@ -2,6 +2,7 @@ from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
+from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 
 from models.problem.problem import Problem
 from models.problem.problem_test_case import ProblemTestCase
@@ -18,7 +19,9 @@ class ProblemService:
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_problem_repository()
-
+        
+        # Adapter para JSON logs
+        self.logger = JsonLoggerAdapter(log_dir="logs", filename="problem_actions.json")
 
     # CREATE
     def create_problem(self, data):
@@ -57,6 +60,18 @@ class ProblemService:
                             output_data=case["output"]
                         )
                     )
+                
+                self.logger.info(
+                    f"Problema criado com casos de teste",
+                    context={
+                        "problem_id": problem.problem_id,
+                        "creator_id": data["creator_id"],
+                        "title": data["title"],
+                        "validation_mode": "INPUTS_OUTPUTS",
+                        "test_cases_count": len(cases),
+                        "action": "create_problem"
+                    }
+                )
 
             # CHECKER
             elif validation_mode == ValidationMode.CHECKER_ALGORITHM:
@@ -76,7 +91,7 @@ class ProblemService:
                 )
 
                 session.add(checker)
-                session.flush()  # IMPORTANTE
+                session.flush()
 
                 for inp in inputs:
                     session.add(
@@ -86,6 +101,19 @@ class ProblemService:
                             checker_id=checker.checker_id
                         )
                     )
+                
+                self.logger.info(
+                    f"Problema criado com checker algorithm",
+                    context={
+                        "problem_id": problem.problem_id,
+                        "creator_id": data["creator_id"],
+                        "title": data["title"],
+                        "validation_mode": "CHECKER_ALGORITHM",
+                        "checker_language": checker_data["language"],
+                        "inputs_count": len(inputs),
+                        "action": "create_problem"
+                    }
+                )
 
             # NO VALIDATION
             elif validation_mode == ValidationMode.NO_VALIDATION:
@@ -101,6 +129,18 @@ class ProblemService:
                             input_data=inp
                         )
                     )
+                
+                self.logger.info(
+                    f"Problema criado sem validação",
+                    context={
+                        "problem_id": problem.problem_id,
+                        "creator_id": data["creator_id"],
+                        "title": data["title"],
+                        "validation_mode": "NO_VALIDATION",
+                        "inputs_count": len(inputs),
+                        "action": "create_problem"
+                    }
+                )
 
             return {"problem_id": problem.problem_id}
 
@@ -116,6 +156,14 @@ class ProblemService:
             )
 
             if not problems:
+                self.logger.debug(
+                    f"Listagem de problemas retornou vazia",
+                    context={
+                        "query": data.get("query"),
+                        "tags": data.get("tags"),
+                        "action": "list_problems"
+                    }
+                )
                 return []
 
             ids = [p.problem_id for p in problems]
@@ -140,6 +188,16 @@ class ProblemService:
                     "tags": tags[p.problem_id]
                 })
 
+            self.logger.debug(
+                f"Listagem de problemas realizada",
+                context={
+                    "query": data.get("query"),
+                    "tags": data.get("tags"),
+                    "result_count": len(result),
+                    "action": "list_problems"
+                }
+            )
+
             return result
 
         return self.db_service.run(func)
@@ -152,6 +210,14 @@ class ProblemService:
             problem = self.repository.get_problem_by_id(session, problem_id)
 
             if not problem:
+                self.logger.warning(
+                    f"Tentativa de acesso a problema inexistente",
+                    context={
+                        "problem_id": problem_id,
+                        "user_id": user_id,
+                        "action": "problem_info"
+                    }
+                )
                 raise AppError("Problema não encontrado", 404)
 
             creator_name = self.repository.get_creator_name(
@@ -169,6 +235,17 @@ class ProblemService:
             comments = self.repository.get_comments(session, problem_id)
 
             reaction = self.repository.get_user_reaction(session, problem_id, user_id)
+
+            self.logger.info(
+                f"Problema acessado",
+                context={
+                    "problem_id": problem_id,
+                    "user_id": user_id,
+                    "title": problem.title,
+                    "difficulty": problem.difficulty,
+                    "action": "view_problem"
+                }
+            )
 
             return {
                 "problem_id": problem.problem_id,
@@ -205,11 +282,29 @@ class ProblemService:
                 react_type = ReactionType(data["react_type"])
             
             except ValueError:
+                self.logger.error(
+                    f"Tipo de reação inválido",
+                    context={
+                        "problem_id": problem_id,
+                        "user_id": user_id,
+                        "invalid_type": data.get("react_type"),
+                        "action": "problem_react"
+                    }
+                )
                 raise AppError("Tipo de reação inválido", 400)
 
-            # Opcional (recomendado): validar se problema existe
+            # Validar se problema existe
             problem = self.repository.get_problem_by_id(session, problem_id)
             if not problem:
+                self.logger.warning(
+                    f"Tentativa de reagir a problema inexistente",
+                    context={
+                        "problem_id": problem_id,
+                        "user_id": user_id,
+                        "react_type": react_type.value,
+                        "action": "problem_react"
+                    }
+                )
                 raise AppError("Problema não encontrado", 404)
 
             action = self.repository.upsert_problem_react(
@@ -218,14 +313,36 @@ class ProblemService:
                 user_id,
                 react_type
             )
+            
+            self.logger.info(
+                f"Reação em problema realizada",
+                context={
+                    "problem_id": problem_id,
+                    "user_id": user_id,
+                    "react_type": react_type.value,
+                    "action_type": action,  # created, updated, removed
+                    "action": "problem_react"
+                }
+            )
+            
             return {
-                "action": action  # created | updated | removed
+                "action": action
             }
 
         return self.db_service.run(func)
     
     def count_problems(self):
         def func(session):
-            return self.repository.count_problems(session)
+            count = self.repository.count_problems(session)
+            
+            self.logger.debug(
+                f"Contagem de problemas realizada",
+                context={
+                    "total_problems": count,
+                    "action": "count_problems"
+                }
+            )
+            
+            return count
 
         return self.db_service.run(func)

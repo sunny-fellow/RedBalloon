@@ -1,19 +1,13 @@
 import re
 from utils.app_error import AppError
-from utils.validator import Validator
+from utils.interfaces.validator import Validator
 from user.validators.nickname_validator import NicknameValidator
 from user.validators.password_validator import PasswordValidator
 
 class RegisterValidator(Validator):
     @staticmethod
     def validate(data: dict):
-        required_fields = [
-            "name",
-            "nickname",
-            "email",
-            "password",
-            "nationality"
-        ]
+        required_fields = ["name", "nickname", "email", "password", "nationality"]
 
         for field in required_fields:
             if not data.get(field):

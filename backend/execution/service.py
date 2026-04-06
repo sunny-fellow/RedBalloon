@@ -4,52 +4,49 @@ from utils.singleton import Singleton
 from models import Problem, ProblemTestCase, ProblemChecker
 from models.enums import ValidationMode
 from database.service import DatabaseService
-from execution.executor_factory import ExecutorFactory
+from execution.execution_context import ExecutionContext
 
 @Singleton
 class ExecutionService:
     def __init__(self, db: DatabaseService):
         self.db = db
+        self.execution_context = ExecutionContext()  # Contexto compartilhado
 
-    def run(
-        self,
-        problem_id: int,
-        source_code: str,
-        language: str
-    ):
+    def run(self, problem_id: int, source_code: str, language: str):
         def _execute(session):
             problem: Problem = session.get(Problem, problem_id)
 
             if not problem:
                 raise Exception("Problem not found")
 
-            executor = ExecutorFactory.get_executor(language)
+            # Define a estratégia baseada na linguagem
+            self.execution_context.set_strategy(language)
             validation_mode = problem.validation_mode
 
             if validation_mode == ValidationMode.NO_VALIDATION:
                 return {"status": "ACCEPTED"}
 
             if validation_mode == ValidationMode.INPUTS_OUTPUTS:
-                return self._run_test_cases(executor, source_code, problem)
+                return self._run_test_cases(source_code, problem)
 
             if validation_mode == ValidationMode.CHECKER_ALGORITHM:
-                return self._run_checker(executor, source_code, problem)
+                return self._run_checker(source_code, problem)
 
             raise Exception("Invalid validation mode")
 
         return self.db.run(_execute)
 
-    # TEST CASES
-    def _run_test_cases(self, executor, source_code, problem: Problem):
+    def _run_test_cases(self, source_code, problem: Problem):
         media_tempo_gasto = 0
 
         for test in problem.test_cases:
-            res = executor.execute(
+            res = self.execution_context.execute(
                 source_code,
                 test.input_data,
                 problem.time_limit,
                 problem.memory_limit
             )
+            
             # Se houve erro de execução, retorna imediatamente
             if res["status"] != "ACCEPTED":
                 return {
@@ -68,24 +65,29 @@ class ExecutionService:
                     "output": output
                 }
             
-            media_tempo_gasto += res.time_spent_ms
+            media_tempo_gasto += res.get("time_spent_ms", 0)
 
         # Se passou em todos os testes
-        media_tempo_gasto //= len(problem.test_cases)
+        if problem.test_cases:
+            media_tempo_gasto //= len(problem.test_cases)
+        
         return {"status": "ACCEPTED", "time_spent": media_tempo_gasto}
 
     # CHECKER
-    def _run_checker(self, executor, source_code, problem: Problem):
+    def _run_checker(self, source_code, problem: Problem):
         checker: ProblemChecker = problem.checker
 
         if not checker:
             raise Exception("Checker not found")
 
-        checker_executor = ExecutorFactory.get_executor(checker.language)
+        # Contexto separado para o checker
+        checker_context = ExecutionContext()
+        checker_context.set_strategy(checker.language)
+        
         media_tempo_gasto = 0
 
         for test in problem.test_cases:
-            user_res = executor.execute(
+            user_res = self.execution_context.execute(
                 source_code,
                 test.input_data,
                 problem.time_limit,
@@ -102,12 +104,13 @@ class ExecutionService:
 
             user_output = user_res.get("output", "").strip()
 
-            # Roda checker
+            # Roda checker usando seu próprio contexto
             checker_input = f"{test.input_data}\n{user_output}"
-            checker_res = checker_executor.execute(
+            checker_res = checker_context.execute(
                 checker.source_code,
                 checker_input,
                 problem.time_limit,
+                problem.memory_limit  # Adicionado memory_limit que estava faltando
             )
 
             # Erro no checker
@@ -127,8 +130,10 @@ class ExecutionService:
                     "checker_output": checker_output
                 }
             
-            media_tempo_gasto += user_res.time_spent_ms
+            media_tempo_gasto += user_res.get("time_spent_ms", 0)
 
         # Se passou em todos os testes/checkers
-        media_tempo_gasto //= len(problem.test_cases)
+        if problem.test_cases:
+            media_tempo_gasto //= len(problem.test_cases)
+        
         return {"status": "ACCEPTED", "time_spent": media_tempo_gasto}

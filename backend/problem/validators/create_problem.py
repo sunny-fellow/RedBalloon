@@ -1,4 +1,4 @@
-from utils.validator import Validator
+from utils.interfaces.validator import Validator
 from utils.app_error import AppError
 
 class CreateProblemValidator(Validator):

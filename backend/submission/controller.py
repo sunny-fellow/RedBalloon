@@ -31,7 +31,6 @@ class Submit(Resource):
 class ProblemSubmissions(Resource):
     @handle_exceptions
     @api.doc("Retorna todas as submissões ACEITAS feitas a um problema específico")
-    @api.param("problem_id", "ID do Problema ao qual as submissões pertencem")
     def get(self, problem_id):
         command = ProblemSubmissionsCommand(service, problem_id)
         return command.execute(), 200
@@ -40,7 +39,6 @@ class ProblemSubmissions(Resource):
 class SubmissionDetails(Resource):
     @handle_exceptions
     @api.doc("Retorna informações detalhadas da submissão buscada")
-    @api.param("submission_id", "ID da Submissão a ser buscada")
     def get(self, submission_id):
         command = SubmissionDetailsCommand(
             service, 

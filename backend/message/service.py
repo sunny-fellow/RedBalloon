@@ -1,6 +1,8 @@
+# message/service.py (modificado com logger)
 from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from utils.app_error import AppError
 from utils.singleton import Singleton
+from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 
 from database.service import DatabaseService
 from models.enums import MessageContextType
@@ -15,6 +17,9 @@ class MessageService:
         self.db_service = DatabaseService()
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_message_repository()
+        
+        # Adapter para JSON logs
+        self.logger = JsonLoggerAdapter(log_dir="logs", filename="message_actions.json")
 
     def comment(self, data):
         CommentValidator.validate(data)
@@ -43,6 +48,28 @@ class MessageService:
                 tags=tags
             )
 
+            # Log da criação do comentário
+            log_context = {
+                "message_id": message.message_id,
+                "user_id": user_id,
+                "context_type": context_type,
+                "action": "create_comment"
+            }
+            
+            if context_ref_id:
+                log_context["context_ref_id"] = context_ref_id
+            
+            if parent_message:
+                log_context["parent_message"] = parent_message
+            
+            if tags:
+                log_context["tags"] = tags
+            
+            self.logger.info(
+                f"Comentário criado no contexto {context_type}",
+                context=log_context
+            )
+
             return {
                 "message_id": message.message_id,
                 "message": message.message,
@@ -66,9 +93,25 @@ class MessageService:
         offset = data.get("offset")
 
         if context_type not in ["GLOBAL", "PROBLEM", "SOLUTION"]:
+            self.logger.warning(
+                f"Tentativa de consulta com context_type inválido",
+                context={
+                    "context_type": context_type,
+                    "user_id": current_user_id,
+                    "action": "get_comments"
+                }
+            )
             raise AppError("context_type inválido", 400)
         
         if context_type in ["PROBLEM", "SOLUTION"] and not context_ref_id:
+            self.logger.warning(
+                f"Tentativa de consulta sem context_ref_id obrigatório",
+                context={
+                    "context_type": context_type,
+                    "user_id": current_user_id,
+                    "action": "get_comments"
+                }
+            )
             raise AppError("context_ref_id é obrigatório para este context_type", 400)
 
         def func(session):
@@ -79,13 +122,14 @@ class MessageService:
                 query=query,
                 tags=tags
             )
+            
             result = []
             
             for msg in comments:
                 msg_tags = [t.tag for t in getattr(msg, "tags", [])]
                 reaction_info = reacts.get(msg.message_id, {"likes": 0, "dislikes": 0})
                 
-                # Opcional: verificar se o usuário atual reagiu
+                # Verificar se o usuário atual reagiu
                 user_reaction = None
                 
                 if current_user_id:
@@ -105,8 +149,41 @@ class MessageService:
                     "parent_message": getattr(msg.context, "parent_message", None),
                     "likes": reaction_info["likes"],
                     "dislikes": reaction_info["dislikes"],
-                    "user_reaction": user_reaction  # "LIKE" | "DISLIKE" | None
+                    "user_reaction": user_reaction
                 })
+
+            # Log da consulta
+            log_context = {
+                "context_type": context_type,
+                "user_id": current_user_id,
+                "result_count": len(result),
+                "action": "get_comments"
+            }
+            
+            if context_ref_id:
+                log_context["context_ref_id"] = context_ref_id
+            
+            if query:
+                log_context["query"] = query
+            
+            if tags:
+                log_context["tags"] = tags
+            
+            if offset:
+                log_context["offset"] = offset
+            
+            log_level = "debug" if len(result) == 0 else "info"
+            
+            if log_level == "debug":
+                self.logger.debug(
+                    f"Consulta de comentários retornou vazia",
+                    context=log_context
+                )
+            else:
+                self.logger.info(
+                    f"Consulta de comentários realizada",
+                    context=log_context
+                )
 
             return result
 

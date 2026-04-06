@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": "2026-04-03T23:28:12.278687",
+    "level": "INFO",
+    "message": "Relatório gerado com sucesso",
+    "context": {
+      "start_date": "2026-01-01T00:00:00",
+      "end_date": "2026-04-03T00:00:00",
+      "records_count": 0,
+      "report_type": "HTMLReport",
+      "action": "generate_report"
+    }
+  },
+  {
+    "timestamp": "2026-04-03T23:30:26.368830",
+    "level": "INFO",
+    "message": "Relatório gerado com sucesso",
+    "context": {
+      "start_date": "2026-01-01T00:00:00",
+      "end_date": "2026-04-03T00:00:00",
+      "records_count": 0,
+      "report_type": "PDFReport",
+      "action": "generate_report"
+    }
+  }
+]

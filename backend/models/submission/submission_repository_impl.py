@@ -5,23 +5,26 @@ from models.enums import SubmissionStatus
 
 class SQLAlchemySubmissionRepository(SubmissionRepository):
     def save_submission(self, session, problem_id, user_id, code, language, time_spent, status, submitted_at):
+        # Se status já é string, use direto; se for enum, pegue o value
+        status_value = status.value if hasattr(status, 'value') else status
+        
         sub = Submission(
             problem_id=problem_id,
             user_id=user_id,
             code=code,
             language=language,
             time_spent=time_spent,
-            status=SubmissionStatus[status],
+            status=status_value,  # Salva como string
             submitted_at=submitted_at
         )
         session.add(sub)
-        session.flush()  # Garante que tem ID
+        session.flush()
         return sub
 
     def get_accepted_submissions(self, session, problem_id):
         return (
             session.query(Submission)
-            .filter_by(problem_id=problem_id, status=SubmissionStatus.ACCEPTED)
+            .filter_by(problem_id=problem_id, status=SubmissionStatus.ACCEPTED.value)  # Use .value
             .all()
         )
 
@@ -67,7 +70,6 @@ class SQLAlchemySubmissionRepository(SubmissionRepository):
         return {
             "submission_id": sub.submission_id,
             "time_spent": sub.time_spent,
-            "memory_used": sub.memory_used,
             "creator_id": sub.user_id,
             "creator_name": sub.user.name,
             "creator_avatar": sub.user.avatar,
@@ -81,5 +83,5 @@ class SQLAlchemySubmissionRepository(SubmissionRepository):
             "problem_creator_name": sub.problem.creator.name,
             "problem_description": sub.problem.description,
             "problem_difficulty": sub.problem.difficulty,
-            "problem_tags": [t.name for t in sub.problem.tags]
+            "problem_tags": [t.tag.value for t in sub.problem.problem_tags]
         }

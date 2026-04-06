@@ -1,0 +1,284 @@
+[
+  {
+    "timestamp": "2026-04-04T15:46:48.993936",
+    "level": "INFO",
+    "message": "Iniciando submissão de código",
+    "context": {
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "code_length": 6,
+      "action": "submit_start"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:47:20.048469",
+    "level": "INFO",
+    "message": "Iniciando submissão de código",
+    "context": {
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "code_length": 6,
+      "action": "submit_start"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:50:25.771983",
+    "level": "INFO",
+    "message": "Iniciando submissão de código",
+    "context": {
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "code_length": 6,
+      "action": "submit_start"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:50:27.608934",
+    "level": "ERROR",
+    "message": "Submissão falhou com erro de execução",
+    "context": {
+      "submission_id": 2,
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "status": "RUNTIME_ERROR",
+      "time_spent": null,
+      "memory_used": null,
+      "action": "submit_result"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:51:32.204794",
+    "level": "INFO",
+    "message": "Iniciando submissão de código",
+    "context": {
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "code_length": 6,
+      "action": "submit_start"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:51:33.943438",
+    "level": "ERROR",
+    "message": "Submissão falhou com erro de execução",
+    "context": {
+      "submission_id": 3,
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "status": "RUNTIME_ERROR",
+      "time_spent": null,
+      "memory_used": null,
+      "action": "submit_result"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:53:19.175707",
+    "level": "INFO",
+    "message": "Iniciando submissão de código",
+    "context": {
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "code_length": 6,
+      "action": "submit_start"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:53:23.236684",
+    "level": "ERROR",
+    "message": "Submissão falhou com erro de execução",
+    "context": {
+      "submission_id": 4,
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "status": "RUNTIME_ERROR",
+      "time_spent": null,
+      "memory_used": null,
+      "action": "submit_result"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:58:40.459698",
+    "level": "INFO",
+    "message": "Iniciando submissão de código",
+    "context": {
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "code_length": 6,
+      "action": "submit_start"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T15:58:42.843511",
+    "level": "ERROR",
+    "message": "Submissão falhou com erro de execução",
+    "context": {
+      "submission_id": 5,
+      "user_id": 1,
+      "problem_id": 1,
+      "language": "C",
+      "status": "RUNTIME_ERROR",
+      "time_spent": null,
+      "memory_used": null,
+      "action": "submit_result"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T16:00:10.734771",
+    "level": "INFO",
+    "message": "Nova reação adicionada à submissão",
+    "context": {
+      "submission_id": 5,
+      "user_id": 1,
+      "reaction": "LIKE",
+      "action_type": "CREATED",
+      "action": "react_submission"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:07:41.908102",
+    "level": "INFO",
+    "message": "Detalhes da submissão acessados",
+    "context": {
+      "submission_id": 5,
+      "user_id": 1,
+      "problem_id": 1,
+      "status": null,
+      "action": "submission_details"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:07:53.341669",
+    "level": "INFO",
+    "message": "Detalhes da submissão acessados",
+    "context": {
+      "submission_id": 5,
+      "user_id": 1,
+      "problem_id": 1,
+      "status": null,
+      "action": "submission_details"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:23:34.166889",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 5,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:23:40.829263",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 1,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:23:56.770199",
+    "level": "INFO",
+    "message": "Detalhes da submissão acessados",
+    "context": {
+      "submission_id": 5,
+      "user_id": 1,
+      "problem_id": 1,
+      "status": null,
+      "action": "submission_details"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:24:07.803551",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 1,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:01.959705",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 1,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:05.930789",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 4,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:08.641343",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 2,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:11.260246",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 3,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:16.863690",
+    "level": "INFO",
+    "message": "Detalhes da submissão acessados",
+    "context": {
+      "submission_id": 5,
+      "user_id": 1,
+      "problem_id": 1,
+      "status": null,
+      "action": "submission_details"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:30.013844",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 5,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  },
+  {
+    "timestamp": "2026-04-04T17:30:32.168460",
+    "level": "DEBUG",
+    "message": "Listagem de submissões aceitas para problema",
+    "context": {
+      "problem_id": 1,
+      "submissions_count": 0,
+      "action": "problem_submissions"
+    }
+  }
+]

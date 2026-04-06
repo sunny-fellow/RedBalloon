@@ -2,12 +2,10 @@ from flask import Flask
 from flask_socketio import SocketIO
 from flask_swagger_ui import get_swaggerui_blueprint
 
-# Configurações e Middlewares
 from config import Config
 from utils.auth_middleware import check_jwt_header
 from utils.api_factory import create_api
 
-# Importa controllers
 from auth.controller        import api as auth_ns
 from database.controller    import api as database_ns
 from message.controller     import api as message_ns
@@ -15,6 +13,12 @@ from problem.controller     import api as problem_ns
 from room.controller        import api as room_ns
 from submission.controller  import api as submission_ns
 from user.controller        import api as user_ns
+from utils.reports.report_controller       import api as reports_ns
+
+from event_bus                import EventBus
+from utils.listeners.ranking_listener         import RankingUpdateListener
+from utils.listeners.notification_listener    import NotificationListener
+from utils.listeners.statistics_listener      import StatisticsListener
 
 class Server:
     def __init__(self):
@@ -42,7 +46,8 @@ class Server:
         self.api.add_namespace(submission_ns, path="/submission")
         self.api.add_namespace(user_ns, path="/user")
         self.api.add_namespace(database_ns, path="/database")
-
+        self.api.add_namespace(reports_ns, path="/reports")
+    
     def _configure_swagger_ui(self):
         swagger_bp = get_swaggerui_blueprint(
             "/apidocs", "/swagger.json", 
@@ -57,7 +62,14 @@ class Server:
             port=Config.PORT, 
             debug=Config.DEBUG
         )
+    
+    def register_listeners():
+        bus = EventBus()
+        bus.subscribe(bus.EventType.SUBMISSION_ACCEPTED, StatisticsListener())
+        bus.subscribe(bus.EventType.SUBMISSION_ACCEPTED, NotificationListener())
+        bus.subscribe(bus.EventType.USER_FOLLOWED, NotificationListener())
 
 if __name__ == "__main__":
     server = Server()
+    server.register_listeners()
     server.run()

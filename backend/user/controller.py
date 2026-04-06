@@ -4,7 +4,7 @@ from flask import request
 from utils.handle_exceptions import handle_exceptions
 from utils.get_user_id import get_user_id
 
-from facade.facade_singleton_controller import FacadeSingletonController
+from utils.facade.facade_singleton_controller import FacadeSingletonController
 
 # Models
 from user.models.user_update import UserUpdateModel

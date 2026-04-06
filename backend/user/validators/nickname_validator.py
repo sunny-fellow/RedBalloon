@@ -1,6 +1,6 @@
 import re
 from utils.app_error import AppError
-from utils.validator import Validator
+from utils.interfaces.validator import Validator
 
 class NicknameValidator(Validator):
     @staticmethod

@@ -1,4 +1,3 @@
-# database/service.py
 import os
 from sqlalchemy import create_engine, text, event, inspect
 from sqlalchemy.orm import Session
