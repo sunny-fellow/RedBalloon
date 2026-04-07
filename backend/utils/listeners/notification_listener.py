@@ -28,11 +28,6 @@ class NotificationListener(EventListener):
                 }
             )
             
-            # Aqui você pode expandir depois para:
-            # - Salvar notificação no banco de dados
-            # - Enviar email
-            # - Enviar push notification
-            # - Atualizar feed do usuário
         
         elif event.type == EventType.USER_FOLLOWED:
             follower_id = event.payload["follower_id"]
