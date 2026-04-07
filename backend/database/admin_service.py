@@ -1,4 +1,5 @@
 import os
+
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import ProgrammingError
 from dotenv import load_dotenv
@@ -14,9 +15,9 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 class DatabaseAdminService:
     """
     Singleton responsável por operações administrativas do banco:
-      - criar database
-      - criar / reset / drop tabelas
-      - preencher tabelas com dados de teste
+        - Criar database
+        - Criar / reset / drop tabelas
+        - Preencher tabelas com dados de teste
     """
     def _check_password(self, password: str):
         if password != ADMIN_PASSWORD:

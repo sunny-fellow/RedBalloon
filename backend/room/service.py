@@ -1,12 +1,9 @@
-# room/service.py (modificado com logger)
 from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
-from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 from datetime import datetime, timedelta, timezone
-import uuid
-from utils.adapter.logger_factory import LoggerFactory  # Adicionar import
+from utils.adapter.logger_factory import LoggerFactory
 
 @Singleton
 class RoomService:

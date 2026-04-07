@@ -2,15 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Optional, List, Tuple, Dict, Any
 
 class MessageRepository(ABC):
-    """Interface abstrata para o repositório de mensagens/comentários"""
-    
+    """
+    Interface abstrata para o repositório de mensagens/comentários
+    """
     @abstractmethod
     def create_message(self, session, user_id: int, content: str) -> Any:
         """
         Cria uma nova mensagem
-        
-        Returns:
-            Objeto Message criado
         """
         pass
     
@@ -38,9 +36,5 @@ class MessageRepository(ABC):
                     offset: int = 0, limit: int = 50) -> Tuple[List[Any], Dict[int, Dict[str, int]]]:
         """
         Retorna comentários de um contexto com contagem de reações
-        
-        Returns:
-            Tupla (lista_de_mensagens, dicionário_de_reações)
-            O dicionário de reações tem estrutura: {message_id: {"likes": int, "dislikes": int}}
         """
         pass

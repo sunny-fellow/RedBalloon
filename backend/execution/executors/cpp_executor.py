@@ -1,6 +1,5 @@
-# execution/executors/cpp_executor.py
 from execution.executors.docker_executor import DockerExecutor
-from execution.executors.code_executor import Executor
+from utils.interfaces.code_executor import Executor
 
 class CppExecutor(DockerExecutor, Executor):
     def __init__(self):

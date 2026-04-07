@@ -14,9 +14,10 @@ from models.submission.submission_repository import SubmissionRepository
 from models.message.message_repository import MessageRepository
 from models.room.room_repository import RoomRepository
 
-
 class SQLAlchemyRepositoryFactory(RepositoryFactory):
-    """Fábrica concreta que cria repositórios com SQLAlchemy"""
+    """
+    Fábrica concreta que cria repositórios com SQLAlchemy
+    """
     
     def create_user_repository(self) -> UserRepository:
         return SQLAlchemyUserRepository()

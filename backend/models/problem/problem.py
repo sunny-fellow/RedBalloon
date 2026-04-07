@@ -25,7 +25,6 @@ class Problem(Base):
     created_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat(), nullable=False)
 
     # Relações
-
     creator = relationship(
         "User",
         back_populates="problems_created"

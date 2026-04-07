@@ -1,5 +1,3 @@
-# room/gateway/repository.py
-from sqlalchemy import func
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
@@ -11,19 +9,21 @@ from models.room.room_problem import RoomProblem
 from models.room.room_submission import RoomSubmission
 from models.problem.problem import Problem
 from models.user.user import User
-from execution.service import ExecutionService
 
 @Singleton
 class RoomGatewayRepository:
+    """
+    Repositório para operações de banco de dados do gateway de salas.
+    Gerencia acesso a dados para chat, submissões, participantes,
+    problemas e configurações de sala via WebSocket.
+    """
     def __init__(self):
         self.db_service = DatabaseService()
 
-    # Sala
     def get_room_by_id(self, room_id: int):
         def func(session):
             return session.query(Room).filter(Room.room_id == room_id).first()
         return self.db_service.run(func)
-
 
     def get_participant(self, room_id: int, user_id: int):
         def func(session):
@@ -32,7 +32,6 @@ class RoomGatewayRepository:
                 RoomParticipant.user_id == user_id
             ).first()
         return self.db_service.run(func)
-
 
     def update_room_config(self, room_id: int, new_config: dict):
         def func(session):
@@ -46,8 +45,6 @@ class RoomGatewayRepository:
             return room
         return self.db_service.run(func)
 
-
-    # Chat
     def add_message(self, room_id: int, user_id: int, message: str):
         def func(session):
             msg = RoomChat(room_id=room_id, user_id=user_id, message=message)
@@ -62,7 +59,6 @@ class RoomGatewayRepository:
                 "sent_at": msg.sent_at
             }
         return self.db_service.run(func)
-
 
     # Problemas da sala
     def get_problems_for_room(self, room_id: int):
@@ -89,7 +85,6 @@ class RoomGatewayRepository:
             ]
         return self.db_service.run(func)
 
-
     def get_problem_details(self, room_id: int, problem_id: int):
         def func(session):
             rp = session.query(RoomProblem).filter(
@@ -111,7 +106,6 @@ class RoomGatewayRepository:
             }
         return self.db_service.run(func)
 
-
     # Submissões
     def create_room_submission(self, data: dict):
         def func(session):
@@ -130,7 +124,6 @@ class RoomGatewayRepository:
             session.refresh(submission)
             return submission
         return self.db_service.run(func)
-
 
     def judge_room_submission(self, submission: RoomSubmission):
         # Executa código do usuário
@@ -192,7 +185,7 @@ class RoomGatewayRepository:
             ]
         return self.db_service.run(func)
 
-    # Info da sala
+    # Informação da sala
     def get_lobby_info(self, room_id: int):
         def func(session):
             # Pega a sala

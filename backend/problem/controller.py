@@ -6,12 +6,12 @@ from utils.get_user_id import get_user_id
 
 from utils.facade.facade_singleton_controller import FacadeSingletonController
 
-# Models
 from problem.models.create_problem import CreateProblemModel
 from problem.models.problem_react import ProblemReactModel
 
 api = Namespace("problem", description="Gerenciamento de Problemas")
 
+# Acesso ao controller feito via Facade Singleton
 facade = FacadeSingletonController()
 
 @api.route("/create")

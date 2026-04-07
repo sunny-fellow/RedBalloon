@@ -1,6 +1,10 @@
 from flask_restx import fields
 
 def CommentModel(api):
+    """
+    Define o modelo de dados para criação de um comentário. Este modelo é utilizado para validar e
+    documentar a estrutura esperada no payload de requisição para criar um novo comentário.
+    """
     return api.model("CommentModel", {
         "user_id": fields.Integer(
             required = True,

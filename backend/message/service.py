@@ -1,16 +1,13 @@
-# message/service.py (modificado com logger)
 from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from utils.app_error import AppError
 from utils.singleton import Singleton
-from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 
 from database.service import DatabaseService
-from models.enums import MessageContextType
 
 from message.validators.comment import CommentValidator
 from message.validators.get_comments import GetCommentsValidator
 
-from utils.adapter.logger_factory import LoggerFactory  # Adicionar import
+from utils.adapter.logger_factory import LoggerFactory 
 
 @Singleton
 class MessageService:
@@ -19,7 +16,7 @@ class MessageService:
         factory = SQLAlchemyRepositoryFactory()
         self.repository = factory.create_message_repository()
         
-        # Criar logger usando a fábrica
+        # Cria um logger usando a fábrica de loggers
         self.logger = LoggerFactory.create_logger(logger_type)
 
     def comment(self, data):
@@ -49,7 +46,7 @@ class MessageService:
                 tags=tags
             )
 
-            # Log da criação do comentário
+            # Define o logger
             log_context = {
                 "message_id": message.message_id,
                 "user_id": user_id,
@@ -81,8 +78,7 @@ class MessageService:
     
     def get_comments(self, data):
         """
-        Retorna comentários filtrados por contexto, query, tags
-        e inclui likes/dislikes da mensagem.
+        Retorna comentários filtrados por contexto, query, tags e inclui likes/dislikes da mensagem.
         """
         GetCommentsValidator.validate(data)
 
@@ -123,7 +119,6 @@ class MessageService:
                 query=query,
                 tags=tags
             )
-            
             result = []
             
             for msg in comments:
@@ -153,7 +148,7 @@ class MessageService:
                     "user_reaction": user_reaction
                 })
 
-            # Log da consulta
+            # Monta o log da consulta
             log_context = {
                 "context_type": context_type,
                 "user_id": current_user_id,

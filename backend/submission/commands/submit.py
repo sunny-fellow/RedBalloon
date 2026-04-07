@@ -2,6 +2,9 @@ from utils.interfaces.command import Command
 from submission.service import SubmissionService
 
 class SubmissionCommand(Command):
+    """
+    Comando para submeter uma solução para um problema.
+    """
     def __init__(self, service: SubmissionService, data):
         self.service = service
         self.data = data

@@ -3,7 +3,7 @@ import tempfile
 import shutil
 import os
 import time
-import threading
+
 from models.enums import SubmissionStatus
 
 class DockerExecutor:
@@ -77,6 +77,7 @@ class DockerExecutor:
                 cpu_period=100000,
                 cpu_quota=50000,
                 pids_limit=config["pids"],
+                
                 # Limite de stack para evitar estouro proposital (8MB padrão)
                 ulimits=[docker.types.Ulimit(name="stack", soft=8192000, hard=8192000)],
                 detach=True

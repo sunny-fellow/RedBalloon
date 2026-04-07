@@ -1,6 +1,11 @@
 from flask_restx import fields
 
 def SubmissionModel(api):
+    """
+    Define o modelo de dados para submissão de código.
+    Este modelo é utilizado para validar requisições de submissão
+    de soluções para problemas.
+    """
     return api.model("SubmissionModel", {
         "user_id": fields.Integer(
             required = True,

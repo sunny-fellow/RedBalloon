@@ -1,6 +1,12 @@
 from flask_restx import fields
 
 def CreateRoomModel(api):
+    """
+    Define o modelo de dados para criação de uma sala de competição.
+
+    Este modelo inclui informações da sala (nome, capacidade, duração, senha)
+    e uma lista de problemas que podem ser novos ou existentes.
+    """
     # Reutilizando partes do problem
     InputsOutputs = api.model("RoomProblemInputsOutputs", {
         "input": fields.String(required=True),

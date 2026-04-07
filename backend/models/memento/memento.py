@@ -1,9 +1,12 @@
-from sqlalchemy import Column, Integer, String, JSON, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from ..base import Base
 
 class Memento(Base):
+    """
+    Modelo do padrão memento para armazenamento de snapshots de entidades.
+    """
     __tablename__ = "mementos"
 
     memento_id = Column(Integer, primary_key=True, autoincrement=True)

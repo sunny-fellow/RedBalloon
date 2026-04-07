@@ -21,7 +21,6 @@ class ProblemTag(Base):
     )
 
     # Relações 
-
     problem = relationship(
         "Problem",
         back_populates="problem_tags"

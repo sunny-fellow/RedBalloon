@@ -1,7 +1,8 @@
+import uuid
+
 from models.room.room_repository import RoomRepository
 from sqlalchemy import func, and_
 from sqlalchemy.orm import aliased
-import uuid
 
 from models.user.user import User
 from models.room.room import Room
@@ -75,14 +76,12 @@ class SQLAlchemyRoomRepository(RoomRepository):
         session.add(participant)
         return participant, user_socket
 
-    # PROBLEM
     def create_problem(self, session, data):
         problem = Problem(**data)
         session.add(problem)
         session.flush()
         return problem
 
-    # ROOM_PROBLEM
     def add_problem_to_room(self, session, room_id, problem_id, points, balloon):
         rp = RoomProblem(
             room_id=room_id,

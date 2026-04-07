@@ -1,6 +1,11 @@
 from flask_restx import fields
 
 def UserUpdateModel(api):
+    """
+    Define o modelo de dados para atualização de usuário.
+    Este modelo é utilizado para validar requisições de atualização
+    de perfil de usuário.
+    """
     return api.model('UserUpdate', {
         'user_id': fields.Integer(required=True, description='ID do usuário', example=1),
         'name': fields.String(required=True, description="Nome do Usuário", example="João Silva"),

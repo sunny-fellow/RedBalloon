@@ -13,7 +13,7 @@ def run_test(name, executor, code, input_data=""):
     except Exception as e:
         print("ERRO NO TESTE:", str(e))
 
-# ---------------- PYTHON ----------------
+# PYTHON
 
 py_exec = PythonExecutor()
 
@@ -49,8 +49,7 @@ import os
 os.system("ls /")
 """)
 
-# ---------------- JAVA ----------------
-
+# JAVA
 java_exec = JavaExecutor()
 
 run_test("Java - OK", java_exec,
@@ -101,8 +100,7 @@ public class Solution {
 """
 )
 
-# ---------------- C ----------------
-
+# C
 c_exec = CExecutor()
 
 run_test("C - Loop infinito", c_exec, """
@@ -133,8 +131,7 @@ int main() {
 }
 """)
 
-# ---------------- C++ ----------------
-
+# C++
 cpp_exec = CppExecutor()
 
 run_test("C++ - Loop infinito", cpp_exec, """

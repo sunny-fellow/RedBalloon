@@ -1,14 +1,13 @@
 import bcrypt
 import jwt
-from datetime import datetime, timedelta, timezone
+import os
 
+from datetime import datetime, timedelta, timezone
 from database.service import DatabaseService
 from utils.singleton import Singleton
 from utils.app_error import AppError
 from auth.repository import AuthRepository
 from models.user.user import User
-
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,7 +24,7 @@ class AuthService:
         self.db_service = DatabaseService()
         self.repository = AuthRepository()
 
-    # JWT
+    # Configura o JWT
     def make_jwt(self, user):
         payload = {
             "user_id": user.user_id,
@@ -41,7 +40,6 @@ class AuthService:
 
         return token
 
-    # LOGIN
     def login(self, data: dict):
         LoginValidator.validate(data)
         
@@ -73,7 +71,6 @@ class AuthService:
 
         return self.db_service.run(func)
 
-    # REGISTER
     def register(self, data: dict):
         print(data)
         RegisterValidator.validate(data)
@@ -99,12 +96,12 @@ class AuthService:
         )
 
         def func(session):
-            # Nickname
+            # Validação por nickname
             existing_user = self.repository.get_by_login(session, nickname)
             if existing_user:
                 raise AppError("Nickname já está em uso.", 400)
 
-            # E-mail
+            # Validação por e-mail
             email_user = session.query(User).filter(User.email == email).first()
             if email_user:
                 raise AppError("Email já está em uso.", 400)

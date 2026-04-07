@@ -2,6 +2,12 @@ from utils.interfaces.validator import Validator
 from utils.app_error import AppError
 
 class SubmissionValidator(Validator):
+    """
+    Validador para dados de submissão de código.
+
+    Responsável por validar todos os campos fornecidos na submissão
+    de uma solução para um problema.
+    """
     @staticmethod
     def validate(data):
         user_id = data.get("user_id")

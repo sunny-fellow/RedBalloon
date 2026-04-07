@@ -1,7 +1,7 @@
 from typing import List
 from utils.singleton import Singleton
 
-from models import Problem, ProblemTestCase, ProblemChecker
+from models import Problem, ProblemChecker
 from models.enums import ValidationMode
 from database.service import DatabaseService
 from execution.execution_context import ExecutionContext
@@ -73,7 +73,6 @@ class ExecutionService:
         
         return {"status": "ACCEPTED", "time_spent": media_tempo_gasto}
 
-    # CHECKER
     def _run_checker(self, source_code, problem: Problem):
         checker: ProblemChecker = problem.checker
 

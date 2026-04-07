@@ -8,9 +8,9 @@ service = RoomGatewayService()
 
 def safe_emit(event_name, broadcast=False):
     """
-    Decorator para capturar erros do service e enviar para o cliente
-    Se broadcast=True, envia para a sala (room_socket).  
-    Se broadcast=False, envia apenas para o usuário (user_socket).
+    Decorator para capturar erros do service e enviar para o cliente.
+        - Se broadcast = True, envia para a sala (room_socket).  
+        - Se broadcast = False, envia apenas para o usuário (user_socket).
     """
     def decorator(func):
         @wraps(func)
@@ -34,6 +34,7 @@ def safe_emit(event_name, broadcast=False):
                 print("ERRO:", e)
         
         return wrapper    
+    
     return decorator
 
 class RoomGateway(Namespace):

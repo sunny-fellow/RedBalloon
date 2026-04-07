@@ -6,19 +6,18 @@ from config import Config
 from utils.auth_middleware import check_jwt_header
 from utils.api_factory import create_api
 
-from auth.controller        import api as auth_ns
-from database.controller    import api as database_ns
-from message.controller     import api as message_ns
-from problem.controller     import api as problem_ns
-from room.controller        import api as room_ns
-from submission.controller  import api as submission_ns
-from user.controller        import api as user_ns
-from utils.reports.report_controller       import api as reports_ns
+from auth.controller                        import api as auth_ns
+from database.controller                    import api as database_ns
+from message.controller                     import api as message_ns
+from problem.controller                     import api as problem_ns
+from room.controller                        import api as room_ns
+from submission.controller                  import api as submission_ns
+from user.controller                        import api as user_ns
+from utils.reports.report_controller        import api as reports_ns
 
+from utils.listeners.notification_listener  import NotificationListener
+from utils.listeners.statistics_listener    import StatisticsListener
 from event_bus import EventBus, EventType
-from utils.listeners.ranking_listener         import RankingUpdateListener
-from utils.listeners.notification_listener    import NotificationListener
-from utils.listeners.statistics_listener      import StatisticsListener
 
 class Server:
     def __init__(self):
@@ -35,7 +34,7 @@ class Server:
         def hello():
             return {"message": "RedBalloon API Online"}, 200
 
-        # Aplica a validação JWT globalmente
+        # Aplica a validação do JWT globalmente
         self.app.before_request(check_jwt_header)
 
     def _register_namespaces(self):

@@ -1,9 +1,10 @@
 import os
-from sqlalchemy import create_engine, text, event, inspect
+
+from sqlalchemy import event, inspect
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoInspectionAvailable
 from dotenv import load_dotenv
-from models import engine, SessionLocal, Base
+from models import SessionLocal
 from utils.singleton import Singleton
 from database.memento_manager import MementoManager
 from models.memento.memento import Memento
@@ -15,8 +16,8 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 class DatabaseService:
     """
     Singleton que fornece:
-      - execução de funções com session (run)
-      - undo do último memento global
+      - Execução de funções com session (run)
+      - Undo do último memento global
       - clear_history
     """
     def __init__(self):
@@ -73,7 +74,7 @@ class DatabaseService:
 
     def run(self, func, user_id: int = None):
         """
-            Executa func(session) com session do SQLAlchemy.
+        Executa func(session) com session do SQLAlchemy.
         """
         with SessionLocal.begin() as session:
             session.info["user_id"] = user_id
@@ -91,12 +92,16 @@ class DatabaseService:
             session.close()
 
     def clear_history(self):
-        """Limpa todos os mementos salvos."""
+        """
+        Limpa todos os mementos salvos.
+        """
         self._memento.clear_history()
     
     @staticmethod
     def _to_dict(obj):
-        """Converte um objeto SQLAlchemy em dicionário pronto para JSON."""
+        """
+        Converte um objeto SQLAlchemy em dicionário pronto para JSON.
+        """
         try:
             state = inspect(obj)
         

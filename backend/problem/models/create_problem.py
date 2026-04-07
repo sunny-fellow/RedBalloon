@@ -1,7 +1,10 @@
 from flask_restx import fields
 
 def CreateProblemModel(api):
-    # Inputs + outputs
+    """
+    Define o modelo de dados para criação de um problema. Este modelo inclui todos os campos
+    necessários para criar um problema, incluindo casos de teste, checker e inputs dependendo do modo de validação.
+    """
     InputsOutputs = api.model("ProblemInputsOutputs", {
         "input": fields.String(
             required=True,
@@ -15,7 +18,6 @@ def CreateProblemModel(api):
         )
     })
 
-    # Checker
     Checker = api.model("ProblemChecker", {
         "language": fields.String(
             required=True,
@@ -28,7 +30,7 @@ def CreateProblemModel(api):
         )
     })
 
-    # Model principal
+    # Modelo principal
     return api.model("ProblemCreate", {
 
         "creator_id": fields.Integer(
@@ -83,14 +85,12 @@ def CreateProblemModel(api):
             description="Se pertence exclusivamente a uma sala"
         ),
 
-        # INPUTS_OUTPUTS
         "inputs_outputs": fields.List(
             fields.Nested(InputsOutputs),
             required=False,
             description="Lista de casos de teste com entrada e saída"
         ),
 
-        # NO_VALIDATION / CHECKER
         "inputs": fields.List(
             fields.String,
             required=False,
@@ -100,7 +100,6 @@ def CreateProblemModel(api):
             nullable=True
         ),
 
-        # CHECKER_ALGORITHM
         "checker": fields.Nested(
             Checker,
             required=False,

@@ -2,6 +2,10 @@ from utils.app_error import AppError
 from models.enums import MessageTags
 
 class CommentValidator:
+    """
+    Validador para dados de criação de comentário. Responsável por validar todos
+    os campos recebidos na requisição de criação de um novo comentário.
+    """
     @staticmethod
     def validate(data):
         context_type = data.get("context_type")
@@ -16,7 +20,7 @@ class CommentValidator:
         if context_type not in ["GLOBAL", "PROBLEM", "SOLUTION"]:
             raise AppError("context_type inválido", 400)
 
-        # context_ref_id obrigatório se context_type não for GLOBAL
+        # O parâmetro context_ref_id é brigatório se context_type não for GLOBAL
         if context_type in ["PROBLEM", "SOLUTION"]:
             if context_ref_id is None:
                 raise AppError(f"context_ref_id é obrigatório para {context_type}", 400)
@@ -24,20 +28,17 @@ class CommentValidator:
             if not isinstance(context_ref_id, int) or context_ref_id <= 0:
                 raise AppError("context_ref_id inválido", 400)
 
-        # parent_message opcional
+        # Aqui, parent_message é opcional
         if parent_message is not None:
             if not isinstance(parent_message, int) or parent_message <= 0:
                 raise AppError("parent_message inválido", 400)
 
-        # user_id
         if not user_id or not isinstance(user_id, int) or user_id <= 0:
             raise AppError("user_id inválido", 400)
 
-        # message
         if not message or not isinstance(message, str) or not message.strip():
             raise AppError("message é obrigatório e não pode ser vazio", 400)
         
-        # tags
         tags = data.get("tags")
         if tags is not None:
             if not isinstance(tags, list):

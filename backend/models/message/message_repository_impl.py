@@ -6,7 +6,7 @@ from models.message.message_context import MessageContext
 from models.message.message_tag import MessageTag
 from models.message.message_react import MessageReact
 from models.user.user import User
-from models.enums import MessageContextType, ReactionType, MessageTags
+from models.enums import MessageContextType, ReactionType
 
 class SQLAlchemyMessageRepository(MessageRepository):
     def create_message(self, session, user_id: int, content: str) -> Message:
@@ -15,10 +15,11 @@ class SQLAlchemyMessageRepository(MessageRepository):
         """
         message = Message(user_id=user_id, message=content)
         session.add(message)
-        session.flush()  # Gera message_id
+        session.flush()  # Gera o message_id
         return message
 
-    def create_message_context(self, session, message_id: int, context_type: str, context_ref_id: int = None, parent_message: int = None):
+    def create_message_context(self, session, message_id: int, context_type: str,
+                               context_ref_id: int = None, parent_message: int = None):
         """
         Cria o contexto da mensagem.
         """
@@ -34,22 +35,14 @@ class SQLAlchemyMessageRepository(MessageRepository):
         for tag in tags:
             session.add(MessageTag(message_id=message_id, tag=tag))
 
-    def get_comments(
-        self, 
-        session, 
-        context_type: str, 
-        context_ref_id: int = None, 
-        query: str = None, 
-        tags: list[str] = None, 
-        offset: int = 0, 
-        limit: int = 50
-    ):
+    def get_comments(self, session, context_type: str,
+                     context_ref_id: int = None, query: str = None, tags: list[str] = None,
+                     offset: int = 0, limit: int = 50):
         """
         Retorna lista de mensagens de um determinado contexto, com contagem de likes/dislikes.
-        Ordena por: mais likes primeiro, depois mais recente.
-        Aplica offset e limite.
+        Ordena por: mais likes primeiro, depois mais recente. Aplica offset e limite.
         """
-        #Base query
+        # Base query
         base_query = session.query(Message).join(MessageContext)
 
         # Filtro por contexto
@@ -65,9 +58,7 @@ class SQLAlchemyMessageRepository(MessageRepository):
         base_query = self._apply_tag_filter(base_query, tags)
 
         # Ordenar no SQL
-        base_query = base_query.outerjoin(MessageReact) \
-                            .group_by(Message.message_id) \
-                            .order_by(
+        base_query = base_query.outerjoin(MessageReact).group_by(Message.message_id).order_by(
                                 func.coalesce(func.sum(func.case([(MessageReact.reaction == ReactionType.LIKE, 1)], else_=0)), 0).desc(),
                                 Message.sent_at.desc()
                             )

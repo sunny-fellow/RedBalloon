@@ -9,11 +9,9 @@ class MementoManager:
     def save(self, session: Session, obj, snapshot: dict, action: str, user_id: int = None):
         """
         Salva um memento no banco.
-
-        action:
-            create -> objeto foi criado
-            update -> objeto foi modificado
-            delete -> objeto foi deletado
+            - create -> objeto foi criado
+            - update -> objeto foi modificado
+            - delete -> objeto foi deletado
         """
         cls = obj.__class__
         pk  = self._get_primary_key(obj)
@@ -51,18 +49,18 @@ class MementoManager:
             except:
                 obj = None
 
-        # Undo create
+        # Desfaz o create
         if action == "create":
             if obj:
                 session.delete(obj)
 
-        # Undo delete
+        # Desfaz o delete
         elif action == "delete":
             clean_snapshot = {k: v for k, v in snapshot.items() if not k.startswith("_sa_")}
             obj = cls(**clean_snapshot)
             session.add(obj)
 
-        # Undo update
+        # Desfaz o update
         elif action == "update":
             if obj:
                 for field, value in snapshot.items():
@@ -92,8 +90,7 @@ class MementoManager:
 
     def _get_primary_key(self, obj):
         """
-        Obtém a chave primária do objeto SQLAlchemy.
-        Suporta chaves compostas.
+        Obtém a chave primária do objeto SQLAlchemy. Suporta chaves compostas.
         """
         mapper = inspect(obj).mapper
         pk_values = tuple(getattr(obj, col.key) for col in mapper.primary_key)

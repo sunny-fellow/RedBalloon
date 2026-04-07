@@ -1,5 +1,3 @@
-# room/gateway/service.py
-from datetime import datetime, timezone
 from functools import wraps
 from utils.singleton import Singleton
 from utils.app_error import AppError
@@ -7,6 +5,12 @@ from room.gateway.repository import RoomGatewayRepository
 
 @Singleton
 class RoomGatewayService:
+    """
+    Serviço para operações do gateway de salas via WebSocket.
+
+    Gerencia chat, submissões, configuração de sala, problemas
+    e administração de participantes em tempo real.
+    """
     def __init__(self):
         self.repository = RoomGatewayRepository()
 
@@ -29,7 +33,7 @@ class RoomGatewayService:
             if not participant:
                 raise AppError("Usuário não participa da sala")
 
-            # Se tudo ok, chama o método original
+            # Se tudo está ok, chama o método original
             return func(self, data, *args, **kwargs)
         return wrapper
 
@@ -129,8 +133,7 @@ class RoomGatewayService:
         data: {room_id}
         """
         return self.repository.get_all_room_submissions(data["room_id"])
-    
-    
+
     @validate_sockets
     def set_leader(self, data: dict):
         self._validate_data(data)
@@ -147,7 +150,6 @@ class RoomGatewayService:
         self.repo.set_leader(data["room_id"], user_id_to_set)
         return {"new_leader_id": user_id_to_set}
 
-    
     @validate_sockets
     def kick_user(self, data: dict):
         self._validate_data(data)

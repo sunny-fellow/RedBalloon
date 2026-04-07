@@ -1,8 +1,15 @@
 import re
+
 from utils.app_error import AppError
 from utils.interfaces.validator import Validator
 
 class PasswordValidator(Validator):
+    """
+    Validador para campo de senha de usuário.
+    Verifica se a senha tem entre 8 e 128 caracteres e contém
+    pelo menos 3 dos 4 tipos de caracteres: maiúsculas, minúsculas,
+    números e caracteres especiais.
+    """
     @staticmethod
     def validate(password: str):
         if not password:

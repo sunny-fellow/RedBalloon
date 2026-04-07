@@ -1,8 +1,6 @@
 from flask_restx import Namespace, Resource
 from utils.handle_exceptions import handle_exceptions
-
 from database.admin_service import DatabaseAdminService
-
 from database.models.password import getPasswordModel
 
 from database.commands.create_database import CreateDatabaseCommand

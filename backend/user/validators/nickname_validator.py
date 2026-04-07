@@ -1,8 +1,14 @@
 import re
+
 from utils.app_error import AppError
 from utils.interfaces.validator import Validator
 
 class NicknameValidator(Validator):
+    """
+    Validador para campo nickname de usuário.
+    Verifica se o nickname não está vazio, tem no máximo 12 caracteres
+    e não contém números.
+    """
     @staticmethod
     def validate(nickname: str):
         if not nickname or not nickname.strip():

@@ -2,6 +2,9 @@ from utils.interfaces.command import Command
 from problem.service import ProblemService
 
 class ProblemReactCommand(Command):
+    """
+    Comando para registrar uma reação (like/dislike) em um problema.
+    """
     def __init__(self, service: ProblemService, data):
         self.service = service
         self.data = data

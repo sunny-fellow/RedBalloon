@@ -1,6 +1,9 @@
 from flask_restx import fields
 
 def EnterRoomModel(api):
+    """
+    Define o modelo de dados para entrada em uma sala existente.
+    """
     return api.model("EnterRoom", {
         "user_id": fields.Integer(
             required = True,

@@ -3,6 +3,10 @@ from utils.app_error import AppError
 from models.enums import MessageTags
 
 class GetCommentsValidator(Validator):
+    """
+    Validador para requisição de busca de comentários. Responsável por validar
+    os filtros e parâmetros de consulta para recuperar comentários.
+    """
     @staticmethod
     def validate(data):
         context_type = data.get("context_type")

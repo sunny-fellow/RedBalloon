@@ -1,6 +1,10 @@
 from flask_restx import fields
 
 def GetCommentsModel(api):
+    """
+    Define o modelo de dados para requisição de busca de comentários. Este modelo é utilizado
+    para validar e documentar os parâmetros de consulta (query string ou payload) para recuperar comentários filtrados.
+    """
     return api.model("GetComments", {
         "context_type": fields.String(
             required=True,
