@@ -27,10 +27,10 @@ class Submit(Resource):
         command = SubmissionCommand(service, data)
         return command.execute(), 201
     
-@api.route("/problem/<int:problem_id>")
+@api.route("/count/<int:problem_id>")
 class ProblemSubmissions(Resource):
     @handle_exceptions
-    @api.doc("Retorna todas as submissões ACEITAS feitas a um problema específico")
+    @api.doc("Retorna todas as submissões feitas a um problema específico")
     def get(self, problem_id):
         command = ProblemSubmissionsCommand(service, problem_id)
         return command.execute(), 200

@@ -16,7 +16,7 @@ class SubmissionRepository(ABC):
         pass
     
     @abstractmethod
-    def get_accepted_submissions(self, session, problem_id: int) -> List[Any]:
+    def get_any_submission(self, session, problem_id: int) -> List[Any]:
         """
         Retorna todas as submissões aceitas de um problema
         """

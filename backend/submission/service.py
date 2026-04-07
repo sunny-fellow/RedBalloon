@@ -117,7 +117,7 @@ class SubmissionService:
 
     def problem_submissions(self, problem_id):
         def _query(session):
-            subs = self.repository.get_accepted_submissions(session, problem_id)
+            subs = self.repository.get_any_submission(session, problem_id)
 
             result = []
             for s in subs:
