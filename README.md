@@ -1,36 +1,33 @@
-## Métodos de Projeto de Software - Projeto
-Este repositório contém o sistema Red Balloon, desenvolvido na disciplina de Métodos de Projeto de Software da Universidade Federal da Paraíba (UFPB). O sistema propõe um ambiente de interação e aprendizado em programação, no qual usuários podem criar e resolver problemas, discutir soluções em formato de fórum e participar de salas virtuais para resolução colaborativa em tempo real. O desenvolvimento segue um modelo incremental, com evolução contínua a cada sprint semanal, que adicionará mais funcionalidades ao sistema proposto.
+# 🎈 Red Balloon - Backend
 
-**Observação:** devido ao escopo requerido, as funcionalidades do sistema estão completamente funcionais, mas não há integração com a interface gráfica (frontend).
+## Sobre o Projeto
 
-## Evolução do Projeto
-As entregas foram estruturadas de forma incremental, adicionando funcionalidades progressivamente.
+Este repositório contém o sistema **Red Balloon**, desenvolvido na disciplina de **Métodos de Projeto de Software** da Universidade Federal da Paraíba (UFPB). O sistema propõe um ambiente de interação e aprendizado em programação, no qual usuários podem:
 
-### Primeira entrega
-- Modelagem inicial do sistema por meio de diagrama de classes;
-- Implementação de um CRUD básico para a entidade de usuários.
+- Criar e resolver problemas de programação
+- Discutir soluções em formato de fórum
+- Participar de salas virtuais para resolução colaborativa em tempo real
 
-### Segunda entrega
-- Implementação de persistência de dados em memória (JSON);
-- Validação de credenciais de login.
+O desenvolvimento segue um **modelo incremental**, com evolução contínua a cada sprint semanal, adicionando novas funcionalidades progressivamente.
 
-### Terceira entrega
-- Implementação de mais uma entidade, com operações de CRUD (problem);
-- Adição de uma classe com os padrões Façade e Singleton, que gerencia os Controllers.
+> **Observação:** Devido ao escopo requerido, as funcionalidades do sistema estão completamente funcionais via API, mas não há integração com interface gráfica (frontend).
 
-### Quarta entrega
-- Separação das camadas de negócio e persistência do sistema (repositories e services);
-- Implementação do padrão Abstract Factory para criação das entidades;
-- Implementação do padrão Adapter para uso em sistemas de log;
-- Adição do padrão Template Method para geração de relatórios de acesso ao sistema.
+---
 
-### Quinta entrega
-- Atualização da fachada do sistema para uso do padrão Command;
-- Implementação do padrão Memento para desfazer atualizações no banco de dados;
+## 📈 Evolução do Projeto
 
-### Sexta entrega
-- Adição de mais dois padrões de projeto: Strategy e Observer;
-- Documentação e modelagem completa do sistema.
+As entregas foram estruturadas de forma incremental, adicionando funcionalidades progressivamente:
+
+| Sprint | Funcionalidades Adicionadas |
+|--------|----------------------------|
+| **1ª Entrega** | • Modelagem inicial com diagrama de classes<br>• CRUD básico para entidade `User` |
+| **2ª Entrega** | • Persistência de dados em memória (JSON)<br>• Validação de credenciais de login |
+| **3ª Entrega** | • Nova entidade `Problem` com operações CRUD<br>• Padrões **Facade** e **Singleton** para gerenciar Controllers |
+| **4ª Entrega** | • Separação das camadas de negócio e persistência (Repositories/Services)<br>• Padrão **Abstract Factory** para criação de repositórios<br>• Padrão **Adapter** para sistema de logs<br>• Padrão **Template Method** para relatórios de acesso |
+| **5ª Entrega** | • Atualização da fachada com padrão **Command**<br>• Padrão **Memento** para desfazer atualizações no banco |
+| **6ª Entrega** | • Padrões **Strategy** (execução de código) e **Observer** (eventos)<br>• Documentação e modelagem completa do sistema |
+
+---
 
 ### Documentos (todos encontrados no diretório `docs`)
 A seção de documentos contém todo o conjunto de documentos escritos e validados em algumas das entregas. Cada versão está armazenada em um diretório próprio, mas a versão final encontra-se na raiz desssa seção e contém os seguintes artefatos:
