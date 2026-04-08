@@ -1,4 +1,3 @@
-# utils/logger_factory.py
 import os
 from utils.interfaces.logger import LoggerInterface
 from utils.adapter.console_logger_adapter import ConsoleLoggerAdapter

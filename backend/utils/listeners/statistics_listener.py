@@ -1,4 +1,3 @@
-# listeners/statistics_listener.py
 from event_bus import EventListener, Event, EventType
 from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService

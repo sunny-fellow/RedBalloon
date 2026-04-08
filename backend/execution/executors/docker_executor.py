@@ -7,6 +7,17 @@ import time
 from models.enums import SubmissionStatus
 
 class DockerExecutor:
+    """
+    Executor base que roda código dentro de containers Docker isolados.
+    Esta classe fornece a infraestrutura para:
+        - Criar um ambiente isolado e seguro para execução de código não confiável
+        - Compilar (quando necessário) e executar código em diferentes linguagens
+        - Aplicar limites de recursos (tempo, memória, CPU, processos)
+        - Capturar e classificar diferentes tipos de erros (TLE, MLE, RE)
+    
+    O Docker é usado para garantir isolamento completo do sistema hospedeiro,
+    com restrições de rede, sistema de arquivos read-only e limites de recursos.
+    """
     def __init__(self, image: str):
         self.client = docker.from_env()
         self.image = image

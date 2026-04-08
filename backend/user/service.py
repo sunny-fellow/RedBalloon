@@ -1,4 +1,3 @@
-# user/service.py (completo)
 from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timezone

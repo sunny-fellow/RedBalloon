@@ -1,4 +1,3 @@
-# reports/controller.py
 from flask_restx import Namespace, Resource
 from flask import request, Response
 from datetime import datetime

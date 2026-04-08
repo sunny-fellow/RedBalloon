@@ -2,6 +2,9 @@ from execution.executors.docker_executor import DockerExecutor
 from utils.interfaces.code_executor import Executor
 
 class CppExecutor(DockerExecutor, Executor):
+    """
+    Executor específico para C++
+    """
     def __init__(self):
         super().__init__("sandbox-cpp")
     

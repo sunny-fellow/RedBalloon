@@ -1,4 +1,3 @@
-# listeners/notification_listener.py
 from event_bus import EventListener, Event, EventType
 from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 from datetime import datetime
@@ -27,12 +26,6 @@ class NotificationListener(EventListener):
                     "message": f"Parabéns! Você resolveu o problema {problem_id}!"
                 }
             )
-            
-            # Aqui você pode expandir depois para:
-            # - Salvar notificação no banco de dados
-            # - Enviar email
-            # - Enviar push notification
-            # - Atualizar feed do usuário
         
         elif event.type == EventType.USER_FOLLOWED:
             follower_id = event.payload["follower_id"]

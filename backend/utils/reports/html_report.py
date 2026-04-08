@@ -1,13 +1,10 @@
-# reports/html_report.py
 from utils.reports.base_report import BaseReport
 from datetime import datetime
-
 
 class HTMLReport(BaseReport):
     """
     Geração de relatório em formato HTML
     """
-    
     def _generate_header(self, start_date: datetime, end_date: datetime) -> str:
         return f"""<!DOCTYPE html>
 <html lang="pt-BR">

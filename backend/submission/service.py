@@ -1,4 +1,3 @@
-# submission/service.py (modificado com logger)
 from models.factories.sqlalchemy_factory import SQLAlchemyRepositoryFactory
 from database.service import DatabaseService
 from utils.singleton import Singleton
@@ -8,7 +7,7 @@ from event_bus import EventBus, Event, EventType
 from submission.validators.submit import SubmissionValidator
 from execution.service import ExecutionService
 from datetime import datetime, timezone
-from utils.adapter.logger_factory import LoggerFactory  # Adicionar import
+from utils.adapter.logger_factory import LoggerFactory
 
 @Singleton
 class SubmissionService:
@@ -60,7 +59,7 @@ class SubmissionService:
                 user_id=user_id,
                 code=source_code,
                 language=language,
-                time_spent=exec_res.get("time_spent", 0),  # Usa 0 se não encontrar o campo,
+                time_spent=exec_res.get("time_spent", 0),  # Usa 0 se não encontrar o campo
                 status=status,
                 submitted_at=datetime.now(timezone.utc).isoformat()
             )
@@ -108,7 +107,7 @@ class SubmissionService:
                 }
             ))
             return {
-                "submission_id": sub.submission_id,  # <-- Mudança aqui
+                "submission_id": sub.submission_id,
                 "status": status,
                 **exec_res
             }

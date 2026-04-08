@@ -1,4 +1,3 @@
-# reports/report_factory.py
 from enum import Enum
 from utils.reports.base_report import BaseReport
 from utils.reports.html_report import HTMLReport

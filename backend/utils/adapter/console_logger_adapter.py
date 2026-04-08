@@ -1,4 +1,3 @@
-# utils/console_logger_adapter.py
 from datetime import datetime
 import json
 from utils.interfaces.logger import LoggerInterface
@@ -7,8 +6,6 @@ class ConsoleLoggerAdapter(LoggerInterface):
     """
     Adapter para logging no console com cores (opcional)
     """
-    
-    # Cores ANSI para terminal (opcional)
     class Colors:
         HEADER = '\033[95m'
         BLUE = '\033[94m'

@@ -1,4 +1,3 @@
-# utils/logger_interface.py
 from abc import ABC, abstractmethod
 
 class LoggerInterface(ABC):

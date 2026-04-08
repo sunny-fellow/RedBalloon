@@ -1,4 +1,3 @@
-# utils/reports/pdf_report.py
 from utils.reports.base_report import BaseReport
 from datetime import datetime
 from reportlab.lib import colors
@@ -8,12 +7,10 @@ from reportlab.lib.units import cm
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from io import BytesIO
 
-
 class PDFReport(BaseReport):
     """
     Geração de relatório em formato PDF verdadeiro usando reportlab
     """
-    
     def generate(self, start_date: datetime, end_date: datetime) -> bytes:
         """
         Gera o relatório e retorna como bytes (PDF)

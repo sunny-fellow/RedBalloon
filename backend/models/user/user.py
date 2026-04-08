@@ -17,36 +17,30 @@ class User(Base):
     created_at = Column(String, default=lambda: datetime.now(timezone.utc).isoformat())
     deleted_at = Column(DateTime, nullable=True)  # NULL = ativo, não-NULL = deletado
 
-    # Mensagens - REMOVA o cascade="all, delete" para evitar exclusão física
     messages = relationship(
         "Message",
         back_populates="user"
-        # cascade removido - não queremos excluir fisicamente
     )
 
     liked_messages = relationship(
         "MessageReact",
         back_populates="user"
-        # cascade removido
     )
 
     # Problemas
     submissions = relationship(
         "Submission",
         back_populates="user"
-        # cascade removido
     )
 
     liked_submissions = relationship(
         "SubmissionReact",
         back_populates="user"
-        # cascade removido
     )
 
     problems_created = relationship(
         "Problem",
         back_populates="creator"
-        # cascade removido
     )
 
     # Relações entre usuários
@@ -54,34 +48,29 @@ class User(Base):
         "UserFollow",
         foreign_keys="UserFollow.following_id",
         back_populates="following"
-        # cascade removido
     )
 
     followings = relationship(
         "UserFollow",
         foreign_keys="UserFollow.follower_id",
         back_populates="follower"
-        # cascade removido
     )
 
     # Salas
     room_participations = relationship(
         "RoomParticipant",
         back_populates="user"
-        # cascade removido
     )
 
-    # Mementos - mantenha o cascade="all, delete-orphan" se quiser exclusão automática
     mementos = relationship(
         "Memento",
         back_populates="user",
-        cascade="all, delete-orphan"  # Este pode manter para limpeza automática
+        cascade="all, delete-orphan"
     )
 
     problem_reactions = relationship(
         "ProblemReact",
         back_populates="user"
-        # cascade removido
     )
     
     @property

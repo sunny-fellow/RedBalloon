@@ -6,6 +6,9 @@ from datetime import datetime
 from typing import Dict, List, Callable
 
 class EventType(Enum):
+    """
+    Enumeração que define todos os tipos de eventos suportados pelo sistema.
+    """
     SUBMISSION_ACCEPTED = "submission.accepted"
     PROBLEM_CREATED = "problem.created"
     USER_FOLLOWED = "user.followed"
@@ -14,6 +17,11 @@ class EventType(Enum):
 
 @dataclass
 class Event:
+    """
+    Representa um evento que ocorre no sistema.
+    Um evento contém informações sobre o que aconteceu e os dados relacionados.
+    Esta é uma estrutura imutável que pode ser transmitida pelo EventBus.
+    """
     type: EventType
     payload: dict
     timestamp: datetime = None
@@ -23,11 +31,17 @@ class Event:
             self.timestamp = datetime.now()
 
 class EventListener:
+    """
+    Interface/Classe base para todos os listeners de eventos.
+    """
     def handle(self, event: Event) -> None:
         raise NotImplementedError
 
 @Singleton
 class EventBus:
+    """
+    Barramento de eventos central que implementa o padrão Publish-Subscribe.
+    """
     def __init__(self):
         self.listeners: Dict[EventType, List[EventListener]] = {}
         self.logger = JsonLoggerAdapter("logs", "events.json")

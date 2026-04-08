@@ -1,4 +1,3 @@
-# room/gateway.py
 from functools import wraps
 from flask_socketio import Namespace, emit
 from utils.app_error import AppError

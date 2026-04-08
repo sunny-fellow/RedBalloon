@@ -11,7 +11,6 @@ class RepositoryFactory(ABC):
     """
     Abstract Factory para criação de repositórios
     """
-    
     @abstractmethod
     def create_user_repository(self) -> UserRepository:
         """

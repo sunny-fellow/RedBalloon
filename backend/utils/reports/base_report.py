@@ -1,4 +1,3 @@
-# utils/base_report.py
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Dict, Union
@@ -10,7 +9,6 @@ class BaseReport(ABC):
     """
     Template Method para geração de relatórios de estatísticas de acesso
     """
-    
     def __init__(self):
         self.db_service = DatabaseService()
         self.logger = LoggerFactory.create_logger()
@@ -44,13 +42,17 @@ class BaseReport(ABC):
     def _validate_dates(self, start_date: datetime, end_date: datetime) -> None:
         if start_date > end_date:
             raise ValueError("Data inicial não pode ser maior que data final")
+        
         if end_date > datetime.now():
             raise ValueError("Data final não pode ser no futuro")
+        
         if (end_date - start_date).days > 365:
             raise ValueError("Período máximo é de 365 dias")
     
     def _collect_access_data(self, start_date: datetime, end_date: datetime) -> Dict:
-        """Coleta dados de acesso do banco de dados"""
+        """
+        Coleta dados de acesso do banco de dados
+        """
         def func(session):
             # Converter datas para string ISO (formato das colunas String)
             start_str = start_date.strftime('%Y-%m-%dT%H:%M:%S')
@@ -76,7 +78,9 @@ class BaseReport(ABC):
         return self.db_service.run(func)
     
     def _get_submissions_data(self, session, start_date: datetime, end_date: datetime) -> Dict:
-        """Busca dados de submissões (submitted_at é DateTime)"""
+        """
+        Busca dados de submissões (submitted_at é DateTime)
+        """
         result = session.execute(
             text("""
                 SELECT 
@@ -131,7 +135,9 @@ class BaseReport(ABC):
         }
     
     def _get_comments_data(self, session, start_date: str, end_date: str) -> Dict:
-        """Busca dados de comentários (sent_at é String, tabela é message_contexts)"""
+        """
+        Busca dados de comentários (sent_at é String, tabela é message_contexts)
+        """
         result = session.execute(
             text("""
                 SELECT 
@@ -152,8 +158,6 @@ class BaseReport(ABC):
             "unique_users": 0,
             "contexts_used": 0
         }
-    
-    # utils/base_report.py - método _get_rooms_data corrigido
 
     def _get_rooms_data(self, session, start_date: str, end_date: str) -> Dict:
         """Busca dados de salas de competição usando joined_at dos participantes"""

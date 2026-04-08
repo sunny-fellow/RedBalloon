@@ -1,4 +1,3 @@
-# listeners/ranking_listener.py
 from event_bus import EventListener, Event, EventType
 from room.gateway.service import RoomGatewayService
 

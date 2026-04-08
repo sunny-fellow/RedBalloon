@@ -18,7 +18,6 @@ class SQLAlchemyRepositoryFactory(RepositoryFactory):
     """
     Fábrica concreta que cria repositórios com SQLAlchemy
     """
-    
     def create_user_repository(self) -> UserRepository:
         return SQLAlchemyUserRepository()
     

@@ -12,7 +12,6 @@ from models.message.message_context import MessageContext
 from models.enums import ReactionType, SubmissionStatus, MessageContextType
 
 class SQLAlchemyProblemRepository(ProblemRepository):
-    # LIST BASE
     def list_problems(self, session, query=None, tags=None):
         q = session.query(Problem)
 
