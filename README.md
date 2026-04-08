@@ -19,7 +19,7 @@ O desenvolvimento segue um **modelo incremental**, com evolução contínua a ca
 As entregas foram estruturadas de forma incremental, adicionando funcionalidades progressivamente:
 
 | Sprint | Funcionalidades Adicionadas |
-|--------|----------------------------|
+|--------|-----------------------------|
 | **1ª Entrega** | • Modelagem inicial com diagrama de classes<br>• CRUD básico para entidade `User` |
 | **2ª Entrega** | • Persistência de dados em memória (JSON)<br>• Validação de credenciais de login |
 | **3ª Entrega** | • Nova entidade `Problem` com operações CRUD<br>• Padrões **Facade** e **Singleton** para gerenciar Controllers |
