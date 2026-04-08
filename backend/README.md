@@ -1,17 +1,13 @@
-# 🚀 RedBalloon Backend - Guia de Instalação
-
+# RedBalloon Backend - Guia de Instalação
 Este documento fornece as instruções necessárias para configurar o ambiente de desenvolvimento, construir os containers de execução e rodar o servidor.
 
-## 📋 Pré-requisitos
-
+## Pré-requisitos
 Antes de começar, certifique-se de ter instalado em sua máquina:
 * **Python 3.10+**
 * **Docker** (essencial para os ambientes de execução de código)
 * **Virtualenv** (recomendado)
 
----
-
-## 🛠️ Passo 1: Configuração do Ambiente Python
+## Passo 1: Configuração do Ambiente Python
 
 1.  **Clone o repositório e acesse a pasta raiz:**
     ```bash
@@ -36,8 +32,7 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 
 ---
 
-## 🔑 Passo 2: Variáveis de Ambiente
-
+## Passo 2: Variáveis de Ambiente
 Crie um arquivo `.env` na raiz do diretório `/backend` (ou na raiz do projeto, conforme sua estrutura) e preencha as seguintes chaves:
 
 ```env
@@ -47,10 +42,7 @@ ADMIN_PASSWORD=sua_senha_admin_aqui
 TOKEN_EXPIRATION_HOURS=24
 ```
 
----
-
-## 🐳 Passo 3: Construção das Imagens Docker (Ambientes de Execução)
-
+## Passo 3: Construção das Imagens Docker (Ambientes de Execução)
 O RedBalloon utiliza containers isolados para compilar e rodar submissões de código com segurança. Você **deve** buildar as imagens abaixo antes de iniciar o servidor:
 
 ```bash
@@ -72,10 +64,7 @@ docker build -t sanbox-python ./python
 
 > **Nota:** Certifique-se de que os nomes das tags (`-t`) coincidem com o que o seu serviço de submissão espera encontrar ao instanciar os containers.
 
----
-
-## 🏃 Passo 4: Executando o Servidor
-
+## Passo 4: Executando o Servidor
 Com as dependências instaladas e as imagens Docker prontas, inicie o servidor Flask:
 
 ```bash
@@ -84,24 +73,13 @@ python backend/main.py
 
 O servidor estará disponível em: `http://localhost:5000`
 
----
+## Informações Úteis
 
-## 🔍 Informações Úteis
-
-### 📚 Documentação da API
+### Documentação da API
 A documentação interativa (Swagger) pode ser acessada em:
 `http://localhost:5000/apidocs`
 
-### 🔒 Autenticação
+### Autenticação
 1. Utilize o namespace `/auth` para realizar login e obter o seu **JWT**.
 2. No Swagger, clique no botão **Authorize** e insira o token no formato: `Bearer SEU_TOKEN_AQUI`.
 3. Todas as rotas (exceto as de autenticação e documentação) exigem este cabeçalho.
-
----
-
-## 📁 Estrutura de Pastas (GoF Facade)
-* `main.py`: Ponto de entrada (Facade).
-* `auth_middleware.py`: Lógica de interceptação e validação JWT.
-* `api_factory.py`: Fábrica de configuração do Flask-RestX.
-* `config.py`: Gestão de variáveis de ambiente.
-
