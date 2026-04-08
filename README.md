@@ -1,4 +1,4 @@
-# 🎈 Red Balloon - Backend
+#  Red Balloon - Backend
 
 ## Sobre o Projeto
 
@@ -14,7 +14,7 @@ O desenvolvimento segue um **modelo incremental**, com evolução contínua a ca
 
 ---
 
-## 📈 Evolução do Projeto
+##  Evolução do Projeto
 
 As entregas foram estruturadas de forma incremental, adicionando funcionalidades progressivamente:
 
