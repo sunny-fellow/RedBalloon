@@ -78,8 +78,3 @@ http://127.0.0.1:5000/apidocs
 ```
 
 5. Use as funcionalidades de CRUD e demais endpoints por meio do Swagger.
-
-```
-
-Se você quiser, posso adicionar também **instruções para rodar frontend + backend simultaneamente no Windows/WSL**, sem precisar de scripts externos. Isso deixa o README pronto para novos usuários. Quer que eu faça?
-```

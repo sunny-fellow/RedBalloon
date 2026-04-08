@@ -3,8 +3,9 @@ from utils.adapter.json_logger_adapter import JsonLoggerAdapter
 from datetime import datetime
 
 class NotificationListener(EventListener):
-    """Registra notificações para usuários sobre eventos relevantes"""
-    
+    """
+    Registra notificações para usuários sobre eventos relevantes
+    """
     def __init__(self):
         self.logger = JsonLoggerAdapter("logs", "notifications.json")
     
