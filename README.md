@@ -1,4 +1,4 @@
-#  Red Balloon - Backend
+#  Red Balloon
 
 ## Sobre o Projeto
 
